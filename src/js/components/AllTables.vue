@@ -97,31 +97,75 @@ export default {
             ],
             tableData: [],
             selected_table_type: '',
-            table_name: ''
+            table_name: '',
+            per_page: 10,
+            page_number: 1
         }
     },
     methods: {
 
         addNewTable() {
 
-            this.tableData.push({
-                id: '20',
-                name: this.table_name,
-                shortCode: '[wp_price_table id="1070"]'
-            });
+            jQuery.post(ajaxurl, {
+                action: 'wp_ajax_ninja_mortgage_ajax_actions',
+                route: 'add_table',
+                post_title: this.table_name,
+                select_table_type: this.selected_table_type
+            }).then(
+                response => {
+                    this.$notify.success({
+                        title: 'Success',
+                        message: response.data.message
+                    });
+                }
+            ).fail(
+                error => {
+                    this.$notify.error({
+                        title: 'Error',
+                        message: error.responseJSON.data.message
+                    });
+                }
+            ).always(
+                () => {
+                    this.addTableModal = false;
+                }
+            )
+            // this.tableData.push({
+            //     id: '20',
+            //     name: this.table_name,
+            //     shortCode: '[wp_price_table id="1070"]'
+            // });
 
-            this.$notify({
-                title: 'Success',
-                message: 'This is a success message',
-                type: 'success'
-            });
+            // this.$notify({
+            //     title: 'Success',
+            //     message: 'This is a success message',
+            //     type: 'success'
+            // });
 
-            this.table_name = '';
+            // this.table_name = '';
 
-            this.addTableModal = false;
+            // this.addTableModal = false;
 
-        }
+        },
+        fetchTables() {
+                this.doingAjax = true;
+                jQuery.get(ajaxurl, {
+                    action: 'wp_ajax_ninja_mortgage_ajax_actions',
+                    route: 'get_tables',
+                    per_page: this.per_page,
+                    page_number: this.page_number
+                })
+                    .then(response => {
+                        this.tableData = response.data.tables;
+                    })
+                    .fail(error => {
+                        console.log(error.responseJSON.data);
+                    })
+            }
 
+    },
+    created() {
+        this.fetchTables();
     }
 }
 </script>
