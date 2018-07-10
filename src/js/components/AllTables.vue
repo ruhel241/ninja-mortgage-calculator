@@ -53,23 +53,10 @@
             width="60%">
                 <label for="new_table_name">Table Name</label>
                 <el-input id="new_table_name" type="text" placeholder="Your Table Name" v-model="table_name"></el-input>
-
-                <el-select v-model="selected_table_type" placeholder="Select Calculator Type" class="select_calc_type">
-                    
-                    <el-option
-                        v-for="(item, i) in table_type"
-                        :key="i"
-                        :label="item.label"
-                        :value="item.value">
-                    </el-option>
                 
-                </el-select>
-
                 <span slot="footer" class="dialog-footer">
-
                     <el-button @click="addTableModal = false">Cancel</el-button>
                     <el-button type="primary" @click="addNewTable">Add New</el-button>
-
                 </span>
             </el-dialog>
     </div>
@@ -96,7 +83,6 @@ export default {
                 }
             ],
             tableData: [],
-            selected_table_type: '',
             table_name: '',
             per_page: 10,
             page_number: 1
@@ -107,10 +93,9 @@ export default {
         addNewTable() {
 
             jQuery.post(ajaxurl, {
-                action: 'wp_ajax_ninja_mortgage_ajax_actions',
+                action: 'ninja_mortgage_ajax_actions',
                 route: 'add_table',
-                post_title: this.table_name,
-                select_table_type: this.selected_table_type
+                post_title: this.table_name
             }).then(
                 response => {
                     this.$notify.success({
@@ -120,10 +105,7 @@ export default {
                 }
             ).fail(
                 error => {
-                    this.$notify.error({
-                        title: 'Error',
-                        message: error.responseJSON.data.message
-                    });
+                    console.log(error);
                 }
             ).always(
                 () => {
@@ -150,7 +132,7 @@ export default {
         fetchTables() {
                 this.doingAjax = true;
                 jQuery.get(ajaxurl, {
-                    action: 'wp_ajax_ninja_mortgage_ajax_actions',
+                    action: 'ninja_mortgage_ajax_actions',
                     route: 'get_tables',
                     per_page: this.per_page,
                     page_number: this.page_number
@@ -159,7 +141,7 @@ export default {
                         this.tableData = response.data.tables;
                     })
                     .fail(error => {
-                        console.log(error.responseJSON.data);
+                         console.log(error);
                     })
             }
 

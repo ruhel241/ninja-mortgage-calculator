@@ -61908,7 +61908,7 @@ var Component = normalizeComponent(
   __vue_scopeId__,
   __vue_module_identifier__
 )
-Component.options.__file = "src\\js\\components\\AllTables.vue"
+Component.options.__file = "src/js/components/AllTables.vue"
 
 /* hot reload */
 if (false) {(function () {
@@ -61917,9 +61917,9 @@ if (false) {(function () {
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-d87ce1c6", Component.options)
+    hotAPI.createRecord("data-v-4e89494a", Component.options)
   } else {
-    hotAPI.reload("data-v-d87ce1c6", Component.options)
+    hotAPI.reload("data-v-4e89494a", Component.options)
   }
   module.hot.dispose(function (data) {
     disposed = true
@@ -61940,13 +61940,13 @@ var content = __webpack_require__(159);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(160)("ea581bea", content, false, {});
+var update = __webpack_require__(160)("3cc99706", content, false, {});
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags
  if(!content.locals) {
-   module.hot.accept("!!../../../node_modules/css-loader/index.js!../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-d87ce1c6\",\"scoped\":false,\"hasInlineConfig\":true}!../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./AllTables.vue", function() {
-     var newContent = require("!!../../../node_modules/css-loader/index.js!../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-d87ce1c6\",\"scoped\":false,\"hasInlineConfig\":true}!../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./AllTables.vue");
+   module.hot.accept("!!../../../node_modules/css-loader/index.js!../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-4e89494a\",\"scoped\":false,\"hasInlineConfig\":true}!../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./AllTables.vue", function() {
+     var newContent = require("!!../../../node_modules/css-loader/index.js!../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-4e89494a\",\"scoped\":false,\"hasInlineConfig\":true}!../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./AllTables.vue");
      if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
      update(newContent);
    });
@@ -62300,19 +62300,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     name: 'all_mortgage_tables',
@@ -62330,7 +62317,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 label: 'Mortgage Payment Calculator'
             }],
             tableData: [],
-            selected_table_type: '',
             table_name: '',
             per_page: 10,
             page_number: 1
@@ -62342,20 +62328,16 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             var _this = this;
 
             jQuery.post(ajaxurl, {
-                action: 'wp_ajax_ninja_mortgage_ajax_actions',
+                action: 'ninja_mortgage_ajax_actions',
                 route: 'add_table',
-                post_title: this.table_name,
-                select_table_type: this.selected_table_type
+                post_title: this.table_name
             }).then(function (response) {
                 _this.$notify.success({
                     title: 'Success',
                     message: response.data.message
                 });
             }).fail(function (error) {
-                _this.$notify.error({
-                    title: 'Error',
-                    message: error.responseJSON.data.message
-                });
+                console.log(error);
             }).always(function () {
                 _this.addTableModal = false;
             });
@@ -62380,14 +62362,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
             this.doingAjax = true;
             jQuery.get(ajaxurl, {
-                action: 'wp_ajax_ninja_mortgage_ajax_actions',
+                action: 'ninja_mortgage_ajax_actions',
                 route: 'get_tables',
                 per_page: this.per_page,
                 page_number: this.page_number
             }).then(function (response) {
                 _this2.tableData = response.data.tables;
             }).fail(function (error) {
-                console.log(error.responseJSON.data);
+                console.log(error);
             });
         }
     },
@@ -62543,27 +62525,6 @@ var render = function() {
           }),
           _vm._v(" "),
           _c(
-            "el-select",
-            {
-              staticClass: "select_calc_type",
-              attrs: { placeholder: "Select Calculator Type" },
-              model: {
-                value: _vm.selected_table_type,
-                callback: function($$v) {
-                  _vm.selected_table_type = $$v
-                },
-                expression: "selected_table_type"
-              }
-            },
-            _vm._l(_vm.table_type, function(item, i) {
-              return _c("el-option", {
-                key: i,
-                attrs: { label: item.label, value: item.value }
-              })
-            })
-          ),
-          _vm._v(" "),
-          _c(
             "span",
             {
               staticClass: "dialog-footer",
@@ -62613,7 +62574,7 @@ module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {
   module.hot.accept()
   if (module.hot.data) {
-    require("vue-hot-reload-api")      .rerender("data-v-d87ce1c6", module.exports)
+    require("vue-hot-reload-api")      .rerender("data-v-4e89494a", module.exports)
   }
 }
 
@@ -63611,7 +63572,7 @@ var Component = normalizeComponent(
   __vue_scopeId__,
   __vue_module_identifier__
 )
-Component.options.__file = "src\\js\\AdminApp.vue"
+Component.options.__file = "src/js/AdminApp.vue"
 
 /* hot reload */
 if (false) {(function () {
@@ -63620,9 +63581,9 @@ if (false) {(function () {
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-3410440f", Component.options)
+    hotAPI.createRecord("data-v-bf37c1a2", Component.options)
   } else {
-    hotAPI.reload("data-v-3410440f", Component.options)
+    hotAPI.reload("data-v-bf37c1a2", Component.options)
   }
   module.hot.dispose(function (data) {
     disposed = true
@@ -63665,7 +63626,7 @@ module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {
   module.hot.accept()
   if (module.hot.data) {
-    require("vue-hot-reload-api")      .rerender("data-v-3410440f", module.exports)
+    require("vue-hot-reload-api")      .rerender("data-v-bf37c1a2", module.exports)
   }
 }
 
