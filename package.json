@@ -23,6 +23,6 @@
         "vuedraggable": "^2.16.0"
     },
     "devDependencies": {
-        "element-ui": "^2.2.2"
+        "element-ui": "^2.4.3"
     }
 }
