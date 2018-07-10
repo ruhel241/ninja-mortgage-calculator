@@ -62440,11 +62440,11 @@ var render = function() {
                 key: "default",
                 fn: function(scope) {
                   return [
-                    _vm._v(
-                      "\n                " +
-                        _vm._s(scope.row.shortCode) +
-                        "\n            "
-                    )
+                    _c("code", [
+                      _vm._v(
+                        '[ninja_mortgage_cal id="' + _vm._s(scope.row.ID) + '"]'
+                      )
+                    ])
                   ]
                 }
               }

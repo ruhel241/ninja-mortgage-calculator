@@ -30,7 +30,7 @@
             <el-table-column 
                 label="ShortCode">
                 <template slot-scope="scope">
-                    {{ scope.row.shortCode }}
+                    <code>[ninja_mortgage_cal id="{{ scope.row.ID }}"]</code>
                 </template>
             </el-table-column>
 
