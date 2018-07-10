@@ -10,16 +10,26 @@ import lang from 'element-ui/lib/locale/lang/en';
 locale.use(lang);
 Vue.use(VueRouter);
 
-import { 
-	Button, 
-	Dialog, 
-	Input, 
-	Select, 
-	Option,
-	Table, 
-	Icon,
-	TableColumn,
-	Notification } from 'element-ui';
+import { Button, Col, Dialog, Input, Select, Row, Option, Table,  Icon, TableColumn, Loading, Notification, Pagination, Tabs, TabPane } from 'element-ui';
+
+Vue.use(Button)
+Vue.use(Col)
+Vue.use(Dialog)
+Vue.use(Input)
+Vue.use(Select)
+Vue.use(Option)
+Vue.use(Row)
+Vue.use(Table)
+Vue.use(TabPane)
+Vue.use(Icon)
+Vue.use(TableColumn)
+Vue.use(Pagination)
+Vue.use(Tabs)
+
+
+Vue.use(Loading.directive);
+Vue.prototype.$loading = Loading.service;
+Vue.prototype.$notify = Notification;
 
 import 'element-ui/lib/theme-chalk/index.css';
 import 'element-ui/lib/theme-chalk/table.css';
@@ -36,19 +46,7 @@ import 'element-ui/lib/theme-chalk/dialog.css';
 import 'element-ui/lib/theme-chalk/notification.css';
 import 'element-ui/lib/theme-chalk/loading.css';
 import 'element-ui/lib/theme-chalk/popover.css';
-import 'element-ui/lib/theme-chalk/pagination.css';
-
-
-Vue.use(Button)
-Vue.use(Dialog)
-Vue.use(Input)
-Vue.use(Select)
-Vue.use(Option)
-Vue.use(Table)
-Vue.use(Icon)
-Vue.use(TableColumn)
-
-Vue.prototype.$notify = Notification; 
+import 'element-ui/lib/theme-chalk/pagination.css'; 
 
 const router = new VueRouter({
 	routes

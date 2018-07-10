@@ -13,7 +13,8 @@
 
 
         <el-table :data="tableData"
-                  style="width: 100%; margin-top: 10px;">
+                  style="width: 100%; margin-top: 10px;"
+                  v-loading="tableLoading">
             
             <el-table-column 
                 prop="ID"
@@ -23,7 +24,9 @@
 
             <el-table-column label="Name">
                 <template slot-scope="scope">
-                    {{ scope.row.post_title }}
+                    <router-link :to="{name: 'edit_table', params: { table_id: scope.row.ID } }">
+                        {{ scope.row.post_title }}
+                    </router-link>
                 </template>
             </el-table-column>
 
@@ -36,7 +39,9 @@
 
             <el-table-column  label="Actions" width="190">
                 <template slot-scope="scope">
-                    <i class="el-icon-edit"></i>
+                    <router-link title="Edit" :to="{ name: 'edit_table', params: { table_id: scope.row.ID} }">
+                        <i class="el-icon-edit"></i>
+                    </router-link>
                     <a :href="scope.row.demo_url"  target="_blank" class="el-button el-button--info el-button--mini">
                         <i class="el-icon-view"></i>
                     </a>
@@ -58,6 +63,17 @@
                     <el-button type="primary" @click="addNewTable">Add New</el-button>
                 </span>
             </el-dialog>
+
+            <!-- Pagination -->
+            <div v-if="total > per_page">
+                <el-pagination background
+                                        layout="prev, pager, next"
+                                        :page-size="per_page"
+                                        :current-page="page_number"
+                                        @current-change="changePage"
+                                        :total="total">
+                </el-pagination>
+            </div>
     </div>
 </template>
 
@@ -67,6 +83,7 @@ export default {
     data() {
         return {
             addTableModal: false,
+            tableLoading: false,
             table_type: [
                 {
                     value: 'mortgage_calculator',
@@ -83,8 +100,9 @@ export default {
             ],
             tableData: [],
             table_name: '',
-            per_page: 10,
-            page_number: 1
+            per_page: 4,
+            page_number: 1,
+            total: 0
         }
     },
     methods: {
@@ -101,18 +119,20 @@ export default {
                         title: 'Success',
                         message: response.data.message
                     });
-                  
+                    this.$router.push({
+                        name: 'edit_table',
+                        params: {
+                            table_id: response.data.table_id
+                        }
+                    })
                 }
             ).fail(
-                
                 error => {
                     this.$notify.error({
                         title: 'Error',
                         message: error.responseJSON.data.message
                     });
                 }
-
-
             ).always(
                 () => {
                     this.addTableModal = false;
@@ -122,7 +142,7 @@ export default {
 
         },
         fetchTables() {
-                this.doingAjax = true;
+                this.tableLoading = true;
                 jQuery.get(ajaxurl, {
                     action: 'ninja_mortgage_ajax_actions',
                     route: 'get_tables',
@@ -131,11 +151,19 @@ export default {
                 })
                     .then(response => {
                         this.tableData = response.data.tables;
+                        this.total = response.data.total;
                         console.log(response)
                     })
                     .fail(error => {
                          console.log(error);
                     })
+                    .always(() => {
+                        this.tableLoading = false
+                    })
+            },
+            changePage(pageNumber) {
+                this.page_number = pageNumber;
+                this.fetchTables();
             }
 
     },

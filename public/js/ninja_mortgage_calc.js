@@ -47667,46 +47667,53 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_1_vue_
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 __WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_2_element_ui__["Button"]);
+__WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_2_element_ui__["Col"]);
 __WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_2_element_ui__["Dialog"]);
 __WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_2_element_ui__["Input"]);
 __WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_2_element_ui__["Select"]);
 __WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_2_element_ui__["Option"]);
+__WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_2_element_ui__["Row"]);
 __WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_2_element_ui__["Table"]);
+__WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_2_element_ui__["TabPane"]);
 __WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_2_element_ui__["Icon"]);
 __WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_2_element_ui__["TableColumn"]);
+__WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_2_element_ui__["Pagination"]);
+__WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_2_element_ui__["Tabs"]);
 
+__WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_2_element_ui__["Loading"].directive);
+__WEBPACK_IMPORTED_MODULE_0_vue___default.a.prototype.$loading = __WEBPACK_IMPORTED_MODULE_2_element_ui__["Loading"].service;
 __WEBPACK_IMPORTED_MODULE_0_vue___default.a.prototype.$notify = __WEBPACK_IMPORTED_MODULE_2_element_ui__["Notification"];
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 var router = new __WEBPACK_IMPORTED_MODULE_1_vue_router__["a" /* default */]({
-	routes: __WEBPACK_IMPORTED_MODULE_3__router_js__["a" /* default */]
+    routes: __WEBPACK_IMPORTED_MODULE_3__router_js__["a" /* default */]
 });
 
 
 
 new __WEBPACK_IMPORTED_MODULE_0_vue___default.a({
-	el: '#ninja_mortgage_calc',
-	router: router,
-	render: function render(h) {
-		return h(__WEBPACK_IMPORTED_MODULE_22__AdminApp___default.a);
-	}
+    el: '#ninja_mortgage_calc',
+    router: router,
+    render: function render(h) {
+        return h(__WEBPACK_IMPORTED_MODULE_22__AdminApp___default.a);
+    }
 });
 
 console.log("JS rendered successfully");
@@ -61876,6 +61883,10 @@ module.exports = __webpack_require__(27);
 	path: '/',
 	name: 'mortgage_calc_home',
 	component: __webpack_require__(157)
+}, {
+	path: '/edit_table/:table_id',
+	name: 'edit_table',
+	component: __webpack_require__(204)
 }]);
 
 /***/ }),
@@ -61908,7 +61919,7 @@ var Component = normalizeComponent(
   __vue_scopeId__,
   __vue_module_identifier__
 )
-Component.options.__file = "src/js/components/AllTables.vue"
+Component.options.__file = "src\\js\\components\\AllTables.vue"
 
 /* hot reload */
 if (false) {(function () {
@@ -61917,9 +61928,9 @@ if (false) {(function () {
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-4e89494a", Component.options)
+    hotAPI.createRecord("data-v-d87ce1c6", Component.options)
   } else {
-    hotAPI.reload("data-v-4e89494a", Component.options)
+    hotAPI.reload("data-v-d87ce1c6", Component.options)
   }
   module.hot.dispose(function (data) {
     disposed = true
@@ -61940,13 +61951,13 @@ var content = __webpack_require__(159);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(160)("3cc99706", content, false, {});
+var update = __webpack_require__(160)("ea581bea", content, false, {});
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags
  if(!content.locals) {
-   module.hot.accept("!!../../../node_modules/css-loader/index.js!../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-4e89494a\",\"scoped\":false,\"hasInlineConfig\":true}!../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./AllTables.vue", function() {
-     var newContent = require("!!../../../node_modules/css-loader/index.js!../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-4e89494a\",\"scoped\":false,\"hasInlineConfig\":true}!../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./AllTables.vue");
+   module.hot.accept("!!../../../node_modules/css-loader/index.js!../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-d87ce1c6\",\"scoped\":false,\"hasInlineConfig\":true}!../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./AllTables.vue", function() {
+     var newContent = require("!!../../../node_modules/css-loader/index.js!../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-d87ce1c6\",\"scoped\":false,\"hasInlineConfig\":true}!../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./AllTables.vue");
      if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
      update(newContent);
    });
@@ -62299,12 +62310,29 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     name: 'all_mortgage_tables',
     data: function data() {
         return {
             addTableModal: false,
+            tableLoading: false,
             table_type: [{
                 value: 'mortgage_calculator',
                 label: 'Mortgage Calculator'
@@ -62317,8 +62345,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             }],
             tableData: [],
             table_name: '',
-            per_page: 10,
-            page_number: 1
+            per_page: 4,
+            page_number: 1,
+            total: 0
         };
     },
 
@@ -62335,6 +62364,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                     title: 'Success',
                     message: response.data.message
                 });
+                _this.$router.push({
+                    name: 'edit_table',
+                    params: {
+                        table_id: response.data.table_id
+                    }
+                });
             }).fail(function (error) {
                 _this.$notify.error({
                     title: 'Error',
@@ -62347,7 +62382,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         fetchTables: function fetchTables() {
             var _this2 = this;
 
-            this.doingAjax = true;
+            this.tableLoading = true;
             jQuery.get(ajaxurl, {
                 action: 'ninja_mortgage_ajax_actions',
                 route: 'get_tables',
@@ -62355,10 +62390,17 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 page_number: this.page_number
             }).then(function (response) {
                 _this2.tableData = response.data.tables;
+                _this2.total = response.data.total;
                 console.log(response);
             }).fail(function (error) {
                 console.log(error);
+            }).always(function () {
+                _this2.tableLoading = false;
             });
+        },
+        changePage: function changePage(pageNumber) {
+            this.page_number = pageNumber;
+            this.fetchTables();
         }
     },
     created: function created() {
@@ -62407,6 +62449,14 @@ var render = function() {
       _c(
         "el-table",
         {
+          directives: [
+            {
+              name: "loading",
+              rawName: "v-loading",
+              value: _vm.tableLoading,
+              expression: "tableLoading"
+            }
+          ],
           staticStyle: { width: "100%", "margin-top": "10px" },
           attrs: { data: _vm.tableData }
         },
@@ -62422,10 +62472,23 @@ var render = function() {
                 key: "default",
                 fn: function(scope) {
                   return [
-                    _vm._v(
-                      "\n                " +
-                        _vm._s(scope.row.post_title) +
-                        "\n            "
+                    _c(
+                      "router-link",
+                      {
+                        attrs: {
+                          to: {
+                            name: "edit_table",
+                            params: { table_id: scope.row.ID }
+                          }
+                        }
+                      },
+                      [
+                        _vm._v(
+                          "\n                    " +
+                            _vm._s(scope.row.post_title) +
+                            "\n                "
+                        )
+                      ]
                     )
                   ]
                 }
@@ -62458,7 +62521,19 @@ var render = function() {
                 key: "default",
                 fn: function(scope) {
                   return [
-                    _c("i", { staticClass: "el-icon-edit" }),
+                    _c(
+                      "router-link",
+                      {
+                        attrs: {
+                          title: "Edit",
+                          to: {
+                            name: "edit_table",
+                            params: { table_id: scope.row.ID }
+                          }
+                        }
+                      },
+                      [_c("i", { staticClass: "el-icon-edit" })]
+                    ),
                     _vm._v(" "),
                     _c(
                       "a",
@@ -62542,7 +62617,26 @@ var render = function() {
           )
         ],
         1
-      )
+      ),
+      _vm._v(" "),
+      _vm.total > _vm.per_page
+        ? _c(
+            "div",
+            [
+              _c("el-pagination", {
+                attrs: {
+                  background: "",
+                  layout: "prev, pager, next",
+                  "page-size": _vm.per_page,
+                  "current-page": _vm.page_number,
+                  total: _vm.total
+                },
+                on: { "current-change": _vm.changePage }
+              })
+            ],
+            1
+          )
+        : _vm._e()
     ],
     1
   )
@@ -62562,7 +62656,7 @@ module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {
   module.hot.accept()
   if (module.hot.data) {
-    require("vue-hot-reload-api")      .rerender("data-v-4e89494a", module.exports)
+    require("vue-hot-reload-api")      .rerender("data-v-d87ce1c6", module.exports)
   }
 }
 
@@ -63560,7 +63654,7 @@ var Component = normalizeComponent(
   __vue_scopeId__,
   __vue_module_identifier__
 )
-Component.options.__file = "src/js/AdminApp.vue"
+Component.options.__file = "src\\js\\AdminApp.vue"
 
 /* hot reload */
 if (false) {(function () {
@@ -63569,9 +63663,9 @@ if (false) {(function () {
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-bf37c1a2", Component.options)
+    hotAPI.createRecord("data-v-3410440f", Component.options)
   } else {
-    hotAPI.reload("data-v-bf37c1a2", Component.options)
+    hotAPI.reload("data-v-3410440f", Component.options)
   }
   module.hot.dispose(function (data) {
     disposed = true
@@ -63614,9 +63708,815 @@ module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {
   module.hot.accept()
   if (module.hot.data) {
-    require("vue-hot-reload-api")      .rerender("data-v-bf37c1a2", module.exports)
+    require("vue-hot-reload-api")      .rerender("data-v-3410440f", module.exports)
   }
 }
+
+/***/ }),
+/* 204 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__(206)
+}
+var normalizeComponent = __webpack_require__(69)
+/* script */
+var __vue_script__ = __webpack_require__(208)
+/* template */
+var __vue_template__ = __webpack_require__(205)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = injectStyle
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "src\\js\\components\\EditTable.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-34d7e6ca", Component.options)
+  } else {
+    hotAPI.reload("data-v-34d7e6ca", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 205 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", { staticClass: "mortgage_calc" }, [
+    _vm._m(0),
+    _vm._v(" "),
+    _c(
+      "div",
+      { staticClass: "change_calc" },
+      [
+        _c(
+          "el-select",
+          {
+            attrs: { placeholder: "Calculator Type" },
+            model: {
+              value: _vm.calc_type,
+              callback: function($$v) {
+                _vm.calc_type = $$v
+              },
+              expression: "calc_type"
+            }
+          },
+          _vm._l(_vm.calc_types, function(type, i) {
+            return _c("el-option", {
+              key: i,
+              attrs: { label: type.label, value: type.value }
+            })
+          })
+        )
+      ],
+      1
+    ),
+    _vm._v(" "),
+    _c(
+      "div",
+      { staticClass: "tabs" },
+      [
+        _c(
+          "el-tabs",
+          {
+            on: { "tab-click": _vm.handleClick },
+            model: {
+              value: _vm.activeName,
+              callback: function($$v) {
+                _vm.activeName = $$v
+              },
+              expression: "activeName"
+            }
+          },
+          [
+            _c("el-tab-pane", { attrs: { label: "Label", name: "first" } }, [
+              _vm._v("Label")
+            ]),
+            _vm._v(" "),
+            _c("el-tab-pane", { attrs: { label: "Default", name: "second" } }, [
+              _vm._v("Default")
+            ]),
+            _vm._v(" "),
+            _c("el-tab-pane", { attrs: { label: "Setting", name: "third" } }, [
+              _vm._v("Setting")
+            ])
+          ],
+          1
+        )
+      ],
+      1
+    ),
+    _vm._v(" "),
+    _vm.calc_type == "mortgage_calculator"
+      ? _c(
+          "div",
+          [
+            _c(
+              "el-row",
+              { staticStyle: { "margin-top": "20px" }, attrs: { gutter: 15 } },
+              [
+                _c(
+                  "el-col",
+                  { attrs: { span: 15 } },
+                  [
+                    _c("label", [_vm._v("Home Price")]),
+                    _vm._v(" "),
+                    _c("el-input", {
+                      attrs: {
+                        type: "number",
+                        placeholder: "Home Price",
+                        min: "0"
+                      }
+                    })
+                  ],
+                  1
+                )
+              ],
+              1
+            ),
+            _vm._v(" "),
+            _c(
+              "el-row",
+              { attrs: { gutter: 15 } },
+              [
+                _c(
+                  "el-col",
+                  { attrs: { span: 8 } },
+                  [
+                    _c("label", [_vm._v("Down Pament")]),
+                    _vm._v(" "),
+                    _c("el-input", {
+                      attrs: {
+                        type: "number",
+                        placeholder: "Down Payment",
+                        min: "0",
+                        name: "downPayment",
+                        id: "downPayment"
+                      }
+                    })
+                  ],
+                  1
+                ),
+                _vm._v(" "),
+                _c(
+                  "el-col",
+                  { attrs: { span: 7 } },
+                  [
+                    _c("label", [_vm._v("Down Pament Percentage")]),
+                    _vm._v(" "),
+                    _c("el-input", {
+                      attrs: {
+                        type: "number",
+                        placeholder: "Down Pament Percentage"
+                      }
+                    })
+                  ],
+                  1
+                )
+              ],
+              1
+            ),
+            _vm._v(" "),
+            _c(
+              "el-row",
+              { attrs: { gutter: 15 } },
+              [
+                _c(
+                  "el-col",
+                  { attrs: { span: 8 } },
+                  [
+                    _c("label", [_vm._v("Mortgage term")]),
+                    _vm._v(" "),
+                    _c("el-input", {
+                      attrs: {
+                        type: "number",
+                        placeholder: "Mortgage Term",
+                        min: "0",
+                        pattern: "/^-?\\d+\\.?\\d*$/",
+                        onKeyPress: "if(this.value.length==2) return false;",
+                        name: "mortgageTerm",
+                        id: "mortgageTerm"
+                      }
+                    })
+                  ],
+                  1
+                ),
+                _vm._v(" "),
+                _c(
+                  "el-col",
+                  { attrs: { span: 7 } },
+                  [
+                    _c("label", [_vm._v("Mortgage term month")]),
+                    _vm._v(" "),
+                    _c("el-input", {
+                      attrs: {
+                        type: "number",
+                        placeholder: "Mortgage Term Month",
+                        pattern: "/^-?\\d+\\.?\\d*$/",
+                        onKeyPress: "if(this.value.length==3) return false;",
+                        min: "0"
+                      }
+                    })
+                  ],
+                  1
+                )
+              ],
+              1
+            ),
+            _vm._v(" "),
+            _c(
+              "el-row",
+              { attrs: { gutter: 15 } },
+              [
+                _c(
+                  "el-col",
+                  { attrs: { span: 15 } },
+                  [
+                    _c("label", [_vm._v("Annual interest rate")]),
+                    _vm._v(" "),
+                    _c("el-input", {
+                      attrs: {
+                        type: "number",
+                        placeholder: "Annual interest rate",
+                        min: "0",
+                        pattern: "/^-?\\d+\\.?\\d*$/",
+                        onKeyPress: "if(this.value.length==2) return false;",
+                        name: "annualInterestRate",
+                        id: "annualInterestRate"
+                      }
+                    })
+                  ],
+                  1
+                )
+              ],
+              1
+            )
+          ],
+          1
+        )
+      : _vm._e(),
+    _vm._v(" "),
+    _vm.calc_type === "mortgage_refinance"
+      ? _c(
+          "div",
+          [
+            _c(
+              "el-row",
+              { staticStyle: { "margin-top": "20px" }, attrs: { gutter: 15 } },
+              [
+                _c(
+                  "el-col",
+                  { attrs: { span: 15 } },
+                  [
+                    _c("label", [_vm._v("Current monthly payment")]),
+                    _vm._v(" "),
+                    _c("el-input", {
+                      attrs: {
+                        type: "number",
+                        placeholder: "Home Price",
+                        min: "0"
+                      }
+                    })
+                  ],
+                  1
+                )
+              ],
+              1
+            ),
+            _vm._v(" "),
+            _c(
+              "el-row",
+              { attrs: { gutter: 15 } },
+              [
+                _c(
+                  "el-col",
+                  { attrs: { span: 8 } },
+                  [
+                    _c("label", [_vm._v("Current loan interest rate")]),
+                    _vm._v(" "),
+                    _c("el-input", {
+                      attrs: {
+                        type: "number",
+                        placeholder: "Down Payment",
+                        min: "0",
+                        name: "downPayment",
+                        id: "downPayment"
+                      }
+                    })
+                  ],
+                  1
+                ),
+                _vm._v(" "),
+                _c(
+                  "el-col",
+                  { attrs: { span: 7 } },
+                  [
+                    _c("label", [_vm._v("Balance left on mortgage")]),
+                    _vm._v(" "),
+                    _c("el-input", {
+                      attrs: {
+                        type: "number",
+                        placeholder: "Down Pament Percentage"
+                      }
+                    })
+                  ],
+                  1
+                )
+              ],
+              1
+            ),
+            _vm._v(" "),
+            _c(
+              "el-row",
+              { attrs: { gutter: 15 } },
+              [
+                _c(
+                  "el-col",
+                  { attrs: { span: 8 } },
+                  [
+                    _c("label", [_vm._v("New Interest Rate")]),
+                    _vm._v(" "),
+                    _c("el-input", {
+                      attrs: {
+                        type: "number",
+                        placeholder: "Down Payment",
+                        min: "0",
+                        name: "downPayment",
+                        id: "downPayment"
+                      }
+                    })
+                  ],
+                  1
+                ),
+                _vm._v(" "),
+                _c(
+                  "el-col",
+                  { attrs: { span: 7 } },
+                  [
+                    _c("label", [_vm._v("Remaining loan term")]),
+                    _vm._v(" "),
+                    _c("el-input", {
+                      attrs: {
+                        type: "number",
+                        placeholder: "Down Pament Percentage"
+                      }
+                    })
+                  ],
+                  1
+                )
+              ],
+              1
+            ),
+            _vm._v(" "),
+            _c(
+              "el-row",
+              { attrs: { gutter: 15 } },
+              [
+                _c(
+                  "el-col",
+                  { attrs: { span: 8 } },
+                  [
+                    _c("label", [_vm._v("New Loan Term")]),
+                    _vm._v(" "),
+                    _c("el-input", {
+                      attrs: {
+                        type: "number",
+                        placeholder: "Down Payment",
+                        min: "0",
+                        name: "downPayment",
+                        id: "downPayment"
+                      }
+                    })
+                  ],
+                  1
+                )
+              ],
+              1
+            )
+          ],
+          1
+        )
+      : _vm._e(),
+    _vm._v(" "),
+    _vm.calc_type === "mortgage_payment"
+      ? _c(
+          "div",
+          [
+            _c(
+              "el-row",
+              { staticStyle: { "margin-top": "20px" }, attrs: { gutter: 15 } },
+              [
+                _c(
+                  "el-col",
+                  { attrs: { span: 15 } },
+                  [
+                    _c("label", [_vm._v("Mortgage Amount")]),
+                    _vm._v(" "),
+                    _c("el-input", {
+                      attrs: {
+                        type: "number",
+                        placeholder: "Home Price",
+                        min: "0"
+                      }
+                    })
+                  ],
+                  1
+                )
+              ],
+              1
+            ),
+            _vm._v(" "),
+            _c(
+              "el-row",
+              { attrs: { gutter: 15 } },
+              [
+                _c(
+                  "el-col",
+                  { attrs: { span: 15 } },
+                  [
+                    _c("label", [_vm._v("Term in years")]),
+                    _vm._v(" "),
+                    _c("el-input", {
+                      attrs: {
+                        type: "number",
+                        placeholder: "Down Payment",
+                        min: "0",
+                        name: "downPayment",
+                        id: "downPayment"
+                      }
+                    })
+                  ],
+                  1
+                )
+              ],
+              1
+            ),
+            _vm._v(" "),
+            _c(
+              "el-row",
+              { attrs: { gutter: 15 } },
+              [
+                _c(
+                  "el-col",
+                  { attrs: { span: 15 } },
+                  [
+                    _c("label", [_vm._v("Interest Rate")]),
+                    _vm._v(" "),
+                    _c("el-input", {
+                      attrs: {
+                        type: "number",
+                        placeholder: "Down Payment",
+                        min: "0",
+                        name: "downPayment",
+                        id: "downPayment"
+                      }
+                    })
+                  ],
+                  1
+                )
+              ],
+              1
+            ),
+            _vm._v(" "),
+            _c(
+              "el-row",
+              { attrs: { gutter: 15 } },
+              [
+                _c(
+                  "el-col",
+                  { attrs: { span: 15 } },
+                  [
+                    _c("label", [_vm._v("Annual property taxes")]),
+                    _vm._v(" "),
+                    _c("el-input", {
+                      attrs: {
+                        type: "number",
+                        placeholder: "Down Payment",
+                        min: "0",
+                        name: "downPayment",
+                        id: "downPayment"
+                      }
+                    })
+                  ],
+                  1
+                )
+              ],
+              1
+            ),
+            _vm._v(" "),
+            _c(
+              "el-row",
+              { attrs: { gutter: 15 } },
+              [
+                _c(
+                  "el-col",
+                  { attrs: { span: 15 } },
+                  [
+                    _c("label", [_vm._v("Annual Home Insurance")]),
+                    _vm._v(" "),
+                    _c("el-input", {
+                      attrs: {
+                        type: "number",
+                        placeholder: "Down Payment",
+                        min: "0",
+                        name: "downPayment",
+                        id: "downPayment"
+                      }
+                    })
+                  ],
+                  1
+                )
+              ],
+              1
+            )
+          ],
+          1
+        )
+      : _vm._e()
+  ])
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "title" }, [
+      _c("h2", [_vm._v("This is Edit Table")])
+    ])
+  }
+]
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-34d7e6ca", module.exports)
+  }
+}
+
+/***/ }),
+/* 206 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(207);
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__(160)("109038ea", content, false, {});
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../node_modules/css-loader/index.js!../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-34d7e6ca\",\"scoped\":false,\"hasInlineConfig\":true}!../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./EditTable.vue", function() {
+     var newContent = require("!!../../../node_modules/css-loader/index.js!../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-34d7e6ca\",\"scoped\":false,\"hasInlineConfig\":true}!../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./EditTable.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 207 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(1)(false);
+// imports
+
+
+// module
+exports.push([module.i, "\n.mortgage_calc {\r\n\twidth: 75%;\r\n\tmargin: 0 auto;\n}\n.title {\r\n\tfloat: left;\n}\n.change_type {\r\n\tfloat: right;\n}\n.el-select {\r\n\tmargin-left: 205px;\n}\n.tabs {\r\n\twidth: 36%;\r\n\tfloat: right;\n}\r\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 208 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+	data: function data() {
+		return {
+			table_id: this.$route.params.table_id,
+			table: {},
+			calc_type: 'mortgage_payment',
+			activeName: '',
+			calc_types: [{
+				value: 'mortgage_calculator',
+				label: 'Mortgage Calculator'
+			}, {
+				value: 'mortgage_refinance',
+				label: 'Mortgage Refinance Calculator'
+			}, {
+				value: 'mortgage_payment',
+				label: 'Mortgage Payment Calculator'
+			}]
+		};
+	},
+
+	methods: {
+		handleClick: function handleClick(tab, event) {
+			console.log(tab, event);
+		}
+	}
+});
 
 /***/ })
 /******/ ]);
