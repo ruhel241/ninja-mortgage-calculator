@@ -105,12 +105,18 @@ export default {
         addNewTable() {
 
             this.tableData.push({
-
                 id: '20',
                 name: this.table_name,
                 shortCode: '[wp_price_table id="1070"]'
-
             });
+
+            this.$notify({
+                title: 'Success',
+                message: 'This is a success message',
+                type: 'success'
+            });
+
+            this.table_name = '';
 
             this.addTableModal = false;
 

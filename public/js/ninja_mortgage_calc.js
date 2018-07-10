@@ -47661,6 +47661,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 
+
 __WEBPACK_IMPORTED_MODULE_4_element_ui_lib_locale___default.a.use(__WEBPACK_IMPORTED_MODULE_5_element_ui_lib_locale_lang_en___default.a);
 __WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_1_vue_router__["a" /* default */]);
 
@@ -47691,6 +47692,8 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_2_elem
 __WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_2_element_ui__["Table"]);
 __WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_2_element_ui__["Icon"]);
 __WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_2_element_ui__["TableColumn"]);
+
+__WEBPACK_IMPORTED_MODULE_0_vue___default.a.prototype.$notify = __WEBPACK_IMPORTED_MODULE_2_element_ui__["Notification"];
 
 var router = new __WEBPACK_IMPORTED_MODULE_1_vue_router__["a" /* default */]({
 	routes: __WEBPACK_IMPORTED_MODULE_3__router_js__["a" /* default */]
@@ -62336,12 +62339,18 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         addNewTable: function addNewTable() {
 
             this.tableData.push({
-
                 id: '20',
                 name: this.table_name,
                 shortCode: '[wp_price_table id="1070"]'
-
             });
+
+            this.$notify({
+                title: 'Success',
+                message: 'This is a success message',
+                type: 'success'
+            });
+
+            this.table_name = '';
 
             this.addTableModal = false;
         }

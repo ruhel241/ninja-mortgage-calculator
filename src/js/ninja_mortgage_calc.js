@@ -6,6 +6,7 @@ import routes from './router.js';
 
 import locale from 'element-ui/lib/locale';
 import lang from 'element-ui/lib/locale/lang/en';
+
 locale.use(lang);
 Vue.use(VueRouter);
 
@@ -17,7 +18,8 @@ import {
 	Option,
 	Table, 
 	Icon,
-	TableColumn } from 'element-ui';
+	TableColumn,
+	Notification } from 'element-ui';
 
 import 'element-ui/lib/theme-chalk/index.css';
 import 'element-ui/lib/theme-chalk/table.css';
@@ -46,6 +48,7 @@ Vue.use(Table)
 Vue.use(Icon)
 Vue.use(TableColumn)
 
+Vue.prototype.$notify = Notification; 
 
 const router = new VueRouter({
 	routes
