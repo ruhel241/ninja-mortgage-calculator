@@ -62299,7 +62299,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     name: 'all_mortgage_tables',
@@ -62337,25 +62336,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                     message: response.data.message
                 });
             }).fail(function (error) {
-                console.log(error);
+                _this.$notify.error({
+                    title: 'Error',
+                    message: error.responseJSON.data.message
+                });
             }).always(function () {
                 _this.addTableModal = false;
             });
-            // this.tableData.push({
-            //     id: '20',
-            //     name: this.table_name,
-            //     shortCode: '[wp_price_table id="1070"]'
-            // });
-
-            // this.$notify({
-            //     title: 'Success',
-            //     message: 'This is a success message',
-            //     type: 'success'
-            // });
-
-            // this.table_name = '';
-
-            // this.addTableModal = false;
         },
         fetchTables: function fetchTables() {
             var _this2 = this;
@@ -62368,6 +62355,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 page_number: this.page_number
             }).then(function (response) {
                 _this2.tableData = response.data.tables;
+                console.log(response);
             }).fail(function (error) {
                 console.log(error);
             });
@@ -62424,7 +62412,7 @@ var render = function() {
         },
         [
           _c("el-table-column", {
-            attrs: { prop: "id", label: "ID", width: "60" }
+            attrs: { prop: "ID", label: "ID", width: "60" }
           }),
           _vm._v(" "),
           _c("el-table-column", {
@@ -62436,7 +62424,7 @@ var render = function() {
                   return [
                     _vm._v(
                       "\n                " +
-                        _vm._s(scope.row.name) +
+                        _vm._s(scope.row.post_title) +
                         "\n            "
                     )
                   ]
@@ -62477,7 +62465,7 @@ var render = function() {
                       {
                         staticClass:
                           "el-button el-button--info el-button--mini",
-                        attrs: { href: "", target: "_blank" }
+                        attrs: { href: scope.row.demo_url, target: "_blank" }
                       },
                       [_c("i", { staticClass: "el-icon-view" })]
                     )

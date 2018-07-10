@@ -3,14 +3,14 @@
 
 class MortgageCalculatorHandler 
 {
-	public static $CPTName = 'ninja_mortgage_cpt';
+	
 
 	public static function handleAjaxCalls()
 	{
 		$route = sanitize_text_field( $_REQUEST['route'] );
 
 		if($route == 'add_table'){
-			$tableTitle = sanitize_text_field($_REQUEST['post_title']);
+			$tableTitle = sanitize_text_field($_REQUEST['post_title']); 
 			static::addTable($tableTitle);
 		}
 
@@ -42,17 +42,18 @@ class MortgageCalculatorHandler
 	
 
 
-	public static function addTable($tableTitle)
+	public static function addTable($tableTitle = '')
 	{
 		if( ! $tableTitle ){
 			wp_send_json_error(array(
-				'message' => __( 'Please Provide Table Title', 'ninja_mortgage')
+				'message' => __( "Please Provide Table Title", 'ninja_mortgage')
 			), 423);
-		} 
+		}
+	
 
 		$tableData = array(
 			'post_title' => $tableTitle,
-			'post_type' => static::$CPT,
+			'post_type' => CPT::$CPTName,
 			'post_status' => 'publish',
 		);
 
@@ -96,12 +97,12 @@ class MortgageCalculatorHandler
 		$offset = ($pageNumber - 1 ) * $perPage;
 
 		$tables = get_posts(array(
-			'post_type' => static::$CPT,
+			'post_type' => CPT::$CPTName,
 			'offset' => $offset,
 			'posts_per_page' => $perPage
 		));
-
-		$totalCount = wp_count_posts(static::$CPT);
+		
+		$totalCount = wp_count_posts(CPT::$CPTName);
 	
 	    $formattedTables = array();
         foreach ($tables as $table) {

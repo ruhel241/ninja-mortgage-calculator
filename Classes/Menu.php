@@ -1,6 +1,5 @@
 <?php namespace NinjaMortgage\Classes;
 
-
 class Menu
 {
 
