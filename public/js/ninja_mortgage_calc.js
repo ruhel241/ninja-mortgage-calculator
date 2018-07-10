@@ -62473,7 +62473,7 @@ var render = function() {
         "el-dialog",
         {
           attrs: {
-            title: "Add New Pricing Table",
+            title: "Add New Mortgage Table",
             visible: _vm.addTableModal,
             width: "60%"
           },

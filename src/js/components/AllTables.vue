@@ -48,7 +48,7 @@
 
         <!-- Dialog -->
         <el-dialog
-            title="Add New Pricing Table"
+            title="Add New Mortgage Table"
             :visible.sync="addTableModal"
             width="60%">
                 <label for="new_table_name">Table Name</label>
