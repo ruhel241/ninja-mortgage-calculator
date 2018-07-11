@@ -119,7 +119,7 @@ class MortgageCalculatorHandler
 	}
 
 
-	public function deleteTable($tableId)
+	public static function deleteTable($tableId)
 	{
 		delete_post_meta($tableId, '_ninija_mortgage_table_config');	
 		wp_delete_post($tableId);

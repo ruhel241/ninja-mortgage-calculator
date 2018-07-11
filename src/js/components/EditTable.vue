@@ -161,6 +161,7 @@
 
 <script>
 	export default {
+		name: 'editTable',
 		data() {
 			return {
 				table_id: this.$route.params.table_id,

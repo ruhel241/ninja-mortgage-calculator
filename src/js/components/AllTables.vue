@@ -1,4 +1,4 @@
-<template>
+<template> 
     <div class="editor">
         <div class="editor_header">
             <div class="section_header">
@@ -45,6 +45,7 @@
                     <a :href="scope.row.demo_url"  target="_blank" class="el-button el-button--info el-button--mini">
                         <i class="el-icon-view"></i>
                     </a>
+                    <app-delete-table @delete="deleteItem(scope.row.ID)"></app-delete-table> 
                 </template>
             </el-table-column>
 
@@ -78,8 +79,13 @@
 </template>
 
 <script>
+import DeleteTable from './deleteTable.vue';
+
 export default {
     name: 'all_mortgage_tables',
+    components: {
+        'app-delete-table': DeleteTable
+    },
     data() {
         return {
             addTableModal: false,
@@ -164,6 +170,28 @@ export default {
             changePage(pageNumber) {
                 this.page_number = pageNumber;
                 this.fetchTables();
+            },
+            deleteItem(tableId) {
+                jQuery.post(ajaxurl, {
+                    action: 'ninja_mortgage_ajax_actions',
+                    route: 'delete_table',
+                    table_id: tableId
+                }).then(
+                    response => {
+                        this.$notify.success({
+                            title: 'Deleted',
+                            message: response.data.message
+                        })
+                        this.fetchTables();
+                    }
+                ).fail(
+                    error => {
+                        this.$notify.error({
+                            title: 'Error', 
+                            message: error.responseJSON.data.message
+                        })
+                    }
+                )
             }
 
     },
