@@ -63116,9 +63116,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
-//
-//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -63132,10 +63129,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			table: {},
 			calc_type: 'mortgage_calculator',
 			activeName: '',
-			homePrice: 'Home Price',
-			downPament: 'Down Pament',
-			mortgageTerm: 'Mortgage Term',
-			annualInterestRate: 'Annual Interest Rate',
+			all_mort_calc_table: {
+				homePrice: 'Home Price',
+				downPament: 'Down Pament',
+				mortgageTerm: 'Mortgage Term',
+				annualInterestRate: 'Annual Interest Rate'
+			},
 			calc_types: [{
 				value: 'mortgage_calculator',
 				label: 'Mortgage Calculator'
@@ -63284,56 +63283,19 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     name: 'tabs',
-    props: ['calcType'],
+    props: ['calcType', 'allMortCalcTable'],
     data: function data() {
         return {
             activeName: 'first',
-            homePrice: 'Home Price',
-            downPament: 'Down Pament',
-            mortgageTerm: 'Mortgage Term',
             mortgageTermMonth: 'Mortgage Term Month',
-            annualInterestRate: 'Annual Interest Rate',
-            homePriceDef: 0,
-            downPamentDef: 0,
-            mortgageTermDef: 0,
-            mortgageTermMonthDef: 0,
-            annualInterestRateDef: 0
+            homePriceDef: 120000,
+            downPamentDef: 20000,
+            mortgageTermDef: 30,
+            mortgageTermMonthDef: 360,
+            annualInterestRateDef: 12
         };
     },
 
@@ -63395,16 +63357,22 @@ var render = function() {
                           "el-col",
                           { attrs: { span: 24 } },
                           [
-                            _c("label", [_vm._v(_vm._s(_vm.homePrice))]),
+                            _c("label", [
+                              _vm._v(_vm._s(_vm.allMortCalcTable.homePrice))
+                            ]),
                             _vm._v(" "),
                             _c("el-input", {
                               attrs: { type: "text" },
                               model: {
-                                value: _vm.homePrice,
+                                value: _vm.allMortCalcTable.homePrice,
                                 callback: function($$v) {
-                                  _vm.homePrice = $$v
+                                  _vm.$set(
+                                    _vm.allMortCalcTable,
+                                    "homePrice",
+                                    $$v
+                                  )
                                 },
-                                expression: "homePrice"
+                                expression: "allMortCalcTable.homePrice"
                               }
                             })
                           ],
@@ -63421,16 +63389,22 @@ var render = function() {
                           "el-col",
                           { attrs: { span: 24 } },
                           [
-                            _c("label", [_vm._v(_vm._s(_vm.downPament))]),
+                            _c("label", [
+                              _vm._v(_vm._s(_vm.allMortCalcTable.downPament))
+                            ]),
                             _vm._v(" "),
                             _c("el-input", {
                               attrs: { type: "text" },
                               model: {
-                                value: _vm.downPament,
+                                value: _vm.allMortCalcTable.downPament,
                                 callback: function($$v) {
-                                  _vm.downPament = $$v
+                                  _vm.$set(
+                                    _vm.allMortCalcTable,
+                                    "downPament",
+                                    $$v
+                                  )
                                 },
-                                expression: "downPament"
+                                expression: "allMortCalcTable.downPament"
                               }
                             })
                           ],
@@ -63447,16 +63421,22 @@ var render = function() {
                           "el-col",
                           { attrs: { span: 24 } },
                           [
-                            _c("label", [_vm._v(_vm._s(_vm.mortgageTerm))]),
+                            _c("label", [
+                              _vm._v(_vm._s(_vm.allMortCalcTable.mortgageTerm))
+                            ]),
                             _vm._v(" "),
                             _c("el-input", {
                               attrs: { type: "text" },
                               model: {
-                                value: _vm.mortgageTerm,
+                                value: _vm.allMortCalcTable.mortgageTerm,
                                 callback: function($$v) {
-                                  _vm.mortgageTerm = $$v
+                                  _vm.$set(
+                                    _vm.allMortCalcTable,
+                                    "mortgageTerm",
+                                    $$v
+                                  )
                                 },
-                                expression: "mortgageTerm"
+                                expression: "allMortCalcTable.mortgageTerm"
                               }
                             })
                           ],
@@ -63502,161 +63482,24 @@ var render = function() {
                           { attrs: { span: 24 } },
                           [
                             _c("label", [
-                              _vm._v(_vm._s(_vm.annualInterestRate))
+                              _vm._v(
+                                _vm._s(_vm.allMortCalcTable.annualInterestRate)
+                              )
                             ]),
                             _vm._v(" "),
                             _c("el-input", {
                               attrs: { type: "text" },
                               model: {
-                                value: _vm.annualInterestRate,
+                                value: _vm.allMortCalcTable.annualInterestRate,
                                 callback: function($$v) {
-                                  _vm.annualInterestRate = $$v
+                                  _vm.$set(
+                                    _vm.allMortCalcTable,
+                                    "annualInterestRate",
+                                    $$v
+                                  )
                                 },
-                                expression: "annualInterestRate"
-                              }
-                            })
-                          ],
-                          1
-                        )
-                      ],
-                      1
-                    )
-                  ],
-                  1
-                )
-              : _vm._e()
-          ]),
-          _vm._v(" "),
-          _c("el-tab-pane", { attrs: { label: "Default", name: "second" } }, [
-            _vm.calcType == "mortgage_calculator"
-              ? _c(
-                  "div",
-                  [
-                    _c(
-                      "el-row",
-                      [
-                        _c(
-                          "el-col",
-                          { attrs: { span: 24 } },
-                          [
-                            _c("label", [_vm._v(_vm._s(_vm.homePrice))]),
-                            _vm._v(" "),
-                            _c("el-input", {
-                              attrs: { type: "text" },
-                              model: {
-                                value: _vm.homePriceDef,
-                                callback: function($$v) {
-                                  _vm.homePriceDef = $$v
-                                },
-                                expression: "homePriceDef"
-                              }
-                            })
-                          ],
-                          1
-                        )
-                      ],
-                      1
-                    ),
-                    _vm._v(" "),
-                    _c(
-                      "el-row",
-                      [
-                        _c(
-                          "el-col",
-                          { attrs: { span: 24 } },
-                          [
-                            _c("label", [_vm._v(_vm._s(_vm.downPament))]),
-                            _vm._v(" "),
-                            _c("el-input", {
-                              attrs: { type: "text" },
-                              model: {
-                                value: _vm.downPamentDef,
-                                callback: function($$v) {
-                                  _vm.downPamentDef = $$v
-                                },
-                                expression: "downPamentDef"
-                              }
-                            })
-                          ],
-                          1
-                        )
-                      ],
-                      1
-                    ),
-                    _vm._v(" "),
-                    _c(
-                      "el-row",
-                      [
-                        _c(
-                          "el-col",
-                          { attrs: { span: 24 } },
-                          [
-                            _c("label", [_vm._v(_vm._s(_vm.mortgageTerm))]),
-                            _vm._v(" "),
-                            _c("el-input", {
-                              attrs: { type: "text" },
-                              model: {
-                                value: _vm.mortgageTermDef,
-                                callback: function($$v) {
-                                  _vm.mortgageTermDef = $$v
-                                },
-                                expression: "mortgageTermDef"
-                              }
-                            })
-                          ],
-                          1
-                        )
-                      ],
-                      1
-                    ),
-                    _vm._v(" "),
-                    _c(
-                      "el-row",
-                      [
-                        _c(
-                          "el-col",
-                          { attrs: { span: 24 } },
-                          [
-                            _c("label", [
-                              _vm._v(_vm._s(_vm.mortgageTermMonth))
-                            ]),
-                            _vm._v(" "),
-                            _c("el-input", {
-                              attrs: { type: "text" },
-                              model: {
-                                value: _vm.mortgageTermMonthDef,
-                                callback: function($$v) {
-                                  _vm.mortgageTermMonthDef = $$v
-                                },
-                                expression: "mortgageTermMonthDef"
-                              }
-                            })
-                          ],
-                          1
-                        )
-                      ],
-                      1
-                    ),
-                    _vm._v(" "),
-                    _c(
-                      "el-row",
-                      [
-                        _c(
-                          "el-col",
-                          { attrs: { span: 24 } },
-                          [
-                            _c("label", [
-                              _vm._v(_vm._s(_vm.annualInterestRate))
-                            ]),
-                            _vm._v(" "),
-                            _c("el-input", {
-                              attrs: { type: "text" },
-                              model: {
-                                value: _vm.annualInterestRateDef,
-                                callback: function($$v) {
-                                  _vm.annualInterestRateDef = $$v
-                                },
-                                expression: "annualInterestRateDef"
+                                expression:
+                                  "allMortCalcTable.annualInterestRate"
                               }
                             })
                           ],
@@ -63809,16 +63652,22 @@ var render = function() {
                           "el-col",
                           { attrs: { span: 24 } },
                           [
-                            _c("label", [_vm._v(_vm._s(_vm.homePrice))]),
+                            _c("label", [
+                              _vm._v(_vm._s(_vm.all_mort_calc_table.homePrice))
+                            ]),
                             _vm._v(" "),
                             _c("el-input", {
                               attrs: { type: "text", disabled: "" },
                               model: {
-                                value: _vm.homePrice,
+                                value: _vm.all_mort_calc_table.homePrice,
                                 callback: function($$v) {
-                                  _vm.homePrice = $$v
+                                  _vm.$set(
+                                    _vm.all_mort_calc_table,
+                                    "homePrice",
+                                    $$v
+                                  )
                                 },
-                                expression: "homePrice"
+                                expression: "all_mort_calc_table.homePrice"
                               }
                             })
                           ],
@@ -63836,16 +63685,22 @@ var render = function() {
                           "el-col",
                           { attrs: { span: 12 } },
                           [
-                            _c("label", [_vm._v(_vm._s(_vm.downPament))]),
+                            _c("label", [
+                              _vm._v(_vm._s(_vm.all_mort_calc_table.downPament))
+                            ]),
                             _vm._v(" "),
                             _c("el-input", {
                               attrs: { type: "text", disabled: "" },
                               model: {
-                                value: _vm.downPament,
+                                value: _vm.all_mort_calc_table.downPament,
                                 callback: function($$v) {
-                                  _vm.downPament = $$v
+                                  _vm.$set(
+                                    _vm.all_mort_calc_table,
+                                    "downPament",
+                                    $$v
+                                  )
                                 },
-                                expression: "downPament"
+                                expression: "all_mort_calc_table.downPament"
                               }
                             })
                           ],
@@ -63880,7 +63735,11 @@ var render = function() {
                           "el-col",
                           { attrs: { span: 12 } },
                           [
-                            _c("label", [_vm._v(_vm._s(_vm.mortgageTerm))]),
+                            _c("label", [
+                              _vm._v(
+                                _vm._s(_vm.all_mort_calc_table.mortgageTerm)
+                              )
+                            ]),
                             _vm._v(" "),
                             _c("el-input", {
                               attrs: {
@@ -63889,11 +63748,15 @@ var render = function() {
                                 disabled: ""
                               },
                               model: {
-                                value: _vm.mortgageTerm,
+                                value: _vm.all_mort_calc_table.mortgageTerm,
                                 callback: function($$v) {
-                                  _vm.mortgageTerm = $$v
+                                  _vm.$set(
+                                    _vm.all_mort_calc_table,
+                                    "mortgageTerm",
+                                    $$v
+                                  )
                                 },
-                                expression: "mortgageTerm"
+                                expression: "all_mort_calc_table.mortgageTerm"
                               }
                             })
                           ],
@@ -63929,17 +63792,27 @@ var render = function() {
                           { attrs: { span: 24 } },
                           [
                             _c("label", [
-                              _vm._v(_vm._s(_vm.annualInterestRate))
+                              _vm._v(
+                                _vm._s(
+                                  _vm.all_mort_calc_table.annualInterestRate
+                                )
+                              )
                             ]),
                             _vm._v(" "),
                             _c("el-input", {
                               attrs: { type: "text", disabled: "" },
                               model: {
-                                value: _vm.annualInterestRate,
+                                value:
+                                  _vm.all_mort_calc_table.annualInterestRate,
                                 callback: function($$v) {
-                                  _vm.annualInterestRate = $$v
+                                  _vm.$set(
+                                    _vm.all_mort_calc_table,
+                                    "annualInterestRate",
+                                    $$v
+                                  )
                                 },
-                                expression: "annualInterestRate"
+                                expression:
+                                  "all_mort_calc_table.annualInterestRate"
                               }
                             })
                           ],
@@ -64231,20 +64104,9 @@ var render = function() {
             { staticClass: "tabs_col", attrs: { span: 8 } },
             [
               _c("app-tabs", {
-                attrs: { calcType: _vm.calc_type },
-                on: {
-                  homePriceUpd: function($event) {
-                    _vm.updateHomePrice($event)
-                  },
-                  downPamentUpd: function($event) {
-                    _vm.updateDownPament($event)
-                  },
-                  mortgageTermUpd: function($event) {
-                    _vm.updateMortgageTerm($event)
-                  },
-                  annualInterestRateUpd: function($event) {
-                    _vm.updateannualInterestRate($event)
-                  }
+                attrs: {
+                  calcType: _vm.calc_type,
+                  allMortCalcTable: _vm.all_mort_calc_table
                 }
               })
             ],

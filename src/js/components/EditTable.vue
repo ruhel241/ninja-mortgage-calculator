@@ -34,14 +34,14 @@
 			<div v-if="calc_type=='mortgage_calculator'"  style="margin-top: 20px">
 				<el-row :gutter="15">
 					<el-col :span="24">
-						<label>{{ homePrice }}</label>
-						<el-input type="text"  v-model="homePrice" disabled></el-input>
+						<label>{{ all_mort_calc_table.homePrice }}</label>
+						<el-input type="text"  v-model="all_mort_calc_table.homePrice" disabled></el-input>
 					</el-col>
 				</el-row>
 				<el-row :gutter="15">
 					<el-col :span="12">
-						<label>{{ downPament }}</label>
-						<el-input type="text" v-model="downPament" disabled></el-input>
+						<label>{{ all_mort_calc_table.downPament }}</label>
+						<el-input type="text" v-model="all_mort_calc_table.downPament" disabled></el-input>
 					</el-col>
 					<el-col :span="12">
 						<label>Down Pament Percentage</label>
@@ -50,8 +50,8 @@
 				</el-row>
 				<el-row :gutter="15">
 					<el-col :span="12">
-						<label>{{ mortgageTerm }}</label>
-						<el-input type="text" placeholder="Mortgage Term" v-model="mortgageTerm" disabled></el-input>
+						<label>{{ all_mort_calc_table.mortgageTerm }}</label>
+						<el-input type="text" placeholder="Mortgage Term" v-model="all_mort_calc_table.mortgageTerm" disabled></el-input>
 					</el-col>
 					<el-col :span="12">
 						<label>Mortgage term month</label>
@@ -62,8 +62,8 @@
 				</el-row>
 				<el-row :gutter="15">
 					<el-col :span="24">
-						<label>{{ annualInterestRate }}</label>
-						<el-input type="text" disabled v-model="annualInterestRate"></el-input>
+						<label>{{ all_mort_calc_table.annualInterestRate }}</label>
+						<el-input type="text" disabled v-model="all_mort_calc_table.annualInterestRate"></el-input>
 					</el-col>
 				</el-row>
 			</div>
@@ -137,10 +137,7 @@
 		</el-col>
 		<el-col :span="8" class="tabs_col">
 			<!-- Tabs Component -->
-			<app-tabs :calcType="calc_type" v-on:homePriceUpd="updateHomePrice($event)"
-																  v-on:downPamentUpd="updateDownPament($event)"
-																  v-on:mortgageTermUpd="updateMortgageTerm($event)"
-																  v-on:annualInterestRateUpd="updateannualInterestRate($event)"></app-tabs>
+			<app-tabs :calcType="calc_type" :allMortCalcTable="all_mort_calc_table"></app-tabs>
 		</el-col>
 	</el-row>
 </div>
@@ -159,10 +156,12 @@ export default {
 				table: {},
 				calc_type: 'mortgage_calculator',
 				activeName: '',
-				homePrice: 'Home Price',
-				downPament: 'Down Pament',
-				mortgageTerm: 'Mortgage Term',
-				annualInterestRate: 'Annual Interest Rate',
+				all_mort_calc_table: {
+					homePrice: 'Home Price',
+					downPament: 'Down Pament',
+					mortgageTerm: 'Mortgage Term',
+					annualInterestRate: 'Annual Interest Rate'
+				},
 				calc_types: [
                 {
                     value: 'mortgage_calculator',
