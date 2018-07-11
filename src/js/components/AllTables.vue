@@ -31,6 +31,13 @@
             </el-table-column>
 
             <el-table-column 
+                label="Caculator Type">
+                <template slot-scope="scope">
+                    {{ scope.row.post_content }}
+                </template>
+            </el-table-column>            
+
+            <el-table-column 
                 label="ShortCode">
                 <template slot-scope="scope">
                     <code>[ninja_mortgage_cal id="{{ scope.row.ID }}"]</code>
@@ -127,7 +134,8 @@ export default {
             jQuery.post(ajaxurl, {
                 action: 'ninja_mortgage_ajax_actions',
                 route: 'add_table',
-                post_title: this.table_name
+                post_title: this.table_name,
+                post_content: this.selectCalculator
             }).then(
                 response => {
                     this.$notify.success({

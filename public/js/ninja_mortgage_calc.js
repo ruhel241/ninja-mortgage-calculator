@@ -62337,6 +62337,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -62377,7 +62384,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             jQuery.post(ajaxurl, {
                 action: 'ninja_mortgage_ajax_actions',
                 route: 'add_table',
-                post_title: this.table_name
+                post_title: this.table_name,
+                post_content: this.selectCalculator
             }).then(function (response) {
                 _this.$notify.success({
                     title: 'Success',
@@ -62690,6 +62698,24 @@ var render = function() {
                             "\n                    "
                         )
                       ]
+                    )
+                  ]
+                }
+              }
+            ])
+          }),
+          _vm._v(" "),
+          _c("el-table-column", {
+            attrs: { label: "Caculator Type" },
+            scopedSlots: _vm._u([
+              {
+                key: "default",
+                fn: function(scope) {
+                  return [
+                    _vm._v(
+                      "\n                    " +
+                        _vm._s(scope.row.post_content) +
+                        "\n                "
                     )
                   ]
                 }
