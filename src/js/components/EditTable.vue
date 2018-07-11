@@ -31,7 +31,7 @@
 						</el-option>
 				</el-select>
 			</div>
-			
+
 			<div v-if="calc_type=='mortgage_calculator'"  style="margin-top: 20px">
 				<el-row :gutter="15">
 					<el-col :span="24">
@@ -157,7 +157,7 @@ export default {
 			return {
 				table_id: this.$route.params.table_id,
 				table: {},
-				calc_type: 'mortgage_calculator',
+				calc_type: '',
 				activeName: '',
 				all_mort_calc_table: {
 					homePrice: 'Home Price',
@@ -198,6 +198,7 @@ export default {
 				}).then(
 					response => {
 						this.table = response.data.table;
+						this.calc_type = this.table.post_content;
 					}
 				).fail(
                 error => {
