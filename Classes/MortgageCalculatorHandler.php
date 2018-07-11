@@ -92,6 +92,7 @@ class MortgageCalculatorHandler
 		$formattedTable = (object)array(
 			'ID' => $table->ID,
 			'post_title' => $table->post_title,
+			'post_content' => $table->post_content
 		);
 		$tableConfig = get_post_meta($tableId, '_ninija_mortgage_table_config', true);
 		 wp_send_json_success(array(
