@@ -1,173 +1,168 @@
 <template>
-	<div class="mortgage_calc">
-		<div class="title">
-			<h2>This is Edit Table</h2>
-		</div>
-		<div class="change_calc">
-			<el-select v-model="calc_type" placeholder="Calculator Type">
-				<el-option
-                        v-for="(type, i) in calc_types"
-                        :key="i"
-                        :label="type.label"
-                        :value="type.value">
-                    </el-option>
-			</el-select>
-		</div>
+<div>
 
-		<div class="tabs">
-			<el-tabs v-model="activeName" @tab-click="handleClick">
-				<el-tab-pane label="Label" name="first">Label</el-tab-pane>
-				<el-tab-pane label="Default" name="second">Default</el-tab-pane>
-				<el-tab-pane label="Setting" name="third">Setting</el-tab-pane>
-			</el-tabs>
-		</div>
+	<el-row class="header">
+		<el-col :span="24">
+			<el-col :span="20">
+				<h1>{{ table.post_title }} <span><code>[ninja_mortgage_cal id="{{ table_id }}"]</code></span></h1>
+			</el-col>
+			<el-col :span="4">
+				<el-button class="common_btn" @click="updateTableConfig()">Update</el-button>
+				<el-button class="common_btn">Preview</el-button>
+			</el-col>
+		</el-col>
+	</el-row>
 
-		<div v-if="calc_type=='mortgage_calculator'">
-			<el-row :gutter="15" style="margin-top: 20px">
-				<el-col :span="15">
-					<label>Home Price</label>
-					<el-input type="number" placeholder="Home Price" min=0></el-input>
-				</el-col>
-			</el-row>
-			<el-row :gutter="15">
-				<el-col :span="8">
-					<label>Down Pament</label>
-					<el-input type="number" placeholder="Down Payment" 
-									min=0
-									name="downPayment"
-									id="downPayment"></el-input>
-				</el-col>
-				<el-col :span="7">
-					<label>Down Pament Percentage</label>
-					<el-input type="number" placeholder="Down Pament Percentage"></el-input>
-				</el-col>
-			</el-row>
-			<el-row :gutter="15">
-				<el-col :span="8">
-					<label>Mortgage term</label>
-					<el-input type="number" placeholder="Mortgage Term" min=0
-									pattern="/^-?\d+\.?\d*$/" onKeyPress="if(this.value.length==2) return false;"
-									name="mortgageTerm"
-									id="mortgageTerm"></el-input>
-				</el-col>
-				<el-col :span="7">
-					<label>Mortgage term month</label>
-					<el-input type="number" 
-									placeholder="Mortgage Term Month" 
-									pattern="/^-?\d+\.?\d*$/" onKeyPress="if(this.value.length==3) return false;"
-									min=0></el-input>
-				</el-col>
-			</el-row>
-			<el-row :gutter="15">
-				<el-col :span="15">
-					<label>Annual interest rate</label>
-					<el-input type="number" placeholder="Annual interest rate" min=0
-									pattern="/^-?\d+\.?\d*$/" onKeyPress="if(this.value.length==2) return false;"
-									name="annualInterestRate"
-									id="annualInterestRate"></el-input>
-				</el-col>
-			</el-row>
-		</div>
 
-		<div v-if="calc_type==='mortgage_refinance'">
-			<el-row :gutter="15" style="margin-top: 20px">
-				<el-col :span="15">
-					<label>Current monthly payment</label>
-					<el-input type="number" placeholder="Home Price" min=0></el-input>
-				</el-col>
-			</el-row>
-			<el-row :gutter="15">
-				<el-col :span="8">
-					<label>Current loan interest rate</label>
-					<el-input type="number" placeholder="Down Payment" 
-									min=0
-									name="downPayment"
-									id="downPayment"></el-input>
-				</el-col>
-				<el-col :span="7">
-					<label>Balance left on mortgage</label>
-					<el-input type="number" placeholder="Down Pament Percentage"></el-input>
-				</el-col>
-			</el-row>
-			<el-row :gutter="15">
-				<el-col :span="8">
-					<label>New Interest Rate</label>
-					<el-input type="number" placeholder="Down Payment" 
-									min=0
-									name="downPayment"
-									id="downPayment"></el-input>
-				</el-col>
-				<el-col :span="7">
-					<label>Remaining loan term</label>
-					<el-input type="number" placeholder="Down Pament Percentage"></el-input>
-				</el-col>
-			</el-row>
-			<el-row :gutter="15">
-				<el-col :span="8">
-					<label>New Loan Term</label>
-					<el-input type="number" placeholder="Down Payment" 
-									min=0
-									name="downPayment"
-									id="downPayment"></el-input>
-				</el-col>
-			</el-row>
-		</div>
-		<div v-if="calc_type==='mortgage_payment'">
-			<el-row :gutter="15" style="margin-top: 20px">
-				<el-col :span="15">
-					<label>Mortgage Amount</label>
-					<el-input type="number" placeholder="Home Price" min=0></el-input>
-				</el-col>
-			</el-row>
-			<el-row :gutter="15">
-				<el-col :span="15">
-					<label>Term in years</label>
-					<el-input type="number" placeholder="Down Payment" 
-									min=0
-									name="downPayment"
-									id="downPayment"></el-input>
-				</el-col>
-			</el-row>
-			<el-row :gutter="15">
-				<el-col :span="15">
-					<label>Interest Rate</label>
-					<el-input type="number" placeholder="Down Payment" 
-									min=0
-									name="downPayment"
-									id="downPayment"></el-input>
-				</el-col>
-			</el-row>
-			<el-row :gutter="15">
-				<el-col :span="15">
-					<label>Annual property taxes</label>
-					<el-input type="number" placeholder="Down Payment" 
-									min=0
-									name="downPayment"
-									id="downPayment"></el-input>
-				</el-col>
-			</el-row>
-			<el-row :gutter="15">
-				<el-col :span="15">
-					<label>Annual Home Insurance</label>
-					<el-input type="number" placeholder="Down Payment" 
-									min=0
-									name="downPayment"
-									id="downPayment"></el-input>
-				</el-col>
-			</el-row>
-		</div>
-	</div>
+	<el-row>
+		<el-col :span="15" class="fields">
+
+			<h2 v-if="calc_type==='mortgage_payment'">Mortgage Payment</h2>
+			<h2 v-if="calc_type==='mortgage_calculator'">Mortgage Calculator</h2>
+			<h2 v-if="calc_type==='mortgage_refinance'">Mortgage Refinance</h2>
+
+			<div class="change_type">
+				<el-select v-model="calc_type" placeholder="Calculator Type">
+					<el-option
+							v-for="(type, i) in calc_types"
+							:key="i"
+							:label="type.label"
+							:value="type.value">
+						</el-option>
+				</el-select>
+			</div>
+			<div v-if="calc_type=='mortgage_calculator'"  style="margin-top: 20px">
+				<el-row :gutter="15">
+					<el-col :span="24">
+						<label>{{ homePrice }}</label>
+						<el-input type="text"  v-model="homePrice" disabled></el-input>
+					</el-col>
+				</el-row>
+				<el-row :gutter="15">
+					<el-col :span="12">
+						<label>{{ downPament }}</label>
+						<el-input type="text" v-model="downPament" disabled></el-input>
+					</el-col>
+					<el-col :span="12">
+						<label>Down Pament Percentage</label>
+						<el-input type="text" placeholder="Down Pament Percentage" disabled></el-input>
+					</el-col>
+				</el-row>
+				<el-row :gutter="15">
+					<el-col :span="12">
+						<label>{{ mortgageTerm }}</label>
+						<el-input type="text" placeholder="Mortgage Term" v-model="mortgageTerm" disabled></el-input>
+					</el-col>
+					<el-col :span="12">
+						<label>Mortgage term month</label>
+						<el-input type="text" 
+										placeholder="Mortgage Term Month" 
+										disabled></el-input>
+					</el-col>
+				</el-row>
+				<el-row :gutter="15">
+					<el-col :span="24">
+						<label>{{ annualInterestRate }}</label>
+						<el-input type="text" disabled v-model="annualInterestRate"></el-input>
+					</el-col>
+				</el-row>
+			</div>
+
+			<div v-if="calc_type==='mortgage_refinance'">
+				<el-row :gutter="15" style="margin-top: 20px">
+					<el-col :span="24">
+						<label>Current monthly payment</label>
+						<el-input type="text" placeholder="Current monthly payment" disabled></el-input>
+					</el-col>
+				</el-row>
+				<el-row :gutter="15">
+					<el-col :span="12">
+						<label>Current loan interest rate</label>
+						<el-input type="text" placeholder="Current loan interest rate" disabled></el-input>
+					</el-col>
+					<el-col :span="12">
+						<label>Balance left on mortgage</label>
+						<el-input type="text" placeholder="Balance left on mortgage" disabled></el-input>
+					</el-col>
+				</el-row>
+				<el-row :gutter="15">
+					<el-col :span="12">
+						<label>New Interest Rate</label>
+						<el-input type="text" placeholder="New Interest Rate" disabled></el-input>
+					</el-col>
+					<el-col :span="12">
+						<label>Remaining loan term</label>
+						<el-input type="text" placeholder="Remaining loan term" disabled></el-input>
+					</el-col>
+				</el-row>
+				<el-row :gutter="15">
+					<el-col :span="24">
+						<label>New Loan Term</label>
+						<el-input type="text" placeholder="New Loan Term" disabled></el-input>
+					</el-col>
+				</el-row>
+			</div>
+			<div v-if="calc_type==='mortgage_payment'">
+				<el-row :gutter="15" style="margin-top: 20px">
+					<el-col :span="24">
+						<label>Mortgage Amount</label>
+						<el-input type="text" placeholder="Home Price" disabled></el-input>
+					</el-col>
+				</el-row>
+				<el-row :gutter="15">
+					<el-col :span="24">
+						<label>Term in years</label>
+						<el-input type="text" placeholder="Down Payment" disabled></el-input>
+					</el-col>
+				</el-row>
+				<el-row :gutter="15">
+					<el-col :span="24">
+						<label>Interest Rate</label>
+						<el-input type="text" placeholder="Down Payment" disabled></el-input>
+					</el-col>
+				</el-row>
+				<el-row :gutter="15">
+					<el-col :span="24">
+						<label>Annual property taxes</label>
+						<el-input type="text" placeholder="Down Payment" disabled></el-input>
+					</el-col>
+				</el-row>
+				<el-row :gutter="15">
+					<el-col :span="24">
+						<label>Annual Home Insurance</label>
+						<el-input type="text" placeholder="Down Payment" disabled></el-input>
+					</el-col>
+				</el-row>
+			</div>
+		</el-col>
+		<el-col :span="8" class="tabs_col">
+			<!-- Tabs Component -->
+			<app-tabs :calcType="calc_type" v-on:homePriceUpd="updateHomePrice($event)"
+																  v-on:downPamentUpd="updateDownPament($event)"
+																  v-on:mortgageTermUpd="updateMortgageTerm($event)"
+																  v-on:annualInterestRateUpd="updateannualInterestRate($event)"></app-tabs>
+		</el-col>
+	</el-row>
+</div>
 </template>
 
 <script>
-	export default {
+import Tabs from './Tabs.vue'
+export default {
 		name: 'editTable',
+		components: {
+			'app-tabs': Tabs
+		},
 		data() {
 			return {
 				table_id: this.$route.params.table_id,
 				table: {},
-				calc_type: 'mortgage_payment',
+				calc_type: 'mortgage_calculator',
 				activeName: '',
+				homePrice: 'Home Price',
+				downPament: 'Down Pament',
+				mortgageTerm: 'Mortgage Term',
+				annualInterestRate: 'Annual Interest Rate',
 				calc_types: [
                 {
                     value: 'mortgage_calculator',
@@ -185,17 +180,67 @@
 			}
 		},
 		methods: {
-			handleClick(tab, event) {
-				console.log(tab, event);
+			fetchTable() {
+				jQuery.get(ajaxurl, {
+					action: 'ninja_mortgage_ajax_actions',
+					route: 'get_table',
+					table_id: this.table_id
+				}).then(
+					response => {
+						this.table = response.data.table;
+					}
+				).fail(
+                error => {
+                    console.log(error)
+                }
+            )
+			},
+
+			updateTableConfig() {
+
+				// jQuery.post(ajaxurl, {
+				// 	action: 'ninja_mortgage_ajax_actions',
+				// 	route: 'ninja_mortgage_ajax_actions'
+				// })
+			},
+
+			updateHomePrice(updatedHomePrcLabel) {
+				this.homePrice = updatedHomePrcLabel;
+			},
+
+			updateDownPament(updatedDwnPmtLabel) {
+				this.downPament = updatedDwnPmtLabel;
+			},
+
+			updateMortgageTerm(updatedMortTerm) {
+				this.mortgageTerm = updatedMortTerm;
+			},
+
+			updateannualInterestRate(updatedAnnIntRate) {
+				this.annualInterestRate = updatedAnnIntRate;
 			}
+		},
+		created() {
+			this.fetchTable();
 		}
 	}
 </script>
 
 
 <style>
-.mortgage_calc {
-	width: 75%;
+.header {
+	font-size: 20px;
+    padding-bottom: 10px;
+    background: #fff;
+    margin-top: -20px;
+    padding-top: 22px;
+    margin-right: -20px;
+    margin-left: -20px;
+    padding-left: 24px;
+}
+
+.inputFields {
+	width: 100%;
 	margin: 0 auto;
 }
 
@@ -205,14 +250,31 @@
 
 .change_type {
 	float: right;
+    /* margin-right: 436px; */
+	margin-top: -36px;
 }
 
-.el-select {
-	margin-left: 205px;
+.tabs_col {
+	background: #fff;
+    margin-top: 15px;
+    padding-right: 12px;
+	padding-left: 10px;
+	padding-bottom: 10px;
 }
 
-.tabs {
-	width: 36%;
-	float: right;
+.common_btn {
+	margin: 0 !important;
 }
+
+.fields {
+	background: #fff;
+	margin-top: 15px;
+	margin-right: 20px;
+	padding: 20px;
+}
+
+.fields h2{
+	margin-top: 0;
+}
+
 </style>

@@ -62958,7 +62958,7 @@ exports = module.exports = __webpack_require__(1)(false);
 
 
 // module
-exports.push([module.i, "\n.mortgage_calc {\r\n\twidth: 75%;\r\n\tmargin: 0 auto;\n}\n.title {\r\n\tfloat: left;\n}\n.change_type {\r\n\tfloat: right;\n}\n.el-select {\r\n\tmargin-left: 205px;\n}\n.tabs {\r\n\twidth: 36%;\r\n\tfloat: right;\n}\r\n", ""]);
+exports.push([module.i, "\n.header {\r\n\tfont-size: 20px;\r\n    padding-bottom: 10px;\r\n    background: #fff;\r\n    margin-top: -20px;\r\n    padding-top: 22px;\r\n    margin-right: -20px;\r\n    margin-left: -20px;\r\n    padding-left: 24px;\n}\n.inputFields {\r\n\twidth: 100%;\r\n\tmargin: 0 auto;\n}\n.title {\r\n\tfloat: left;\n}\n.change_type {\r\n\tfloat: right;\r\n    /* margin-right: 436px; */\r\n\tmargin-top: -36px;\n}\n.tabs_col {\r\n\tbackground: #fff;\r\n    margin-top: 15px;\r\n    padding-right: 12px;\r\n\tpadding-left: 10px;\r\n\tpadding-bottom: 10px;\n}\n.common_btn {\r\n\tmargin: 0 !important;\n}\n.fields {\r\n\tbackground: #fff;\r\n\tmargin-top: 15px;\r\n\tmargin-right: 20px;\r\n\tpadding: 20px;\n}\n.fields h2{\r\n\tmargin-top: 0;\n}\r\n\r\n", ""]);
 
 // exports
 
@@ -62969,19 +62969,8 @@ exports.push([module.i, "\n.mortgage_calc {\r\n\twidth: 75%;\r\n\tmargin: 0 auto
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Tabs_vue__ = __webpack_require__(212);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Tabs_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__Tabs_vue__);
 //
 //
 //
@@ -63131,14 +63120,22 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 
+
 /* harmony default export */ __webpack_exports__["default"] = ({
 	name: 'editTable',
+	components: {
+		'app-tabs': __WEBPACK_IMPORTED_MODULE_0__Tabs_vue___default.a
+	},
 	data: function data() {
 		return {
 			table_id: this.$route.params.table_id,
 			table: {},
-			calc_type: 'mortgage_payment',
+			calc_type: 'mortgage_calculator',
 			activeName: '',
+			homePrice: 'Home Price',
+			downPament: 'Down Pament',
+			mortgageTerm: 'Mortgage Term',
+			annualInterestRate: 'Annual Interest Rate',
 			calc_types: [{
 				value: 'mortgage_calculator',
 				label: 'Mortgage Calculator'
@@ -63153,9 +63150,41 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 	},
 
 	methods: {
-		handleClick: function handleClick(tab, event) {
-			console.log(tab, event);
+		fetchTable: function fetchTable() {
+			var _this = this;
+
+			jQuery.get(ajaxurl, {
+				action: 'ninja_mortgage_ajax_actions',
+				route: 'get_table',
+				table_id: this.table_id
+			}).then(function (response) {
+				_this.table = response.data.table;
+			}).fail(function (error) {
+				console.log(error);
+			});
+		},
+		updateTableConfig: function updateTableConfig() {
+
+			// jQuery.post(ajaxurl, {
+			// 	action: 'ninja_mortgage_ajax_actions',
+			// 	route: 'ninja_mortgage_ajax_actions'
+			// })
+		},
+		updateHomePrice: function updateHomePrice(updatedHomePrcLabel) {
+			this.homePrice = updatedHomePrcLabel;
+		},
+		updateDownPament: function updateDownPament(updatedDwnPmtLabel) {
+			this.downPament = updatedDwnPmtLabel;
+		},
+		updateMortgageTerm: function updateMortgageTerm(updatedMortTerm) {
+			this.mortgageTerm = updatedMortTerm;
+		},
+		updateannualInterestRate: function updateannualInterestRate(updatedAnnIntRate) {
+			this.annualInterestRate = updatedAnnIntRate;
 		}
+	},
+	created: function created() {
+		this.fetchTable();
 	}
 });
 
@@ -63167,509 +63196,565 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "mortgage_calc" }, [
-    _vm._m(0),
-    _vm._v(" "),
-    _c(
-      "div",
-      { staticClass: "change_calc" },
-      [
-        _c(
-          "el-select",
-          {
-            attrs: { placeholder: "Calculator Type" },
-            model: {
-              value: _vm.calc_type,
-              callback: function($$v) {
-                _vm.calc_type = $$v
-              },
-              expression: "calc_type"
-            }
-          },
-          _vm._l(_vm.calc_types, function(type, i) {
-            return _c("el-option", {
-              key: i,
-              attrs: { label: type.label, value: type.value }
-            })
-          })
-        )
-      ],
-      1
-    ),
-    _vm._v(" "),
-    _c(
-      "div",
-      { staticClass: "tabs" },
-      [
-        _c(
-          "el-tabs",
-          {
-            on: { "tab-click": _vm.handleClick },
-            model: {
-              value: _vm.activeName,
-              callback: function($$v) {
-                _vm.activeName = $$v
-              },
-              expression: "activeName"
-            }
-          },
-          [
-            _c("el-tab-pane", { attrs: { label: "Label", name: "first" } }, [
-              _vm._v("Label")
-            ]),
+  return _c(
+    "div",
+    [
+      _c(
+        "el-row",
+        { staticClass: "header" },
+        [
+          _c(
+            "el-col",
+            { attrs: { span: 24 } },
+            [
+              _c("el-col", { attrs: { span: 20 } }, [
+                _c("h1", [
+                  _vm._v(_vm._s(_vm.table.post_title) + " "),
+                  _c("span", [
+                    _c("code", [
+                      _vm._v(
+                        '[ninja_mortgage_cal id="' + _vm._s(_vm.table_id) + '"]'
+                      )
+                    ])
+                  ])
+                ])
+              ]),
+              _vm._v(" "),
+              _c(
+                "el-col",
+                { attrs: { span: 4 } },
+                [
+                  _c(
+                    "el-button",
+                    {
+                      staticClass: "common_btn",
+                      on: {
+                        click: function($event) {
+                          _vm.updateTableConfig()
+                        }
+                      }
+                    },
+                    [_vm._v("Update")]
+                  ),
+                  _vm._v(" "),
+                  _c("el-button", { staticClass: "common_btn" }, [
+                    _vm._v("Preview")
+                  ])
+                ],
+                1
+              )
+            ],
+            1
+          )
+        ],
+        1
+      ),
+      _vm._v(" "),
+      _c(
+        "el-row",
+        [
+          _c("el-col", { staticClass: "fields", attrs: { span: 15 } }, [
+            _vm.calc_type === "mortgage_payment"
+              ? _c("h2", [_vm._v("Mortgage Payment")])
+              : _vm._e(),
             _vm._v(" "),
-            _c("el-tab-pane", { attrs: { label: "Default", name: "second" } }, [
-              _vm._v("Default")
-            ]),
+            _vm.calc_type === "mortgage_calculator"
+              ? _c("h2", [_vm._v("Mortgage Calculator")])
+              : _vm._e(),
             _vm._v(" "),
-            _c("el-tab-pane", { attrs: { label: "Setting", name: "third" } }, [
-              _vm._v("Setting")
-            ])
-          ],
-          1
-        )
-      ],
-      1
-    ),
-    _vm._v(" "),
-    _vm.calc_type == "mortgage_calculator"
-      ? _c(
-          "div",
-          [
+            _vm.calc_type === "mortgage_refinance"
+              ? _c("h2", [_vm._v("Mortgage Refinance")])
+              : _vm._e(),
+            _vm._v(" "),
             _c(
-              "el-row",
-              { staticStyle: { "margin-top": "20px" }, attrs: { gutter: 15 } },
+              "div",
+              { staticClass: "change_type" },
               [
                 _c(
-                  "el-col",
-                  { attrs: { span: 15 } },
-                  [
-                    _c("label", [_vm._v("Home Price")]),
-                    _vm._v(" "),
-                    _c("el-input", {
-                      attrs: {
-                        type: "number",
-                        placeholder: "Home Price",
-                        min: "0"
-                      }
+                  "el-select",
+                  {
+                    attrs: { placeholder: "Calculator Type" },
+                    model: {
+                      value: _vm.calc_type,
+                      callback: function($$v) {
+                        _vm.calc_type = $$v
+                      },
+                      expression: "calc_type"
+                    }
+                  },
+                  _vm._l(_vm.calc_types, function(type, i) {
+                    return _c("el-option", {
+                      key: i,
+                      attrs: { label: type.label, value: type.value }
                     })
-                  ],
-                  1
+                  })
                 )
               ],
               1
             ),
             _vm._v(" "),
-            _c(
-              "el-row",
-              { attrs: { gutter: 15 } },
-              [
-                _c(
-                  "el-col",
-                  { attrs: { span: 8 } },
+            _vm.calc_type == "mortgage_calculator"
+              ? _c(
+                  "div",
+                  { staticStyle: { "margin-top": "20px" } },
                   [
-                    _c("label", [_vm._v("Down Pament")]),
+                    _c(
+                      "el-row",
+                      { attrs: { gutter: 15 } },
+                      [
+                        _c(
+                          "el-col",
+                          { attrs: { span: 24 } },
+                          [
+                            _c("label", [_vm._v(_vm._s(_vm.homePrice))]),
+                            _vm._v(" "),
+                            _c("el-input", {
+                              attrs: { type: "text", disabled: "" },
+                              model: {
+                                value: _vm.homePrice,
+                                callback: function($$v) {
+                                  _vm.homePrice = $$v
+                                },
+                                expression: "homePrice"
+                              }
+                            })
+                          ],
+                          1
+                        )
+                      ],
+                      1
+                    ),
                     _vm._v(" "),
-                    _c("el-input", {
-                      attrs: {
-                        type: "number",
-                        placeholder: "Down Payment",
-                        min: "0",
-                        name: "downPayment",
-                        id: "downPayment"
-                      }
-                    })
-                  ],
-                  1
-                ),
-                _vm._v(" "),
-                _c(
-                  "el-col",
-                  { attrs: { span: 7 } },
-                  [
-                    _c("label", [_vm._v("Down Pament Percentage")]),
+                    _c(
+                      "el-row",
+                      { attrs: { gutter: 15 } },
+                      [
+                        _c(
+                          "el-col",
+                          { attrs: { span: 12 } },
+                          [
+                            _c("label", [_vm._v(_vm._s(_vm.downPament))]),
+                            _vm._v(" "),
+                            _c("el-input", {
+                              attrs: { type: "text", disabled: "" },
+                              model: {
+                                value: _vm.downPament,
+                                callback: function($$v) {
+                                  _vm.downPament = $$v
+                                },
+                                expression: "downPament"
+                              }
+                            })
+                          ],
+                          1
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "el-col",
+                          { attrs: { span: 12 } },
+                          [
+                            _c("label", [_vm._v("Down Pament Percentage")]),
+                            _vm._v(" "),
+                            _c("el-input", {
+                              attrs: {
+                                type: "text",
+                                placeholder: "Down Pament Percentage",
+                                disabled: ""
+                              }
+                            })
+                          ],
+                          1
+                        )
+                      ],
+                      1
+                    ),
                     _vm._v(" "),
-                    _c("el-input", {
-                      attrs: {
-                        type: "number",
-                        placeholder: "Down Pament Percentage"
-                      }
-                    })
+                    _c(
+                      "el-row",
+                      { attrs: { gutter: 15 } },
+                      [
+                        _c(
+                          "el-col",
+                          { attrs: { span: 12 } },
+                          [
+                            _c("label", [_vm._v(_vm._s(_vm.mortgageTerm))]),
+                            _vm._v(" "),
+                            _c("el-input", {
+                              attrs: {
+                                type: "text",
+                                placeholder: "Mortgage Term",
+                                disabled: ""
+                              },
+                              model: {
+                                value: _vm.mortgageTerm,
+                                callback: function($$v) {
+                                  _vm.mortgageTerm = $$v
+                                },
+                                expression: "mortgageTerm"
+                              }
+                            })
+                          ],
+                          1
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "el-col",
+                          { attrs: { span: 12 } },
+                          [
+                            _c("label", [_vm._v("Mortgage term month")]),
+                            _vm._v(" "),
+                            _c("el-input", {
+                              attrs: {
+                                type: "text",
+                                placeholder: "Mortgage Term Month",
+                                disabled: ""
+                              }
+                            })
+                          ],
+                          1
+                        )
+                      ],
+                      1
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "el-row",
+                      { attrs: { gutter: 15 } },
+                      [
+                        _c(
+                          "el-col",
+                          { attrs: { span: 24 } },
+                          [
+                            _c("label", [
+                              _vm._v(_vm._s(_vm.annualInterestRate))
+                            ]),
+                            _vm._v(" "),
+                            _c("el-input", {
+                              attrs: { type: "text", disabled: "" },
+                              model: {
+                                value: _vm.annualInterestRate,
+                                callback: function($$v) {
+                                  _vm.annualInterestRate = $$v
+                                },
+                                expression: "annualInterestRate"
+                              }
+                            })
+                          ],
+                          1
+                        )
+                      ],
+                      1
+                    )
                   ],
                   1
                 )
-              ],
-              1
-            ),
+              : _vm._e(),
             _vm._v(" "),
-            _c(
-              "el-row",
-              { attrs: { gutter: 15 } },
-              [
-                _c(
-                  "el-col",
-                  { attrs: { span: 8 } },
+            _vm.calc_type === "mortgage_refinance"
+              ? _c(
+                  "div",
                   [
-                    _c("label", [_vm._v("Mortgage term")]),
+                    _c(
+                      "el-row",
+                      {
+                        staticStyle: { "margin-top": "20px" },
+                        attrs: { gutter: 15 }
+                      },
+                      [
+                        _c(
+                          "el-col",
+                          { attrs: { span: 24 } },
+                          [
+                            _c("label", [_vm._v("Current monthly payment")]),
+                            _vm._v(" "),
+                            _c("el-input", {
+                              attrs: {
+                                type: "text",
+                                placeholder: "Current monthly payment",
+                                disabled: ""
+                              }
+                            })
+                          ],
+                          1
+                        )
+                      ],
+                      1
+                    ),
                     _vm._v(" "),
-                    _c("el-input", {
-                      attrs: {
-                        type: "number",
-                        placeholder: "Mortgage Term",
-                        min: "0",
-                        pattern: "/^-?\\d+\\.?\\d*$/",
-                        onKeyPress: "if(this.value.length==2) return false;",
-                        name: "mortgageTerm",
-                        id: "mortgageTerm"
-                      }
-                    })
-                  ],
-                  1
-                ),
-                _vm._v(" "),
-                _c(
-                  "el-col",
-                  { attrs: { span: 7 } },
-                  [
-                    _c("label", [_vm._v("Mortgage term month")]),
+                    _c(
+                      "el-row",
+                      { attrs: { gutter: 15 } },
+                      [
+                        _c(
+                          "el-col",
+                          { attrs: { span: 12 } },
+                          [
+                            _c("label", [_vm._v("Current loan interest rate")]),
+                            _vm._v(" "),
+                            _c("el-input", {
+                              attrs: {
+                                type: "text",
+                                placeholder: "Current loan interest rate",
+                                disabled: ""
+                              }
+                            })
+                          ],
+                          1
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "el-col",
+                          { attrs: { span: 12 } },
+                          [
+                            _c("label", [_vm._v("Balance left on mortgage")]),
+                            _vm._v(" "),
+                            _c("el-input", {
+                              attrs: {
+                                type: "text",
+                                placeholder: "Balance left on mortgage",
+                                disabled: ""
+                              }
+                            })
+                          ],
+                          1
+                        )
+                      ],
+                      1
+                    ),
                     _vm._v(" "),
-                    _c("el-input", {
-                      attrs: {
-                        type: "number",
-                        placeholder: "Mortgage Term Month",
-                        pattern: "/^-?\\d+\\.?\\d*$/",
-                        onKeyPress: "if(this.value.length==3) return false;",
-                        min: "0"
-                      }
-                    })
+                    _c(
+                      "el-row",
+                      { attrs: { gutter: 15 } },
+                      [
+                        _c(
+                          "el-col",
+                          { attrs: { span: 12 } },
+                          [
+                            _c("label", [_vm._v("New Interest Rate")]),
+                            _vm._v(" "),
+                            _c("el-input", {
+                              attrs: {
+                                type: "text",
+                                placeholder: "New Interest Rate",
+                                disabled: ""
+                              }
+                            })
+                          ],
+                          1
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "el-col",
+                          { attrs: { span: 12 } },
+                          [
+                            _c("label", [_vm._v("Remaining loan term")]),
+                            _vm._v(" "),
+                            _c("el-input", {
+                              attrs: {
+                                type: "text",
+                                placeholder: "Remaining loan term",
+                                disabled: ""
+                              }
+                            })
+                          ],
+                          1
+                        )
+                      ],
+                      1
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "el-row",
+                      { attrs: { gutter: 15 } },
+                      [
+                        _c(
+                          "el-col",
+                          { attrs: { span: 24 } },
+                          [
+                            _c("label", [_vm._v("New Loan Term")]),
+                            _vm._v(" "),
+                            _c("el-input", {
+                              attrs: {
+                                type: "text",
+                                placeholder: "New Loan Term",
+                                disabled: ""
+                              }
+                            })
+                          ],
+                          1
+                        )
+                      ],
+                      1
+                    )
                   ],
                   1
                 )
-              ],
-              1
-            ),
+              : _vm._e(),
             _vm._v(" "),
-            _c(
-              "el-row",
-              { attrs: { gutter: 15 } },
-              [
-                _c(
-                  "el-col",
-                  { attrs: { span: 15 } },
+            _vm.calc_type === "mortgage_payment"
+              ? _c(
+                  "div",
                   [
-                    _c("label", [_vm._v("Annual interest rate")]),
+                    _c(
+                      "el-row",
+                      {
+                        staticStyle: { "margin-top": "20px" },
+                        attrs: { gutter: 15 }
+                      },
+                      [
+                        _c(
+                          "el-col",
+                          { attrs: { span: 24 } },
+                          [
+                            _c("label", [_vm._v("Mortgage Amount")]),
+                            _vm._v(" "),
+                            _c("el-input", {
+                              attrs: {
+                                type: "text",
+                                placeholder: "Home Price",
+                                disabled: ""
+                              }
+                            })
+                          ],
+                          1
+                        )
+                      ],
+                      1
+                    ),
                     _vm._v(" "),
-                    _c("el-input", {
-                      attrs: {
-                        type: "number",
-                        placeholder: "Annual interest rate",
-                        min: "0",
-                        pattern: "/^-?\\d+\\.?\\d*$/",
-                        onKeyPress: "if(this.value.length==2) return false;",
-                        name: "annualInterestRate",
-                        id: "annualInterestRate"
-                      }
-                    })
+                    _c(
+                      "el-row",
+                      { attrs: { gutter: 15 } },
+                      [
+                        _c(
+                          "el-col",
+                          { attrs: { span: 24 } },
+                          [
+                            _c("label", [_vm._v("Term in years")]),
+                            _vm._v(" "),
+                            _c("el-input", {
+                              attrs: {
+                                type: "text",
+                                placeholder: "Down Payment",
+                                disabled: ""
+                              }
+                            })
+                          ],
+                          1
+                        )
+                      ],
+                      1
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "el-row",
+                      { attrs: { gutter: 15 } },
+                      [
+                        _c(
+                          "el-col",
+                          { attrs: { span: 24 } },
+                          [
+                            _c("label", [_vm._v("Interest Rate")]),
+                            _vm._v(" "),
+                            _c("el-input", {
+                              attrs: {
+                                type: "text",
+                                placeholder: "Down Payment",
+                                disabled: ""
+                              }
+                            })
+                          ],
+                          1
+                        )
+                      ],
+                      1
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "el-row",
+                      { attrs: { gutter: 15 } },
+                      [
+                        _c(
+                          "el-col",
+                          { attrs: { span: 24 } },
+                          [
+                            _c("label", [_vm._v("Annual property taxes")]),
+                            _vm._v(" "),
+                            _c("el-input", {
+                              attrs: {
+                                type: "text",
+                                placeholder: "Down Payment",
+                                disabled: ""
+                              }
+                            })
+                          ],
+                          1
+                        )
+                      ],
+                      1
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "el-row",
+                      { attrs: { gutter: 15 } },
+                      [
+                        _c(
+                          "el-col",
+                          { attrs: { span: 24 } },
+                          [
+                            _c("label", [_vm._v("Annual Home Insurance")]),
+                            _vm._v(" "),
+                            _c("el-input", {
+                              attrs: {
+                                type: "text",
+                                placeholder: "Down Payment",
+                                disabled: ""
+                              }
+                            })
+                          ],
+                          1
+                        )
+                      ],
+                      1
+                    )
                   ],
                   1
                 )
-              ],
-              1
-            )
-          ],
-          1
-        )
-      : _vm._e(),
-    _vm._v(" "),
-    _vm.calc_type === "mortgage_refinance"
-      ? _c(
-          "div",
-          [
-            _c(
-              "el-row",
-              { staticStyle: { "margin-top": "20px" }, attrs: { gutter: 15 } },
-              [
-                _c(
-                  "el-col",
-                  { attrs: { span: 15 } },
-                  [
-                    _c("label", [_vm._v("Current monthly payment")]),
-                    _vm._v(" "),
-                    _c("el-input", {
-                      attrs: {
-                        type: "number",
-                        placeholder: "Home Price",
-                        min: "0"
-                      }
-                    })
-                  ],
-                  1
-                )
-              ],
-              1
-            ),
-            _vm._v(" "),
-            _c(
-              "el-row",
-              { attrs: { gutter: 15 } },
-              [
-                _c(
-                  "el-col",
-                  { attrs: { span: 8 } },
-                  [
-                    _c("label", [_vm._v("Current loan interest rate")]),
-                    _vm._v(" "),
-                    _c("el-input", {
-                      attrs: {
-                        type: "number",
-                        placeholder: "Down Payment",
-                        min: "0",
-                        name: "downPayment",
-                        id: "downPayment"
-                      }
-                    })
-                  ],
-                  1
-                ),
-                _vm._v(" "),
-                _c(
-                  "el-col",
-                  { attrs: { span: 7 } },
-                  [
-                    _c("label", [_vm._v("Balance left on mortgage")]),
-                    _vm._v(" "),
-                    _c("el-input", {
-                      attrs: {
-                        type: "number",
-                        placeholder: "Down Pament Percentage"
-                      }
-                    })
-                  ],
-                  1
-                )
-              ],
-              1
-            ),
-            _vm._v(" "),
-            _c(
-              "el-row",
-              { attrs: { gutter: 15 } },
-              [
-                _c(
-                  "el-col",
-                  { attrs: { span: 8 } },
-                  [
-                    _c("label", [_vm._v("New Interest Rate")]),
-                    _vm._v(" "),
-                    _c("el-input", {
-                      attrs: {
-                        type: "number",
-                        placeholder: "Down Payment",
-                        min: "0",
-                        name: "downPayment",
-                        id: "downPayment"
-                      }
-                    })
-                  ],
-                  1
-                ),
-                _vm._v(" "),
-                _c(
-                  "el-col",
-                  { attrs: { span: 7 } },
-                  [
-                    _c("label", [_vm._v("Remaining loan term")]),
-                    _vm._v(" "),
-                    _c("el-input", {
-                      attrs: {
-                        type: "number",
-                        placeholder: "Down Pament Percentage"
-                      }
-                    })
-                  ],
-                  1
-                )
-              ],
-              1
-            ),
-            _vm._v(" "),
-            _c(
-              "el-row",
-              { attrs: { gutter: 15 } },
-              [
-                _c(
-                  "el-col",
-                  { attrs: { span: 8 } },
-                  [
-                    _c("label", [_vm._v("New Loan Term")]),
-                    _vm._v(" "),
-                    _c("el-input", {
-                      attrs: {
-                        type: "number",
-                        placeholder: "Down Payment",
-                        min: "0",
-                        name: "downPayment",
-                        id: "downPayment"
-                      }
-                    })
-                  ],
-                  1
-                )
-              ],
-              1
-            )
-          ],
-          1
-        )
-      : _vm._e(),
-    _vm._v(" "),
-    _vm.calc_type === "mortgage_payment"
-      ? _c(
-          "div",
-          [
-            _c(
-              "el-row",
-              { staticStyle: { "margin-top": "20px" }, attrs: { gutter: 15 } },
-              [
-                _c(
-                  "el-col",
-                  { attrs: { span: 15 } },
-                  [
-                    _c("label", [_vm._v("Mortgage Amount")]),
-                    _vm._v(" "),
-                    _c("el-input", {
-                      attrs: {
-                        type: "number",
-                        placeholder: "Home Price",
-                        min: "0"
-                      }
-                    })
-                  ],
-                  1
-                )
-              ],
-              1
-            ),
-            _vm._v(" "),
-            _c(
-              "el-row",
-              { attrs: { gutter: 15 } },
-              [
-                _c(
-                  "el-col",
-                  { attrs: { span: 15 } },
-                  [
-                    _c("label", [_vm._v("Term in years")]),
-                    _vm._v(" "),
-                    _c("el-input", {
-                      attrs: {
-                        type: "number",
-                        placeholder: "Down Payment",
-                        min: "0",
-                        name: "downPayment",
-                        id: "downPayment"
-                      }
-                    })
-                  ],
-                  1
-                )
-              ],
-              1
-            ),
-            _vm._v(" "),
-            _c(
-              "el-row",
-              { attrs: { gutter: 15 } },
-              [
-                _c(
-                  "el-col",
-                  { attrs: { span: 15 } },
-                  [
-                    _c("label", [_vm._v("Interest Rate")]),
-                    _vm._v(" "),
-                    _c("el-input", {
-                      attrs: {
-                        type: "number",
-                        placeholder: "Down Payment",
-                        min: "0",
-                        name: "downPayment",
-                        id: "downPayment"
-                      }
-                    })
-                  ],
-                  1
-                )
-              ],
-              1
-            ),
-            _vm._v(" "),
-            _c(
-              "el-row",
-              { attrs: { gutter: 15 } },
-              [
-                _c(
-                  "el-col",
-                  { attrs: { span: 15 } },
-                  [
-                    _c("label", [_vm._v("Annual property taxes")]),
-                    _vm._v(" "),
-                    _c("el-input", {
-                      attrs: {
-                        type: "number",
-                        placeholder: "Down Payment",
-                        min: "0",
-                        name: "downPayment",
-                        id: "downPayment"
-                      }
-                    })
-                  ],
-                  1
-                )
-              ],
-              1
-            ),
-            _vm._v(" "),
-            _c(
-              "el-row",
-              { attrs: { gutter: 15 } },
-              [
-                _c(
-                  "el-col",
-                  { attrs: { span: 15 } },
-                  [
-                    _c("label", [_vm._v("Annual Home Insurance")]),
-                    _vm._v(" "),
-                    _c("el-input", {
-                      attrs: {
-                        type: "number",
-                        placeholder: "Down Payment",
-                        min: "0",
-                        name: "downPayment",
-                        id: "downPayment"
-                      }
-                    })
-                  ],
-                  1
-                )
-              ],
-              1
-            )
-          ],
-          1
-        )
-      : _vm._e()
-  ])
+              : _vm._e()
+          ]),
+          _vm._v(" "),
+          _c(
+            "el-col",
+            { staticClass: "tabs_col", attrs: { span: 8 } },
+            [
+              _c("app-tabs", {
+                attrs: { calcType: _vm.calc_type },
+                on: {
+                  homePriceUpd: function($event) {
+                    _vm.updateHomePrice($event)
+                  },
+                  downPamentUpd: function($event) {
+                    _vm.updateDownPament($event)
+                  },
+                  mortgageTermUpd: function($event) {
+                    _vm.updateMortgageTerm($event)
+                  },
+                  annualInterestRateUpd: function($event) {
+                    _vm.updateannualInterestRate($event)
+                  }
+                }
+              })
+            ],
+            1
+          )
+        ],
+        1
+      )
+    ],
+    1
+  )
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "title" }, [
-      _c("h2", [_vm._v("This is Edit Table")])
-    ])
-  }
-]
+var staticRenderFns = []
 render._withStripped = true
 module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {
@@ -64728,6 +64813,509 @@ if (false) {
   module.hot.accept()
   if (module.hot.data) {
     require("vue-hot-reload-api")      .rerender("data-v-3410440f", module.exports)
+  }
+}
+
+/***/ }),
+/* 212 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__(27)
+/* script */
+var __vue_script__ = __webpack_require__(213)
+/* template */
+var __vue_template__ = __webpack_require__(214)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "src\\js\\components\\Tabs.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-42a170d2", Component.options)
+  } else {
+    hotAPI.reload("data-v-42a170d2", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 213 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    name: 'tabs',
+    props: ['calcType'],
+    data: function data() {
+        return {
+            activeName: 'first',
+            homePrice: 'Home Price',
+            downPament: 'Down Pament',
+            mortgageTerm: 'Mortgage Term',
+            mortgageTermMonth: 'Mortgage Term Month',
+            annualInterestRate: 'Annual Interest Rate',
+            homePriceDef: 0,
+            downPamentDef: 0,
+            mortgageTermDef: 0,
+            mortgageTermMonthDef: 0,
+            annualInterestRateDef: 0
+        };
+    },
+
+    methods: {
+        handleClick: function handleClick(tab, event) {
+            console.log(tab, event);
+        }
+    },
+    watch: {
+        homePrice: function homePrice() {
+            this.$emit('homePriceUpd', this.homePrice);
+        },
+        downPament: function downPament() {
+            this.$emit('downPamentUpd', this.downPament);
+        },
+        mortgageTerm: function mortgageTerm() {
+            this.$emit('mortgageTermUpd', this.mortgageTerm);
+        },
+        annualInterestRate: function annualInterestRate() {
+            this.$emit('annualInterestRateUpd', this.annualInterestRate);
+        }
+    }
+});
+
+/***/ }),
+/* 214 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "div",
+    { staticClass: "tabs" },
+    [
+      _c(
+        "el-tabs",
+        {
+          on: { "tab-click": _vm.handleClick },
+          model: {
+            value: _vm.activeName,
+            callback: function($$v) {
+              _vm.activeName = $$v
+            },
+            expression: "activeName"
+          }
+        },
+        [
+          _c("el-tab-pane", { attrs: { label: "Label", name: "first" } }, [
+            _vm.calcType == "mortgage_calculator"
+              ? _c(
+                  "div",
+                  [
+                    _c(
+                      "el-row",
+                      [
+                        _c(
+                          "el-col",
+                          { attrs: { span: 24 } },
+                          [
+                            _c("label", [_vm._v(_vm._s(_vm.homePrice))]),
+                            _vm._v(" "),
+                            _c("el-input", {
+                              attrs: { type: "text" },
+                              model: {
+                                value: _vm.homePrice,
+                                callback: function($$v) {
+                                  _vm.homePrice = $$v
+                                },
+                                expression: "homePrice"
+                              }
+                            })
+                          ],
+                          1
+                        )
+                      ],
+                      1
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "el-row",
+                      [
+                        _c(
+                          "el-col",
+                          { attrs: { span: 24 } },
+                          [
+                            _c("label", [_vm._v(_vm._s(_vm.downPament))]),
+                            _vm._v(" "),
+                            _c("el-input", {
+                              attrs: { type: "text" },
+                              model: {
+                                value: _vm.downPament,
+                                callback: function($$v) {
+                                  _vm.downPament = $$v
+                                },
+                                expression: "downPament"
+                              }
+                            })
+                          ],
+                          1
+                        )
+                      ],
+                      1
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "el-row",
+                      [
+                        _c(
+                          "el-col",
+                          { attrs: { span: 24 } },
+                          [
+                            _c("label", [_vm._v(_vm._s(_vm.mortgageTerm))]),
+                            _vm._v(" "),
+                            _c("el-input", {
+                              attrs: { type: "text" },
+                              model: {
+                                value: _vm.mortgageTerm,
+                                callback: function($$v) {
+                                  _vm.mortgageTerm = $$v
+                                },
+                                expression: "mortgageTerm"
+                              }
+                            })
+                          ],
+                          1
+                        )
+                      ],
+                      1
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "el-row",
+                      [
+                        _c(
+                          "el-col",
+                          { attrs: { span: 24 } },
+                          [
+                            _c("label", [
+                              _vm._v(_vm._s(_vm.mortgageTermMonth))
+                            ]),
+                            _vm._v(" "),
+                            _c("el-input", {
+                              attrs: { type: "text" },
+                              model: {
+                                value: _vm.mortgageTermMonth,
+                                callback: function($$v) {
+                                  _vm.mortgageTermMonth = $$v
+                                },
+                                expression: "mortgageTermMonth"
+                              }
+                            })
+                          ],
+                          1
+                        )
+                      ],
+                      1
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "el-row",
+                      [
+                        _c(
+                          "el-col",
+                          { attrs: { span: 24 } },
+                          [
+                            _c("label", [
+                              _vm._v(_vm._s(_vm.annualInterestRate))
+                            ]),
+                            _vm._v(" "),
+                            _c("el-input", {
+                              attrs: { type: "text" },
+                              model: {
+                                value: _vm.annualInterestRate,
+                                callback: function($$v) {
+                                  _vm.annualInterestRate = $$v
+                                },
+                                expression: "annualInterestRate"
+                              }
+                            })
+                          ],
+                          1
+                        )
+                      ],
+                      1
+                    )
+                  ],
+                  1
+                )
+              : _vm._e()
+          ]),
+          _vm._v(" "),
+          _c("el-tab-pane", { attrs: { label: "Default", name: "second" } }, [
+            _vm.calcType == "mortgage_calculator"
+              ? _c(
+                  "div",
+                  [
+                    _c(
+                      "el-row",
+                      [
+                        _c(
+                          "el-col",
+                          { attrs: { span: 24 } },
+                          [
+                            _c("label", [_vm._v(_vm._s(_vm.homePrice))]),
+                            _vm._v(" "),
+                            _c("el-input", {
+                              attrs: { type: "text" },
+                              model: {
+                                value: _vm.homePriceDef,
+                                callback: function($$v) {
+                                  _vm.homePriceDef = $$v
+                                },
+                                expression: "homePriceDef"
+                              }
+                            })
+                          ],
+                          1
+                        )
+                      ],
+                      1
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "el-row",
+                      [
+                        _c(
+                          "el-col",
+                          { attrs: { span: 24 } },
+                          [
+                            _c("label", [_vm._v(_vm._s(_vm.downPament))]),
+                            _vm._v(" "),
+                            _c("el-input", {
+                              attrs: { type: "text" },
+                              model: {
+                                value: _vm.downPamentDef,
+                                callback: function($$v) {
+                                  _vm.downPamentDef = $$v
+                                },
+                                expression: "downPamentDef"
+                              }
+                            })
+                          ],
+                          1
+                        )
+                      ],
+                      1
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "el-row",
+                      [
+                        _c(
+                          "el-col",
+                          { attrs: { span: 24 } },
+                          [
+                            _c("label", [_vm._v(_vm._s(_vm.mortgageTerm))]),
+                            _vm._v(" "),
+                            _c("el-input", {
+                              attrs: { type: "text" },
+                              model: {
+                                value: _vm.mortgageTermDef,
+                                callback: function($$v) {
+                                  _vm.mortgageTermDef = $$v
+                                },
+                                expression: "mortgageTermDef"
+                              }
+                            })
+                          ],
+                          1
+                        )
+                      ],
+                      1
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "el-row",
+                      [
+                        _c(
+                          "el-col",
+                          { attrs: { span: 24 } },
+                          [
+                            _c("label", [
+                              _vm._v(_vm._s(_vm.mortgageTermMonth))
+                            ]),
+                            _vm._v(" "),
+                            _c("el-input", {
+                              attrs: { type: "text" },
+                              model: {
+                                value: _vm.mortgageTermMonthDef,
+                                callback: function($$v) {
+                                  _vm.mortgageTermMonthDef = $$v
+                                },
+                                expression: "mortgageTermMonthDef"
+                              }
+                            })
+                          ],
+                          1
+                        )
+                      ],
+                      1
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "el-row",
+                      [
+                        _c(
+                          "el-col",
+                          { attrs: { span: 24 } },
+                          [
+                            _c("label", [
+                              _vm._v(_vm._s(_vm.annualInterestRate))
+                            ]),
+                            _vm._v(" "),
+                            _c("el-input", {
+                              attrs: { type: "text" },
+                              model: {
+                                value: _vm.annualInterestRateDef,
+                                callback: function($$v) {
+                                  _vm.annualInterestRateDef = $$v
+                                },
+                                expression: "annualInterestRateDef"
+                              }
+                            })
+                          ],
+                          1
+                        )
+                      ],
+                      1
+                    )
+                  ],
+                  1
+                )
+              : _vm._e()
+          ]),
+          _vm._v(" "),
+          _c("el-tab-pane", { attrs: { label: "Settings", name: "third" } }, [
+            _vm._v("Settings")
+          ])
+        ],
+        1
+      )
+    ],
+    1
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-42a170d2", module.exports)
   }
 }
 
