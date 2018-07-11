@@ -87,7 +87,7 @@ class MortgageCalculatorHandler
             'table'        => $formattedTable,
             'table_config' => $tableConfig,
             // 'element_config' => static::getElementConfig(),
-            // 'demo_url' => home_url().'?wp_pricing_preview='.$tableId.'#wp_pricing_demo'
+           'demo_url' => home_url().'?ninja_mortgage_calculator_preview='.$tableId.'#ninja_mortgage_demo'
         ));
 	}
 
