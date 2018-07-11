@@ -63145,6 +63145,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -63163,6 +63166,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 				downPament: 'Down Pament',
 				mortgageTerm: 'Mortgage Term',
 				annualInterestRate: 'Annual Interest Rate'
+			},
+			all_refinance_calc_table: {
+				currentlyMonthlyPayment: 'Currently Monthly Payment',
+				loanIntRate: 'Current Loan interest rate',
+				balanceMortgage: 'Balance left on mortgage',
+				newIntRate: 'New Interest Rate',
+				remainingLoanTerm: 'Remaining Loan Term',
+				newLoanTerm: 'New Loan Term'
 			},
 			calc_types: [{
 				value: 'mortgage_calculator',
@@ -63346,10 +63357,16 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     name: 'tabs',
-    props: ['calcType', 'allMortCalcTable'],
+    props: ['calcType', 'allMortCalcTable', 'allRefinanceCalcTable'],
     data: function data() {
         return {
             activeName: 'first',
@@ -63587,9 +63604,32 @@ var render = function() {
                           "el-col",
                           { attrs: { span: 24 } },
                           [
-                            _c("label", [_vm._v("Current monthly payment ")]),
+                            _c("label", [
+                              _vm._v(
+                                _vm._s(
+                                  _vm.allRefinanceCalcTable
+                                    .currentlyMonthlyPayment
+                                )
+                              )
+                            ]),
                             _vm._v(" "),
-                            _c("el-input", { attrs: { type: "text" } })
+                            _c("el-input", {
+                              attrs: { type: "text" },
+                              model: {
+                                value:
+                                  _vm.allRefinanceCalcTable
+                                    .currentlyMonthlyPayment,
+                                callback: function($$v) {
+                                  _vm.$set(
+                                    _vm.allRefinanceCalcTable,
+                                    "currentlyMonthlyPayment",
+                                    $$v
+                                  )
+                                },
+                                expression:
+                                  "allRefinanceCalcTable.currentlyMonthlyPayment"
+                              }
+                            })
                           ],
                           1
                         )
@@ -63604,9 +63644,26 @@ var render = function() {
                           "el-col",
                           { attrs: { span: 24 } },
                           [
-                            _c("label", [_vm._v("Balance left on mortgage ")]),
+                            _c("label", [
+                              _vm._v(
+                                _vm._s(_vm.allRefinanceCalcTable.loanIntRate)
+                              )
+                            ]),
                             _vm._v(" "),
-                            _c("el-input", { attrs: { type: "text" } })
+                            _c("el-input", {
+                              attrs: { type: "text" },
+                              model: {
+                                value: _vm.allRefinanceCalcTable.loanIntRate,
+                                callback: function($$v) {
+                                  _vm.$set(
+                                    _vm.allRefinanceCalcTable,
+                                    "loanIntRate",
+                                    $$v
+                                  )
+                                },
+                                expression: "allRefinanceCalcTable.loanIntRate"
+                              }
+                            })
                           ],
                           1
                         )
@@ -63621,9 +63678,30 @@ var render = function() {
                           "el-col",
                           { attrs: { span: 24 } },
                           [
-                            _c("label", [_vm._v("New Interest Rate")]),
+                            _c("label", [
+                              _vm._v(
+                                _vm._s(
+                                  _vm.allRefinanceCalcTable.balanceMortgage
+                                )
+                              )
+                            ]),
                             _vm._v(" "),
-                            _c("el-input", { attrs: { type: "text" } })
+                            _c("el-input", {
+                              attrs: { type: "text" },
+                              model: {
+                                value:
+                                  _vm.allRefinanceCalcTable.balanceMortgage,
+                                callback: function($$v) {
+                                  _vm.$set(
+                                    _vm.allRefinanceCalcTable,
+                                    "balanceMortgage",
+                                    $$v
+                                  )
+                                },
+                                expression:
+                                  "allRefinanceCalcTable.balanceMortgage"
+                              }
+                            })
                           ],
                           1
                         )
@@ -63638,9 +63716,26 @@ var render = function() {
                           "el-col",
                           { attrs: { span: 24 } },
                           [
-                            _c("label", [_vm._v("Remaining loan term")]),
+                            _c("label", [
+                              _vm._v(
+                                _vm._s(_vm.allRefinanceCalcTable.newIntRate)
+                              )
+                            ]),
                             _vm._v(" "),
-                            _c("el-input", { attrs: { type: "text" } })
+                            _c("el-input", {
+                              attrs: { type: "text" },
+                              model: {
+                                value: _vm.allRefinanceCalcTable.newIntRate,
+                                callback: function($$v) {
+                                  _vm.$set(
+                                    _vm.allRefinanceCalcTable,
+                                    "newIntRate",
+                                    $$v
+                                  )
+                                },
+                                expression: "allRefinanceCalcTable.newIntRate"
+                              }
+                            })
                           ],
                           1
                         )
@@ -63655,9 +63750,64 @@ var render = function() {
                           "el-col",
                           { attrs: { span: 24 } },
                           [
-                            _c("label", [_vm._v("New Loan Term")]),
+                            _c("label", [
+                              _vm._v(
+                                _vm._s(
+                                  _vm.allRefinanceCalcTable.remainingLoanTerm
+                                )
+                              )
+                            ]),
                             _vm._v(" "),
-                            _c("el-input", { attrs: { type: "text" } })
+                            _c("el-input", {
+                              attrs: { type: "text" },
+                              model: {
+                                value:
+                                  _vm.allRefinanceCalcTable.remainingLoanTerm,
+                                callback: function($$v) {
+                                  _vm.$set(
+                                    _vm.allRefinanceCalcTable,
+                                    "remainingLoanTerm",
+                                    $$v
+                                  )
+                                },
+                                expression:
+                                  "allRefinanceCalcTable.remainingLoanTerm"
+                              }
+                            })
+                          ],
+                          1
+                        )
+                      ],
+                      1
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "el-row",
+                      [
+                        _c(
+                          "el-col",
+                          { attrs: { span: 24 } },
+                          [
+                            _c("label", [
+                              _vm._v(
+                                _vm._s(_vm.allRefinanceCalcTable.newLoanTerm)
+                              )
+                            ]),
+                            _vm._v(" "),
+                            _c("el-input", {
+                              attrs: { type: "text" },
+                              model: {
+                                value: _vm.allRefinanceCalcTable.newLoanTerm,
+                                callback: function($$v) {
+                                  _vm.$set(
+                                    _vm.allRefinanceCalcTable,
+                                    "newLoanTerm",
+                                    $$v
+                                  )
+                                },
+                                expression: "allRefinanceCalcTable.newLoanTerm"
+                              }
+                            })
                           ],
                           1
                         )
@@ -63997,13 +64147,34 @@ var render = function() {
                           "el-col",
                           { attrs: { span: 24 } },
                           [
-                            _c("label", [_vm._v("Current monthly payment")]),
+                            _c("label", [
+                              _vm._v(
+                                _vm._s(
+                                  _vm.all_refinance_calc_table
+                                    .currentlyMonthlyPayment
+                                )
+                              )
+                            ]),
                             _vm._v(" "),
                             _c("el-input", {
                               attrs: {
                                 type: "text",
                                 placeholder: "Current monthly payment",
                                 disabled: ""
+                              },
+                              model: {
+                                value:
+                                  _vm.all_refinance_calc_table
+                                    .currentlyMonthlyPayment,
+                                callback: function($$v) {
+                                  _vm.$set(
+                                    _vm.all_refinance_calc_table,
+                                    "currentlyMonthlyPayment",
+                                    $$v
+                                  )
+                                },
+                                expression:
+                                  "all_refinance_calc_table.currentlyMonthlyPayment"
                               }
                             })
                           ],
@@ -64021,13 +64192,29 @@ var render = function() {
                           "el-col",
                           { attrs: { span: 12 } },
                           [
-                            _c("label", [_vm._v("Current loan interest rate")]),
+                            _c("label", [
+                              _vm._v(
+                                _vm._s(_vm.all_refinance_calc_table.loanIntRate)
+                              )
+                            ]),
                             _vm._v(" "),
                             _c("el-input", {
                               attrs: {
                                 type: "text",
                                 placeholder: "Current loan interest rate",
                                 disabled: ""
+                              },
+                              model: {
+                                value: _vm.all_refinance_calc_table.loanIntRate,
+                                callback: function($$v) {
+                                  _vm.$set(
+                                    _vm.all_refinance_calc_table,
+                                    "loanIntRate",
+                                    $$v
+                                  )
+                                },
+                                expression:
+                                  "all_refinance_calc_table.loanIntRate"
                               }
                             })
                           ],
@@ -64038,13 +64225,32 @@ var render = function() {
                           "el-col",
                           { attrs: { span: 12 } },
                           [
-                            _c("label", [_vm._v("Balance left on mortgage")]),
+                            _c("label", [
+                              _vm._v(
+                                _vm._s(
+                                  _vm.all_refinance_calc_table.balanceMortgage
+                                )
+                              )
+                            ]),
                             _vm._v(" "),
                             _c("el-input", {
                               attrs: {
                                 type: "text",
                                 placeholder: "Balance left on mortgage",
                                 disabled: ""
+                              },
+                              model: {
+                                value:
+                                  _vm.all_refinance_calc_table.balanceMortgage,
+                                callback: function($$v) {
+                                  _vm.$set(
+                                    _vm.all_refinance_calc_table,
+                                    "balanceMortgage",
+                                    $$v
+                                  )
+                                },
+                                expression:
+                                  "all_refinance_calc_table.balanceMortgage"
                               }
                             })
                           ],
@@ -64062,13 +64268,29 @@ var render = function() {
                           "el-col",
                           { attrs: { span: 12 } },
                           [
-                            _c("label", [_vm._v("New Interest Rate")]),
+                            _c("label", [
+                              _vm._v(
+                                _vm._s(_vm.all_refinance_calc_table.newIntRate)
+                              )
+                            ]),
                             _vm._v(" "),
                             _c("el-input", {
                               attrs: {
                                 type: "text",
                                 placeholder: "New Interest Rate",
                                 disabled: ""
+                              },
+                              model: {
+                                value: _vm.all_refinance_calc_table.newIntRate,
+                                callback: function($$v) {
+                                  _vm.$set(
+                                    _vm.all_refinance_calc_table,
+                                    "newIntRate",
+                                    $$v
+                                  )
+                                },
+                                expression:
+                                  "all_refinance_calc_table.newIntRate"
                               }
                             })
                           ],
@@ -64079,13 +64301,33 @@ var render = function() {
                           "el-col",
                           { attrs: { span: 12 } },
                           [
-                            _c("label", [_vm._v("Remaining loan term")]),
+                            _c("label", [
+                              _vm._v(
+                                _vm._s(
+                                  _vm.all_refinance_calc_table.remainingLoanTerm
+                                )
+                              )
+                            ]),
                             _vm._v(" "),
                             _c("el-input", {
                               attrs: {
                                 type: "text",
                                 placeholder: "Remaining loan term",
                                 disabled: ""
+                              },
+                              model: {
+                                value:
+                                  _vm.all_refinance_calc_table
+                                    .remainingLoanTerm,
+                                callback: function($$v) {
+                                  _vm.$set(
+                                    _vm.all_refinance_calc_table,
+                                    "remainingLoanTerm",
+                                    $$v
+                                  )
+                                },
+                                expression:
+                                  "all_refinance_calc_table.remainingLoanTerm"
                               }
                             })
                           ],
@@ -64103,13 +64345,29 @@ var render = function() {
                           "el-col",
                           { attrs: { span: 24 } },
                           [
-                            _c("label", [_vm._v("New Loan Term")]),
+                            _c("label", [
+                              _vm._v(
+                                _vm._s(_vm.all_refinance_calc_table.newLoanTerm)
+                              )
+                            ]),
                             _vm._v(" "),
                             _c("el-input", {
                               attrs: {
                                 type: "text",
                                 placeholder: "New Loan Term",
                                 disabled: ""
+                              },
+                              model: {
+                                value: _vm.all_refinance_calc_table.newLoanTerm,
+                                callback: function($$v) {
+                                  _vm.$set(
+                                    _vm.all_refinance_calc_table,
+                                    "newLoanTerm",
+                                    $$v
+                                  )
+                                },
+                                expression:
+                                  "all_refinance_calc_table.newLoanTerm"
                               }
                             })
                           ],
@@ -64262,7 +64520,8 @@ var render = function() {
               _c("app-tabs", {
                 attrs: {
                   calcType: _vm.calc_type,
-                  allMortCalcTable: _vm.all_mort_calc_table
+                  allMortCalcTable: _vm.all_mort_calc_table,
+                  allRefinanceCalcTable: _vm.all_refinance_calc_table
                 }
               })
             ],

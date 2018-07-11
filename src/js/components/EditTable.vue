@@ -31,6 +31,7 @@
 						</el-option>
 				</el-select>
 			</div>
+			
 			<div v-if="calc_type=='mortgage_calculator'"  style="margin-top: 20px">
 				<el-row :gutter="15">
 					<el-col :span="24">
@@ -71,37 +72,39 @@
 			<div v-if="calc_type==='mortgage_refinance'">
 				<el-row :gutter="15" style="margin-top: 20px">
 					<el-col :span="24">
-						<label>Current monthly payment</label>
-						<el-input type="text" placeholder="Current monthly payment" disabled></el-input>
+						<label>{{ all_refinance_calc_table.currentlyMonthlyPayment }}</label>
+						<el-input type="text" placeholder="Current monthly payment" v-model="all_refinance_calc_table.currentlyMonthlyPayment" disabled></el-input>
 					</el-col>
 				</el-row>
 				<el-row :gutter="15">
 					<el-col :span="12">
-						<label>Current loan interest rate</label>
-						<el-input type="text" placeholder="Current loan interest rate" disabled></el-input>
+						<label>{{ all_refinance_calc_table.loanIntRate }}</label>
+						<el-input type="text" placeholder="Current loan interest rate" v-model="all_refinance_calc_table.loanIntRate" disabled></el-input>
 					</el-col>
 					<el-col :span="12">
-						<label>Balance left on mortgage</label>
-						<el-input type="text" placeholder="Balance left on mortgage" disabled></el-input>
+						<label>{{ all_refinance_calc_table.balanceMortgage }}</label>
+						<el-input type="text" placeholder="Balance left on mortgage" v-model="all_refinance_calc_table.balanceMortgage" disabled></el-input>
 					</el-col>
 				</el-row>
 				<el-row :gutter="15">
 					<el-col :span="12">
-						<label>New Interest Rate</label>
-						<el-input type="text" placeholder="New Interest Rate" disabled></el-input>
+						<label>{{ all_refinance_calc_table.newIntRate }}</label>
+						<el-input type="text" placeholder="New Interest Rate" v-model="all_refinance_calc_table.newIntRate" disabled></el-input>
 					</el-col>
 					<el-col :span="12">
-						<label>Remaining loan term</label>
-						<el-input type="text" placeholder="Remaining loan term" disabled></el-input>
+						<label>{{ all_refinance_calc_table.remainingLoanTerm }}</label>
+						<el-input type="text" placeholder="Remaining loan term" v-model="all_refinance_calc_table.remainingLoanTerm" disabled></el-input>
 					</el-col>
 				</el-row>
 				<el-row :gutter="15">
 					<el-col :span="24">
-						<label>New Loan Term</label>
-						<el-input type="text" placeholder="New Loan Term" disabled></el-input>
+						<label>{{ all_refinance_calc_table.newLoanTerm }}</label>
+						<el-input type="text" placeholder="New Loan Term" v-model="all_refinance_calc_table.newLoanTerm" disabled></el-input>
 					</el-col>
 				</el-row>
 			</div>
+
+
 			<div v-if="calc_type==='mortgage_payment'">
 				<el-row :gutter="15" style="margin-top: 20px">
 					<el-col :span="24">
@@ -137,7 +140,7 @@
 		</el-col>
 		<el-col :span="8" class="tabs_col">
 			<!-- Tabs Component -->
-			<app-tabs :calcType="calc_type" :allMortCalcTable="all_mort_calc_table"></app-tabs>
+			<app-tabs :calcType="calc_type" :allMortCalcTable="all_mort_calc_table" :allRefinanceCalcTable="all_refinance_calc_table"></app-tabs>
 		</el-col>
 	</el-row>
 </div>
@@ -161,6 +164,14 @@ export default {
 					downPament: 'Down Pament',
 					mortgageTerm: 'Mortgage Term',
 					annualInterestRate: 'Annual Interest Rate'
+				},
+				all_refinance_calc_table: {
+					currentlyMonthlyPayment: 'Currently Monthly Payment',
+					loanIntRate: 'Current Loan interest rate',
+					balanceMortgage: 'Balance left on mortgage',
+					newIntRate: 'New Interest Rate',
+					remainingLoanTerm: 'Remaining Loan Term',
+					newLoanTerm: 'New Loan Term'
 				},
 				calc_types: [
                 {

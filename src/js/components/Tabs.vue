@@ -38,32 +38,38 @@
                     <div v-if="calcType=='mortgage_refinance'">
                         <el-row>
                             <el-col :span="24">
-                                <label>Current monthly payment </label>
-                                <el-input type="text"></el-input>
+                                <label>{{ allRefinanceCalcTable.currentlyMonthlyPayment }}</label>
+                                <el-input type="text" v-model="allRefinanceCalcTable.currentlyMonthlyPayment"></el-input>
                             </el-col>
                         </el-row>
                         <el-row>
                             <el-col :span="24">
-                                <label>Balance left on mortgage </label>
-                                <el-input type="text"></el-input>
+                                <label>{{ allRefinanceCalcTable.loanIntRate }}</label>
+                                <el-input type="text" v-model="allRefinanceCalcTable.loanIntRate"></el-input>
                             </el-col>
                         </el-row>
                         <el-row>
                             <el-col :span="24">
-                                <label>New Interest Rate</label>
-                                <el-input type="text"></el-input>
+                                <label>{{ allRefinanceCalcTable.balanceMortgage }}</label>
+                                <el-input type="text" v-model="allRefinanceCalcTable.balanceMortgage"></el-input>
                             </el-col>
                         </el-row>
                         <el-row>
                             <el-col :span="24">
-                                <label>Remaining loan term</label>
-                                <el-input type="text"></el-input>
+                                <label>{{ allRefinanceCalcTable.newIntRate }}</label>
+                                <el-input type="text" v-model="allRefinanceCalcTable.newIntRate"></el-input>
                             </el-col>
                         </el-row>
                         <el-row>
                             <el-col :span="24">
-                                <label>New Loan Term</label>
-                                <el-input type="text"></el-input>
+                                <label>{{ allRefinanceCalcTable.remainingLoanTerm }}</label>
+                                <el-input type="text" v-model="allRefinanceCalcTable.remainingLoanTerm"></el-input>
+                            </el-col>
+                        </el-row>
+                        <el-row>
+                            <el-col :span="24">
+                                <label>{{ allRefinanceCalcTable.newLoanTerm }}</label>
+                                <el-input type="text" v-model="allRefinanceCalcTable.newLoanTerm"></el-input>
                             </el-col>
                         </el-row>
                     </div>
@@ -78,7 +84,7 @@
 <script>
 export default {
     name: 'tabs',
-    props: ['calcType', 'allMortCalcTable'],
+    props: ['calcType', 'allMortCalcTable', 'allRefinanceCalcTable'],
     data() {
         return {
             activeName: 'first',
