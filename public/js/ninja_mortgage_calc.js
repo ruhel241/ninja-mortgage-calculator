@@ -62340,6 +62340,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     },
     data: function data() {
         return {
+            addingTableAjax: false,
             addTableModal: false,
             tableLoading: false,
             table_type: [{
@@ -62364,6 +62365,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         addNewTable: function addNewTable() {
             var _this = this;
 
+            this.addingTableAjax = true;
             jQuery.post(ajaxurl, {
                 action: 'ninja_mortgage_ajax_actions',
                 route: 'add_table',
@@ -62386,6 +62388,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 });
             }).always(function () {
                 _this.addTableModal = false;
+                _this.addingTableAjax = false;
             });
         },
         fetchTables: function fetchTables() {
@@ -62555,7 +62558,7 @@ var render = function() {
                 }
               }
             },
-            [_vm._v("cancel")]
+            [_vm._v("Cancel")]
           ),
           _vm._v(" "),
           _c(
@@ -62568,7 +62571,7 @@ var render = function() {
                 }
               }
             },
-            [_vm._v("confirm")]
+            [_vm._v("Confirm")]
           )
         ],
         1
@@ -62807,7 +62810,18 @@ var render = function() {
               _vm._v(" "),
               _c(
                 "el-button",
-                { attrs: { type: "primary" }, on: { click: _vm.addNewTable } },
+                {
+                  directives: [
+                    {
+                      name: "loading",
+                      rawName: "v-loading",
+                      value: _vm.addingTableAjax,
+                      expression: "addingTableAjax"
+                    }
+                  ],
+                  attrs: { type: "primary" },
+                  on: { click: _vm.addNewTable }
+                },
                 [_vm._v("Add New")]
               )
             ],

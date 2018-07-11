@@ -61,7 +61,7 @@
                 <el-input id="new_table_name" type="text" placeholder="Your Table Name" v-model="table_name"></el-input>
                 <span slot="footer" class="dialog-footer">
                     <el-button @click="addTableModal = false">Cancel</el-button>
-                    <el-button type="primary" @click="addNewTable">Add New</el-button>
+                    <el-button type="primary" @click="addNewTable" v-loading="addingTableAjax">Add New</el-button>
                 </span>
             </el-dialog>
 
@@ -88,6 +88,7 @@ export default {
     },
     data() {
         return {
+            addingTableAjax: false,
             addTableModal: false,
             tableLoading: false,
             table_type: [
@@ -114,7 +115,7 @@ export default {
     methods: {
 
         addNewTable() {
-
+            this.addingTableAjax = true;
             jQuery.post(ajaxurl, {
                 action: 'ninja_mortgage_ajax_actions',
                 route: 'add_table',
@@ -142,6 +143,7 @@ export default {
             ).always(
                 () => {
                     this.addTableModal = false;
+                    this.addingTableAjax = false;
                 }
             )
            
