@@ -42,17 +42,24 @@ class MortgageCalculatorHandler
 	
 
 
-	public static function addTable($tableTitle = '')
+	public static function addTable($tableTitle = '', $selectCalculator)
 	{
 		if( ! $tableTitle ){
 			wp_send_json_error(array(
 				'message' => __( "Please Provide Table Title", 'ninja_mortgage')
 			), 423);
 		}
+
+		if( ! $selectCalculator ){
+			wp_send_json_error(array(
+				'message' => __("Please Select Calculator Type", 'ninja_mortgage')
+			), 423);
+		}
 	
 
 		$tableData = array(
 			'post_title' => $tableTitle,
+			'post_content' => $selectCalculator,
 			'post_type' => CPT::$CPTName,
 			'post_status' => 'publish',
 		);
@@ -70,6 +77,11 @@ class MortgageCalculatorHandler
             'message'  => __('Table Successfully created'),
             'table_id' => $tableId
         ), 200);
+
+
+        wp_send_json_error(array(
+        	'message' => $tableData
+        ), 423 );
 	}
 
 
