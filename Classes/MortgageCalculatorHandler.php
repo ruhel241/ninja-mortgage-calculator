@@ -140,6 +140,28 @@ class MortgageCalculatorHandler
 
 
 
+	public static function populateDemoData($tableId) //add meta label etc
+    {
+        update_post_meta($tableId, '_ninija_mortgage_table_config', static::getMortgageCalConfig());
+    }
+
+
+
+    public static function getMortgageCalConfig()
+    {
+    	
+    }
+
+
+
+
+
+
+
+
+
+
+
 
 }
 

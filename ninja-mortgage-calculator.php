@@ -43,6 +43,11 @@ class NINJAMortgageCalculator
 	{
 		add_action('admin_menu', array('NinjaMortgage\Classes\Menu', 'addAdminMenuPages') );
 		add_action('wp_ajax_ninja_mortgage_ajax_actions', array('NinjaMortgage\Classes\MortgageCalculatorHandler','handleAjaxCalls'));
+
+		add_action('ninja_mortgage_added_new_table', array('NinjaMortgage\Classes\MortgageCalculatorHandler','populateDemoData') );
+		add_action('ninija_mortgage_table_config_updated', array('NinjaMortgage\Classes\MortgageCalculatorHandler','deleteCache') );
+
+
 		
 	}
 
