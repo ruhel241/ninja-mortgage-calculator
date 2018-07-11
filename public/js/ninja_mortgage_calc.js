@@ -62379,7 +62379,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             }],
             tableData: [],
             table_name: '',
-            per_page: 5,
+            per_page: 3,
             page_number: 1,
             total: 0
         };
@@ -62441,9 +62441,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         deleteItem: function deleteItem(tableId) {
             var _this3 = this;
 
-            console.log("Total : " + this.total);
-            console.log("Page : " + this.per_page);
-            console.log(this.total - this.per_page);
             jQuery.post(ajaxurl, {
                 action: 'ninja_mortgage_ajax_actions',
                 route: 'delete_table',
@@ -62454,11 +62451,19 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                     message: response.data.message
                 });
                 _this3.total = _this3.total - 1;
-
-                if (_this3.total - _this3.per_page * 2 == 0 && _this3.total != _this3.per_page) {
-                    _this3.page_number = _this3.page_number - 1;
-                } else if (_this3.total == _this3.per_page) {
+                if (_this3.total == _this3.per_page) {
                     _this3.page_number = 1;
+                } else if (_this3.total % 2 != 0 && _this3.total % _this3.per_page == 0) {
+                    var res = parseInt(_this3.total / 2);
+                    console.log(res);
+                    if (_this3.total - (res * 2 + 1) == 0 && _this3.total != _this3.per_page) {
+                        _this3.page_number = _this3.page_number - 1;
+                    }
+                } else if (_this3.total % 2 == 0 && _this3.total % _this3.per_page == 0) {
+                    var res = parseInt(_this3.total / 2);
+                    if (_this3.total - res * 2 == 0 && _this3.total != _this3.per_page) {
+                        _this3.page_number = _this3.page_number - 1;
+                    }
                 }
                 _this3.fetchTables();
             }).fail(function (error) {
