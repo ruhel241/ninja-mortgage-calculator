@@ -34,6 +34,40 @@
                             </el-col>
                         </el-row>
                     </div>
+
+                    <div v-if="calcType=='mortgage_refinance'">
+                        <el-row>
+                            <el-col :span="24">
+                                <label>Current monthly payment </label>
+                                <el-input type="text"></el-input>
+                            </el-col>
+                        </el-row>
+                        <el-row>
+                            <el-col :span="24">
+                                <label>Balance left on mortgage </label>
+                                <el-input type="text"></el-input>
+                            </el-col>
+                        </el-row>
+                        <el-row>
+                            <el-col :span="24">
+                                <label>New Interest Rate</label>
+                                <el-input type="text"></el-input>
+                            </el-col>
+                        </el-row>
+                        <el-row>
+                            <el-col :span="24">
+                                <label>Remaining loan term</label>
+                                <el-input type="text"></el-input>
+                            </el-col>
+                        </el-row>
+                        <el-row>
+                            <el-col :span="24">
+                                <label>New Loan Term</label>
+                                <el-input type="text"></el-input>
+                            </el-col>
+                        </el-row>
+                    </div>
+
                 </el-tab-pane>
                     
 				<el-tab-pane label="Settings" name="third">Settings</el-tab-pane>

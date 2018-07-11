@@ -63283,6 +63283,40 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     name: 'tabs',
@@ -63502,6 +63536,99 @@ var render = function() {
                                   "allMortCalcTable.annualInterestRate"
                               }
                             })
+                          ],
+                          1
+                        )
+                      ],
+                      1
+                    )
+                  ],
+                  1
+                )
+              : _vm._e(),
+            _vm._v(" "),
+            _vm.calcType == "mortgage_refinance"
+              ? _c(
+                  "div",
+                  [
+                    _c(
+                      "el-row",
+                      [
+                        _c(
+                          "el-col",
+                          { attrs: { span: 24 } },
+                          [
+                            _c("label", [_vm._v("Current monthly payment ")]),
+                            _vm._v(" "),
+                            _c("el-input", { attrs: { type: "text" } })
+                          ],
+                          1
+                        )
+                      ],
+                      1
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "el-row",
+                      [
+                        _c(
+                          "el-col",
+                          { attrs: { span: 24 } },
+                          [
+                            _c("label", [_vm._v("Balance left on mortgage ")]),
+                            _vm._v(" "),
+                            _c("el-input", { attrs: { type: "text" } })
+                          ],
+                          1
+                        )
+                      ],
+                      1
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "el-row",
+                      [
+                        _c(
+                          "el-col",
+                          { attrs: { span: 24 } },
+                          [
+                            _c("label", [_vm._v("New Interest Rate")]),
+                            _vm._v(" "),
+                            _c("el-input", { attrs: { type: "text" } })
+                          ],
+                          1
+                        )
+                      ],
+                      1
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "el-row",
+                      [
+                        _c(
+                          "el-col",
+                          { attrs: { span: 24 } },
+                          [
+                            _c("label", [_vm._v("Remaining loan term")]),
+                            _vm._v(" "),
+                            _c("el-input", { attrs: { type: "text" } })
+                          ],
+                          1
+                        )
+                      ],
+                      1
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "el-row",
+                      [
+                        _c(
+                          "el-col",
+                          { attrs: { span: 24 } },
+                          [
+                            _c("label", [_vm._v("New Loan Term")]),
+                            _vm._v(" "),
+                            _c("el-input", { attrs: { type: "text" } })
                           ],
                           1
                         )
