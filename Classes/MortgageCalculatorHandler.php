@@ -11,7 +11,8 @@ class MortgageCalculatorHandler
 
 		if($route == 'add_table'){
 			$tableTitle = sanitize_text_field($_REQUEST['post_title']); 
-			static::addTable($tableTitle);
+			$selectCalculator = sanitize_text_field($_REQUEST['post_content']); 
+			static::addTable($tableTitle, $selectCalculator);
 		}
 
 		if($route == 'get_tables'){
@@ -42,17 +43,24 @@ class MortgageCalculatorHandler
 	
 
 
-	public static function addTable($tableTitle = '')
+	public static function addTable($tableTitle = '', $selectCalculator = '')
 	{
 		if( ! $tableTitle ){
 			wp_send_json_error(array(
 				'message' => __( "Please Provide Table Title", 'ninja_mortgage')
 			), 423);
 		}
+ 
+		if( ! $selectCalculator ){
+			wp_send_json_error(array(
+				'message' => __("Please Select Calculator Type", 'ninja_mortgage')
+			), 423);
+		}
 	
 
 		$tableData = array(
 			'post_title' => $tableTitle,
+			'post_content' => $selectCalculator,
 			'post_type' => CPT::$CPTName,
 			'post_status' => 'publish',
 		);
@@ -70,6 +78,9 @@ class MortgageCalculatorHandler
             'message'  => __('Table Successfully created'),
             'table_id' => $tableId
         ), 200);
+
+
+      
 	}
 
 
@@ -109,6 +120,7 @@ class MortgageCalculatorHandler
             $formattedTables[] = array(
                 'ID'         => $table->ID,
                 'post_title' => $table->post_title,
+                'post_content' => $table->post_content,
                 'demo_url' => home_url().'?ninja_mortgage_calculator_preview='.$table->ID.'#ninja_mortgage_demo'
             );
         }
