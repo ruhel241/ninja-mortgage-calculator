@@ -62330,6 +62330,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -62343,7 +62350,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             addingTableAjax: false,
             addTableModal: false,
             tableLoading: false,
-            table_type: [{
+            selectCalculator: '',
+            calc_types: [{
                 value: 'mortgage_calculator',
                 label: 'Mortgage Calculator'
             }, {
@@ -62677,9 +62685,9 @@ var render = function() {
                       },
                       [
                         _vm._v(
-                          "\n                    " +
+                          "\n                        " +
                             _vm._s(scope.row.post_title) +
-                            "\n                "
+                            "\n                    "
                         )
                       ]
                     )
@@ -62787,6 +62795,27 @@ var render = function() {
               expression: "table_name"
             }
           }),
+          _vm._v(" "),
+          _c(
+            "el-select",
+            {
+              staticStyle: { "margin-top": "10px" },
+              attrs: { placeholder: "Select Calculator Type" },
+              model: {
+                value: _vm.selectCalculator,
+                callback: function($$v) {
+                  _vm.selectCalculator = $$v
+                },
+                expression: "selectCalculator"
+              }
+            },
+            _vm._l(_vm.calc_types, function(type, i) {
+              return _c("el-option", {
+                key: i,
+                attrs: { label: type.label, value: type.value }
+              })
+            })
+          ),
           _vm._v(" "),
           _c(
             "span",
