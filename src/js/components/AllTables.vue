@@ -94,7 +94,8 @@
                                         :page-size="per_page"
                                         :current-page="page_number"
                                         @current-change="changePage"
-                                        :total="total">
+                                        :total="total"
+                                        :open-delay="300">
                 </el-pagination>
             </div>
     </div>
@@ -130,7 +131,7 @@ export default {
             ],
             tableData: [],
             table_name: '',
-            per_page: 4,
+            per_page: 5,
             page_number: 1,
             total: 0
         }
@@ -197,6 +198,9 @@ export default {
                 this.fetchTables();
             },
             deleteItem(tableId) {
+                console.log("Total : " + this.total)
+                console.log("Page : " + this.per_page)
+                console.log(this.total - this.per_page)
                 jQuery.post(ajaxurl, {
                     action: 'ninja_mortgage_ajax_actions',
                     route: 'delete_table',
@@ -207,6 +211,14 @@ export default {
                             title: 'Deleted',
                             message: response.data.message
                         })
+                        this.total = this.total - 1;
+
+                         if( this.total - (this.per_page * 2)== 0 && this.total != this.per_page ) {
+                            this.page_number = this.page_number - 1;
+                        }       
+                        else if(this.total == this.per_page) {
+                            this.page_number = 1;
+                        }                 
                         this.fetchTables();
                     }
                 ).fail(
