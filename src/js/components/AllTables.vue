@@ -33,7 +33,15 @@
             <el-table-column 
                 label="Caculator Type">
                 <template slot-scope="scope">
-                    {{ scope.row.post_content }}
+                    <span v-if="scope.row.post_content=='mortgage_calculator'">
+                        Mortgage Calculator
+                    </span>
+                    <span v-if="scope.row.post_content=='mortgage_refinance'">
+                        Mortgage Refinance
+                    </span>
+                    <span v-if="scope.row.post_content=='mortgage_payment'">
+                        Mortgage Payment
+                    </span>
                 </template>
             </el-table-column>            
 
@@ -176,7 +184,6 @@ export default {
                     .then(response => {
                         this.tableData = response.data.tables;
                         this.total = response.data.total;
-                        console.log(response)
                     })
                     .fail(error => {
                          console.log(error);
