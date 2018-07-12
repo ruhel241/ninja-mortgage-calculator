@@ -63252,7 +63252,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			}, {
 				value: 'mortgage_payment',
 				label: 'Mortgage Payment Calculator'
-			}]
+			}],
+			updatedData: {}
 		};
 	},
 
@@ -63272,11 +63273,25 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			});
 		},
 		updateTableConfig: function updateTableConfig() {
+			var _this2 = this;
 
-			// jQuery.post(ajaxurl, {
-			// 	action: 'ninja_mortgage_ajax_actions',
-			// 	route: 'ninja_mortgage_ajax_actions'
-			// })
+			this.updatedData = {
+				name: this.table.post_title,
+				type: this.table.post_content,
+				mortgage_table_label: this.all_mort_calc_table
+			};
+			console.log(this.updatedData);
+			jQuery.post(ajaxurl, {
+				action: 'ninja_mortgage_ajax_actions',
+				route: 'update_table_config',
+				table_config: this.updatedData
+			}).then(function (response) {
+				_this2.$notify.success({
+					title: 'Updated',
+					message: response.data.message
+				});
+				console.log(response);
+			});
 		},
 		updateHomePrice: function updateHomePrice(updatedHomePrcLabel) {
 			this.homePrice = updatedHomePrcLabel;

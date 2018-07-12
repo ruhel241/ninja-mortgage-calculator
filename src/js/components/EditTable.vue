@@ -186,7 +186,8 @@ export default {
                     value: 'mortgage_payment',
                     label: 'Mortgage Payment Calculator'
                 }
-            ]
+            ],
+			updatedData: {}
 			}
 		},
 		methods: {
@@ -208,11 +209,24 @@ export default {
 			},
 
 			updateTableConfig() {
-
-				// jQuery.post(ajaxurl, {
-				// 	action: 'ninja_mortgage_ajax_actions',
-				// 	route: 'ninja_mortgage_ajax_actions'
-				// })
+				this.updatedData = {
+					name: this.table.post_title,
+					type: this.table.post_content,
+					mortgage_table_label: this.all_mort_calc_table
+				}
+				console.log(this.updatedData)
+				jQuery.post(ajaxurl, {
+                    action: 'ninja_mortgage_ajax_actions',
+                    route: 'update_table_config',
+					table_config: this.updatedData
+                })
+                    .then(response => {
+                        this.$notify.success({
+                            title: 'Updated',
+                            message: response.data.message
+						});
+						console.log(response)
+                    })
 			},
 
 			updateHomePrice(updatedHomePrcLabel) {
