@@ -4,7 +4,7 @@
 	<el-row class="header">
 		<el-col :span="24">
 			<el-col :span="20">
-				<h1>{{ table.post_title }} <span><code>[ninja_mortgage_cal id="{{ table_id }}"]</code></span></h1>
+				<h1>{{ table.name }} <span><code>[ninja_mortgage_cal id="{{ table_id }}"]</code></span></h1>
 			</el-col>
 			<el-col :span="4">
 				<el-button class="common_btn" @click="updateTableConfig()">Update</el-button>
@@ -208,9 +208,16 @@ export default {
 					table_id: this.table_id
 				}).then(
 					response => {
+<<<<<<< HEAD
 						this.table = response.data.table;
 						this.calc_type = this.table.post_content;
 						console.log(response);
+=======
+						this.table = response.data.table_config;
+						this.calc_type = this.table.type;
+						this.all_mort_calc_table = this.table.mortgage_table_label;
+						console.log(response)
+>>>>>>> e740f2d0235017e41471a836f12f47471dd0f2ec
 					}
 				).fail(
                 error => {
@@ -222,22 +229,24 @@ export default {
 			updateTableConfig() {
 				this.updatedData = {
 					name: this.table.post_title,
-					type: this.table.post_content,
+					type: this.calc_type,
 					mortgage_table_label: this.all_mort_calc_table
 				}
 				console.log(this.updatedData)
 				jQuery.post(ajaxurl, {
                     action: 'ninja_mortgage_ajax_actions',
                     route: 'update_table_config',
+                    table_id: this.table_id,
 					table_config: this.updatedData
                 })
-                    .then(response => {
-                        this.$notify.success({
-                            title: 'Updated',
-                            message: response.data.message
-						});
-						console.log(response)
-                    })
+
+                .then(response => {
+                    this.$notify.success({
+                        title: 'Updated',
+                        message: response.data.message
+					});
+					console.log(response)
+                })
 			},
 
 			updateHomePrice(updatedHomePrcLabel) {
