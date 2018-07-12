@@ -4,7 +4,7 @@
 	<el-row class="header">
 		<el-col :span="24">
 			<el-col :span="20">
-				<h1>{{ table.post_title }} <span><code>[ninja_mortgage_cal id="{{ table_id }}"]</code></span></h1>
+				<h1>{{ title }} <span><code>[ninja_mortgage_cal id="{{ table_id }}"]</code></span></h1>
 			</el-col>
 			<el-col :span="4">
 				<el-button class="common_btn" @click="updateTableConfig()">Update</el-button>
@@ -35,8 +35,8 @@
 			<div v-if="calc_type=='mortgage_calculator'"  style="margin-top: 20px">
 				<el-row :gutter="15">
 					<el-col :span="24">
-						<label>{{ tableConfig.mortgage_table_label.homePrice }} </label>
-						<el-input type="text"  v-model="tableConfig.mortgage_table_label.homePrice" disabled></el-input>
+						<label>{{ all_mort_calc_table.homePrice }} </label>
+						<el-input type="text"  v-model="all_mort_calc_table.homePrice" disabled></el-input>
 					</el-col>
 				</el-row>
 				<el-row :gutter="15">
@@ -160,15 +160,12 @@ export default {
 			return {
 				table_id: this.$route.params.table_id,
 				table: {},
+				title: '',
 				calc_type: '',
 				tableConfig:'',
 				activeName: '',
-				all_mort_calc_table: {
-					homePrice: 'Home Price',
-					downPament: 'Down Pament',
-					mortgageTerm: 'Mortgage Term',
-					annualInterestRate: 'Annual Interest Rate'
-				},
+				MortgageCalConfig: {},
+				all_mort_calc_table: {},
 				all_refinance_calc_table: {
 					currentlyMonthlyPayment: 'Currently Monthly Payment',
 					loanIntRate: 'Current Loan interest rate',
@@ -206,19 +203,38 @@ export default {
 				jQuery.get(ajaxurl, {
 					action: 'ninja_mortgage_ajax_actions',
 					route: 'get_table',
-					table_id: this.table_id
+					table_id: this.table_id,
+
 				}).then(
 					response => {
-						this.table = response.data.table;
-						this.calc_type = this.table.post_content;
+					console.log(response)
+
+						this.MortgageCalConfig = response.data.MortgageCalConfig;
+					 	this.all_mort_calc_table = this.MortgageCalConfig.all_mort_calc_table;
+					 	console.log(this.all_mort_calc_table)
+
+						this.title = response.data.table.post_title;
+
 						this.tableConfig = response.data.table_config;
+						this.calc_type = this.tableConfig.post_content;
+						console.log(this.tableConfig)	
+
+
+						if(this.calc_type == 'mortgage_calculator' ) {
+							this.all_mort_calc_table = this.tableConfig.selectedLabel;
+						}
+						else if(this.calc_type == 'mortgage_refinance' ) {
+							this.all_mort_calc_table = this.tableConfig.selectedLabel;
+						}
+
+						else {
+							this.all_mort_calc_table = this.tableConfig.selectedLabel;
 						
-						/*
-							this.table = response.data.table_config;
-						this.calc_type = this.table.type;
-						this.all_mort_calc_table = this.table.mortgage_table_label;
-						console.log(response)
-						*/
+						}
+
+
+						
+
 
 					}
 				).fail(
@@ -229,12 +245,28 @@ export default {
 			},
 
 			updateTableConfig() {
+
+				if( this.calc_type === 'mortgage_calculator' ) {
+					var selected_label = this.all_mort_calc_table;
+				}
+				else if( this.calc_type === 'mortgage_refinance' ) {
+					var selected_label = this.all_refinance_calc_table;
+				}
+				else {
+					var selected_label = this.all_payment_calc_table;
+				}
+
+
+				console.log(selected_label);
+
+
+
 				this.updatedData = {
 					post_title: this.table.post_title,
 					post_content: this.calc_type,
-					mortgage_table_label: this.all_mort_calc_table
+					selectedLabel: selected_label 
 				}
-				console.log(this.updatedData);
+
 				jQuery.post(ajaxurl, {
                     action: 'ninja_mortgage_ajax_actions',
                     route: 'update_table_config',
@@ -245,24 +277,8 @@ export default {
                         title: 'Updated',
                         message: response.data.message
 					});
-					console.log(response);
+					console.log(response)
                 })
-			},
-
-			updateHomePrice(updatedHomePrcLabel) {
-				this.homePrice = updatedHomePrcLabel;
-			},
-
-			updateDownPament(updatedDwnPmtLabel) {
-				this.downPament = updatedDwnPmtLabel;
-			},
-
-			updateMortgageTerm(updatedMortTerm) {
-				this.mortgageTerm = updatedMortTerm;
-			},
-
-			updateannualInterestRate(updatedAnnIntRate) {
-				this.annualInterestRate = updatedAnnIntRate;
 			}
 		},
 		created() {

@@ -63230,6 +63230,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 		return {
 			table_id: this.$route.params.table_id,
 			table: {},
+			title: '',
 			calc_type: '',
 			tableConfig: '',
 			activeName: '',
@@ -63277,16 +63278,21 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 				route: 'get_table',
 				table_id: this.table_id
 			}).then(function (response) {
-				_this.table = response.data.table;
-				_this.calc_type = _this.table.post_content;
-				_this.tableConfig = response.data.table_config;
+				console.log(response);
 
-				/*
-    	this.table = response.data.table_config;
-    this.calc_type = this.table.type;
-    this.all_mort_calc_table = this.table.mortgage_table_label;
-    console.log(response)
-    */
+				_this.title = response.data.table.post_title;
+
+				_this.tableConfig = response.data.table_config;
+				_this.calc_type = _this.tableConfig.post_content;
+				console.log(_this.tableConfig);
+
+				if (_this.calc_type == 'mortgage_calculator') {
+					_this.all_mort_calc_table = _this.tableConfig.selectedLabel;
+				} else if (_this.calc_type == 'mortgage_refinance') {
+					_this.all_mort_calc_table = _this.tableConfig.selectedLabel;
+				} else {
+					_this.all_mort_calc_table = _this.tableConfig.selectedLabel;
+				}
 			}).fail(function (error) {
 				console.log(error);
 			});
@@ -63294,12 +63300,22 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 		updateTableConfig: function updateTableConfig() {
 			var _this2 = this;
 
+			if (this.calc_type === 'mortgage_calculator') {
+				var selected_label = this.all_mort_calc_table;
+			} else if (this.calc_type === 'mortgage_refinance') {
+				var selected_label = this.all_refinance_calc_table;
+			} else {
+				var selected_label = this.all_payment_calc_table;
+			}
+
+			console.log(selected_label);
+
 			this.updatedData = {
 				post_title: this.table.post_title,
 				post_content: this.calc_type,
-				mortgage_table_label: this.all_mort_calc_table
+				selectedLabel: selected_label
 			};
-			console.log(this.updatedData);
+
 			jQuery.post(ajaxurl, {
 				action: 'ninja_mortgage_ajax_actions',
 				route: 'update_table_config',
@@ -63312,18 +63328,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 				});
 				console.log(response);
 			});
-		},
-		updateHomePrice: function updateHomePrice(updatedHomePrcLabel) {
-			this.homePrice = updatedHomePrcLabel;
-		},
-		updateDownPament: function updateDownPament(updatedDwnPmtLabel) {
-			this.downPament = updatedDwnPmtLabel;
-		},
-		updateMortgageTerm: function updateMortgageTerm(updatedMortTerm) {
-			this.mortgageTerm = updatedMortTerm;
-		},
-		updateannualInterestRate: function updateannualInterestRate(updatedAnnIntRate) {
-			this.annualInterestRate = updatedAnnIntRate;
 		}
 	},
 	created: function created() {
@@ -64224,7 +64228,7 @@ var render = function() {
             [
               _c("el-col", { attrs: { span: 20 } }, [
                 _c("h1", [
-                  _vm._v(_vm._s(_vm.table.post_title) + " "),
+                  _vm._v(_vm._s(_vm.title) + " "),
                   _c("span", [
                     _c("code", [
                       _vm._v(
@@ -64323,27 +64327,22 @@ var render = function() {
                           [
                             _c("label", [
                               _vm._v(
-                                _vm._s(
-                                  _vm.tableConfig.mortgage_table_label.homePrice
-                                ) + " "
+                                _vm._s(_vm.all_mort_calc_table.homePrice) + " "
                               )
                             ]),
                             _vm._v(" "),
                             _c("el-input", {
                               attrs: { type: "text", disabled: "" },
                               model: {
-                                value:
-                                  _vm.tableConfig.mortgage_table_label
-                                    .homePrice,
+                                value: _vm.all_mort_calc_table.homePrice,
                                 callback: function($$v) {
                                   _vm.$set(
-                                    _vm.tableConfig.mortgage_table_label,
+                                    _vm.all_mort_calc_table,
                                     "homePrice",
                                     $$v
                                   )
                                 },
-                                expression:
-                                  "tableConfig.mortgage_table_label.homePrice"
+                                expression: "all_mort_calc_table.homePrice"
                               }
                             })
                           ],

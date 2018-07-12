@@ -98,9 +98,13 @@ class MortgageCalculatorHandler
 		 wp_send_json_success(array(
             'table'        => $formattedTable,
             'table_config' => $tableConfig,
-            // 'element_config' => static::getElementConfig(),
+            'MortgageCalConfig' => static::getMortgageCalConfig(),
            'demo_url' => home_url().'?ninja_mortgage_calculator_preview='.$tableId.'#ninja_mortgage_demo'
         ));
+
+		 // wp_send_json_success(array(
+		 // 	'MortgageCalConfig' => $MortgageCalConfig
+		 // ));
 	}
 
 
@@ -149,8 +153,6 @@ class MortgageCalculatorHandler
 		// $updatedData = get_post_meta($tableId, '_ninija_mortgage_table_config', true);
 
 		do_action('ninija_mortgage_table_config_updated', $tableId, $table_config);
-
-
 		wp_send_json_success(array(
             'message' => __('Table Content has been updated', 'ninja_mortgage'),
              // 'updatedData' => $updatedData
@@ -158,7 +160,6 @@ class MortgageCalculatorHandler
 
         
 	}
-
 
 
 	public static function populateDemoData($tableId) //add meta label etc
@@ -170,10 +171,40 @@ class MortgageCalculatorHandler
 
     public static function getMortgageCalConfig()
     {
-    	
+    	return array(
+			
+			'all_mort_calc_table' => array(
+                'homePrice' 	     => 'Home Price',
+                'downPament'	     => 'Down Pament',
+                'mortgageTerm'	     => 'Mortgage Term',
+                'annualInterestRate' => 'Annual Interest Rate'
+            ),
+
+			'all_refinance_calc_table' => array(
+				'currentlyMonthlyPayment' => 'Currently Monthly Payment',
+				'loanIntRate' 			  => 'Current Loan interest rate',
+				'balanceMortgage'		  => 'Balance left on mortgage',
+				'newIntRate' 			  => 'New Interest Rate',
+				'remainingLoanTerm'		  => 'Remaining Loan Term',
+				'newLoanTerm' 			  => 'New Loan Term'
+			),
+			
+			'all_payment_calc_table' => array(
+				'mortgageAmount' 	  => 'Mortgage Amount',
+				'termInYears' 		  => 'Term in years',
+				'interestRate' 		  => 'Interest Rate',
+				'annualPropertyTaxes' => 'Annual Property Taxes',
+				'annualHomeInsurance' => 'Annual Home Insurance'
+			),
+
+			'component_settings' => array(
+                array('key' => 'all_mort_calc_table'),
+                array('key' => 'all_refinance_calc_table'),
+                array('key' => 'all_payment_calc_table'),
+            ),
+
+		);
     }
-
-
 
 
 
