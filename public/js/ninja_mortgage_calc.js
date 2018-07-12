@@ -63231,6 +63231,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			table_id: this.$route.params.table_id,
 			table: {},
 			calc_type: '',
+			tableConfig: '',
 			activeName: '',
 			all_mort_calc_table: {
 				homePrice: 'Home Price',
@@ -63278,7 +63279,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			}).then(function (response) {
 				_this.table = response.data.table;
 				_this.calc_type = _this.table.post_content;
-				console.log(response);
+				_this.tableConfig = response.data.table_config;
 
 				/*
     	this.table = response.data.table_config;
@@ -64321,21 +64322,28 @@ var render = function() {
                           { attrs: { span: 24 } },
                           [
                             _c("label", [
-                              _vm._v(_vm._s(_vm.all_mort_calc_table.homePrice))
+                              _vm._v(
+                                _vm._s(
+                                  _vm.tableConfig.mortgage_table_label.homePrice
+                                ) + " "
+                              )
                             ]),
                             _vm._v(" "),
                             _c("el-input", {
                               attrs: { type: "text", disabled: "" },
                               model: {
-                                value: _vm.all_mort_calc_table.homePrice,
+                                value:
+                                  _vm.tableConfig.mortgage_table_label
+                                    .homePrice,
                                 callback: function($$v) {
                                   _vm.$set(
-                                    _vm.all_mort_calc_table,
+                                    _vm.tableConfig.mortgage_table_label,
                                     "homePrice",
                                     $$v
                                   )
                                 },
-                                expression: "all_mort_calc_table.homePrice"
+                                expression:
+                                  "tableConfig.mortgage_table_label.homePrice"
                               }
                             })
                           ],

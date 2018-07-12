@@ -35,8 +35,8 @@
 			<div v-if="calc_type=='mortgage_calculator'"  style="margin-top: 20px">
 				<el-row :gutter="15">
 					<el-col :span="24">
-						<label>{{ all_mort_calc_table.homePrice }}</label>
-						<el-input type="text"  v-model="all_mort_calc_table.homePrice" disabled></el-input>
+						<label>{{ tableConfig.mortgage_table_label.homePrice }} </label>
+						<el-input type="text"  v-model="tableConfig.mortgage_table_label.homePrice" disabled></el-input>
 					</el-col>
 				</el-row>
 				<el-row :gutter="15">
@@ -161,6 +161,7 @@ export default {
 				table_id: this.$route.params.table_id,
 				table: {},
 				calc_type: '',
+				tableConfig:'',
 				activeName: '',
 				all_mort_calc_table: {
 					homePrice: 'Home Price',
@@ -210,8 +211,8 @@ export default {
 					response => {
 						this.table = response.data.table;
 						this.calc_type = this.table.post_content;
-						console.log(response);
-
+						this.tableConfig = response.data.table_config;
+						
 						/*
 							this.table = response.data.table_config;
 						this.calc_type = this.table.type;
