@@ -108,39 +108,42 @@
 			<div v-if="calc_type==='mortgage_payment'">
 				<el-row :gutter="15" style="margin-top: 20px">
 					<el-col :span="24">
-						<label>Mortgage Amount</label>
-						<el-input type="text" placeholder="Home Price" disabled></el-input>
+						<label>{{ all_payment_calc_table.mortgageAmount }}</label>
+						<el-input type="text" v-model="all_payment_calc_table.mortgageAmount" disabled></el-input>
 					</el-col>
 				</el-row>
 				<el-row :gutter="15">
 					<el-col :span="24">
-						<label>Term in years</label>
-						<el-input type="text" placeholder="Down Payment" disabled></el-input>
+						<label>{{ all_payment_calc_table.termInYears }}</label>
+						<el-input type="text" v-model="all_payment_calc_table.termInYears" disabled></el-input>
 					</el-col>
 				</el-row>
 				<el-row :gutter="15">
 					<el-col :span="24">
-						<label>Interest Rate</label>
-						<el-input type="text" placeholder="Down Payment" disabled></el-input>
+						<label>{{ all_payment_calc_table.interestRate }}</label>
+						<el-input type="text" v-model="all_payment_calc_table.interestRate" disabled></el-input>
 					</el-col>
 				</el-row>
 				<el-row :gutter="15">
 					<el-col :span="24">
-						<label>Annual property taxes</label>
-						<el-input type="text" placeholder="Down Payment" disabled></el-input>
+						<label>{{ all_payment_calc_table.annualPropertyTaxes }}</label>
+						<el-input type="text" v-model="all_payment_calc_table.annualPropertyTaxes" disabled></el-input>
 					</el-col>
 				</el-row>
 				<el-row :gutter="15">
 					<el-col :span="24">
-						<label>Annual Home Insurance</label>
-						<el-input type="text" placeholder="Down Payment" disabled></el-input>
+						<label>{{ all_payment_calc_table.annualHomeInsurance }}</label>
+						<el-input type="text" v-model="all_payment_calc_table.annualHomeInsurance" disabled></el-input>
 					</el-col>
 				</el-row>
 			</div>
 		</el-col>
 		<el-col :span="8" class="tabs_col">
 			<!-- Tabs Component -->
-			<app-tabs :calcType="calc_type" :allMortCalcTable="all_mort_calc_table" :allRefinanceCalcTable="all_refinance_calc_table"></app-tabs>
+			<app-tabs :calcType="calc_type" 
+							 :allMortCalcTable="all_mort_calc_table" 
+							 :allRefinanceCalcTable="all_refinance_calc_table"
+							 :allPaymentCalcTable="all_payment_calc_table"></app-tabs>
 		</el-col>
 	</el-row>
 </div>
@@ -173,6 +176,13 @@ export default {
 					remainingLoanTerm: 'Remaining Loan Term',
 					newLoanTerm: 'New Loan Term'
 				},
+				all_payment_calc_table: {
+					mortgageAmount: 'Mortgage Amount',
+					termInYears: 'Term in years',
+					interestRate: 'Interest Rate',
+					annualPropertyTaxes: 'Annual Property Taxes',
+					annualHomeInsurance: 'Annual Home Insurance'
+				},
 				calc_types: [
                 {
                     value: 'mortgage_calculator',
@@ -200,6 +210,7 @@ export default {
 					response => {
 						this.table = response.data.table;
 						this.calc_type = this.table.post_content;
+						console.log(response);
 					}
 				).fail(
                 error => {

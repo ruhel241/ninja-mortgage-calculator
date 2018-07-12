@@ -74,6 +74,45 @@
                         </el-row>
                     </div>
 
+                    <div v-if="calcType=='mortgage_payment'">
+                        <el-row>
+                            <el-col :span="24">
+                                <label>{{ allPaymentCalcTable.mortgageAmount }}</label>
+                                <el-input type="text" v-model="allPaymentCalcTable.mortgageAmount"></el-input>
+                            </el-col>
+                        </el-row>
+                        <el-row>
+                            <el-col :span="24">
+                                <label>{{ allPaymentCalcTable.termInYears }}</label>
+                                <el-input type="text" v-model="allPaymentCalcTable.termInYears"></el-input>
+                            </el-col>
+                        </el-row>
+                        <el-row>
+                            <el-col :span="24">
+                                <label>{{ allPaymentCalcTable.interestRate }}</label>
+                                <el-input type="text" v-model="allPaymentCalcTable.interestRate"></el-input>
+                            </el-col>
+                        </el-row>
+                        <el-row>
+                            <el-col :span="24">
+                                <label>{{ allPaymentCalcTable.annualPropertyTaxes }}</label>
+                                <el-input type="text" v-model="allPaymentCalcTable.annualPropertyTaxes"></el-input>
+                            </el-col>
+                        </el-row>
+                        <el-row>
+                            <el-col :span="24">
+                                <label>{{ allPaymentCalcTable.annualHomeInsurance }}</label>
+                                <el-input type="text" v-model="allPaymentCalcTable.annualHomeInsurance"></el-input>
+                            </el-col>
+                        </el-row>
+                        <el-row>
+                            <el-col :span="24">
+                                <label>{{ allPaymentCalcTable.newLoanTerm }}</label>
+                                <el-input type="text" v-model="allPaymentCalcTable.newLoanTerm"></el-input>
+                            </el-col>
+                        </el-row>
+                    </div>
+
                 </el-tab-pane>
                     
 				<el-tab-pane label="Settings" name="third">Settings</el-tab-pane>
@@ -84,7 +123,7 @@
 <script>
 export default {
     name: 'tabs',
-    props: ['calcType', 'allMortCalcTable', 'allRefinanceCalcTable'],
+    props: ['calcType', 'allMortCalcTable', 'allRefinanceCalcTable', 'allPaymentCalcTable'],
     data() {
         return {
             activeName: 'first',
