@@ -144,11 +144,19 @@ class MortgageCalculatorHandler
 
 	public function updateTableConfig($tableId, $table_config)
 	{
-		update_post_meta($tableId, '_ninija_mortgage_table_config', $table_config);
+		 update_post_meta($tableId, '_ninija_mortgage_table_config', $table_config);
+
+		$updatedData = get_post_meta($tableId, '_ninija_mortgage_table_config', true);
+
 		do_action('ninija_mortgage_table_config_updated', $tableId, $table_config);
+
+
 		wp_send_json_success(array(
-            'message' => __('Table Content has been updated', 'ninja_mortgage')
+            'message' => __('Table Content has been updated', 'ninja_mortgage'),
+             'updatedData' => $updatedData
         ));
+
+        
 	}
 
 
