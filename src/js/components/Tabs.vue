@@ -113,25 +113,25 @@
                     <div v-if="calcType=='mortgage_calculator'">
                         <el-row>
                             <el-col :span="24">
-                                <label>Home Price</label>
+                                <label>{{ allMortCalcTable.homePrice }}</label>
                                 <el-input type="text" v-model="allMortCalcDefVal.homePriceDefVal"></el-input>
                             </el-col>
                         </el-row>
                         <el-row>
                             <el-col :span="24">
-                                <label>Down Pament</label>
+                                <label>{{ allMortCalcTable.downPament }}</label>
                                 <el-input type="text" v-model="allMortCalcDefVal.downPamentDefVal"></el-input>
                             </el-col>
                         </el-row>
                         <el-row>
                             <el-col :span="24">
-                                <label>Mortgage Term</label>
+                                <label>{{ allMortCalcTable.mortgageTerm }}</label>
                                 <el-input type="text" v-model="allMortCalcDefVal.mortgageTermDefVal"></el-input>
                             </el-col>
                         </el-row>
                         <el-row>
                             <el-col :span="24">
-                                <label>Annual Interest Rate</label>
+                                <label>{{ allMortCalcTable.annualInterestRate }}</label>
                                 <el-input type="text" v-model="allMortCalcDefVal.annualInterestRateDefVal"></el-input>
                             </el-col>
                         </el-row>
@@ -141,37 +141,37 @@
                     <div v-if="calcType=='mortgage_refinance'">
                         <el-row>
                             <el-col :span="24">
-                                <label>Currently Monthly Payment</label>
+                                <label>{{ allRefinanceCalcTable.currentlyMonthlyPayment }}</label>
                                 <el-input type="text" v-model="allRefinanceDefVal.currentlyMonthlyPaymentDefVal"></el-input>
                             </el-col>
                         </el-row>
                         <el-row>
                             <el-col :span="24">
-                                <label>Current Loan Interest Rate</label>
+                                <label>{{ allRefinanceCalcTable.loanIntRate }}</label>
                                 <el-input type="text" v-model="allRefinanceDefVal.loanIntRateDefVal"></el-input>
                             </el-col>
                         </el-row>
                         <el-row>
                             <el-col :span="24">
-                                <label>Balance left on mortgage</label>
+                                <label>{{ allRefinanceCalcTable.balanceMortgage }}</label>
                                 <el-input type="text" v-model="allRefinanceDefVal.balanceMortgageDefVal"></el-input>
                             </el-col>
                         </el-row>
                         <el-row>
                             <el-col :span="24">
-                                <label>New Interest Rate</label>
+                                <label>{{ allRefinanceCalcTable.newIntRate }}</label>
                                 <el-input type="text" v-model="allRefinanceDefVal.newIntRateDefVal"></el-input>
                             </el-col>
                         </el-row>
                         <el-row>
                             <el-col :span="24">
-                                <label>Remaining Loan Term</label>
+                                <label>{{ allRefinanceCalcTable.remainingLoanTerm }}</label>
                                 <el-input type="text" v-model="allRefinanceDefVal.remainingLoanTermDefVal"></el-input>
                             </el-col>
                         </el-row>
                         <el-row>
                             <el-col :span="24">
-                                <label>New Loan Term</label>
+                                <label>{{ allRefinanceCalcTable.newLoanTerm }}</label>
                                 <el-input type="text" v-model="allRefinanceDefVal.newLoanTermDefVal"></el-input>
                             </el-col>
                         </el-row>
@@ -181,32 +181,32 @@
                     <div v-if="calcType=='mortgage_payment'">
                         <el-row>
                             <el-col :span="24">
-                                <label>Mortgage Amount</label>
+                                <label>{{ allPaymentCalcTable.mortgageAmount }}</label>
                                 <el-input type="text" v-model="allPaymentCalcTableDefVal.mortgageAmountDefVal"></el-input>
                             </el-col>
                         </el-row>
                         <el-row>
                             <el-col :span="24">
-                                <label>Term in years</label>
+                                <label>{{ allPaymentCalcTable.termInYears }}</label>
                                 <el-input type="text" v-model="allPaymentCalcTableDefVal.termInYearsDefVal"></el-input>
                             </el-col>
                         </el-row>
                         <el-row>
                             <el-col :span="24">
-                                <label>Interest Rate</label>
+                                <label>{{ allPaymentCalcTable.interestRate }}</label>
                                 <el-input type="text" v-model="allPaymentCalcTableDefVal.interestRateDefVal"></el-input>
                             </el-col>
                         </el-row>
                         <el-row>
                             <el-col :span="24">
-                                <label>Annual Property Taxes</label>
-                                <el-input type="text" v-model="allPaymentCalcTableDefVal.annualHomeInsuranceDefVal"></el-input>
+                                <label>{{ allPaymentCalcTable.annualPropertyTaxes }}</label>
+                                <el-input type="text" v-model="allPaymentCalcTableDefVal.annualPropertyTaxesDefVal"></el-input>
                             </el-col>
                         </el-row>
                         <el-row>
                             <el-col :span="24">
-                                <label>Annual Home Insurance</label>
-                                <el-input type="text" v-model="allPaymentCalcTableDefVal.annualPropertyTaxesDefVal"></el-input>
+                                <label>{{ allPaymentCalcTable.annualHomeInsurance }}</label>
+                                <el-input type="text" v-model="allPaymentCalcTableDefVal.annualHomeInsuranceDefVal"></el-input>
                             </el-col>
                         </el-row>
                     </div>

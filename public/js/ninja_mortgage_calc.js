@@ -64332,7 +64332,9 @@ var render = function() {
                             "el-col",
                             { attrs: { span: 24 } },
                             [
-                              _c("label", [_vm._v("Home Price")]),
+                              _c("label", [
+                                _vm._v(_vm._s(_vm.allMortCalcTable.homePrice))
+                              ]),
                               _vm._v(" "),
                               _c("el-input", {
                                 attrs: { type: "text" },
@@ -64363,7 +64365,9 @@ var render = function() {
                             "el-col",
                             { attrs: { span: 24 } },
                             [
-                              _c("label", [_vm._v("Down Pament")]),
+                              _c("label", [
+                                _vm._v(_vm._s(_vm.allMortCalcTable.downPament))
+                              ]),
                               _vm._v(" "),
                               _c("el-input", {
                                 attrs: { type: "text" },
@@ -64394,7 +64398,11 @@ var render = function() {
                             "el-col",
                             { attrs: { span: 24 } },
                             [
-                              _c("label", [_vm._v("Mortgage Term")]),
+                              _c("label", [
+                                _vm._v(
+                                  _vm._s(_vm.allMortCalcTable.mortgageTerm)
+                                )
+                              ]),
                               _vm._v(" "),
                               _c("el-input", {
                                 attrs: { type: "text" },
@@ -64426,7 +64434,13 @@ var render = function() {
                             "el-col",
                             { attrs: { span: 24 } },
                             [
-                              _c("label", [_vm._v("Annual Interest Rate")]),
+                              _c("label", [
+                                _vm._v(
+                                  _vm._s(
+                                    _vm.allMortCalcTable.annualInterestRate
+                                  )
+                                )
+                              ]),
                               _vm._v(" "),
                               _c("el-input", {
                                 attrs: { type: "text" },
@@ -64468,7 +64482,12 @@ var render = function() {
                             { attrs: { span: 24 } },
                             [
                               _c("label", [
-                                _vm._v("Currently Monthly Payment")
+                                _vm._v(
+                                  _vm._s(
+                                    _vm.allRefinanceCalcTable
+                                      .currentlyMonthlyPayment
+                                  )
+                                )
                               ]),
                               _vm._v(" "),
                               _c("el-input", {
@@ -64503,7 +64522,9 @@ var render = function() {
                             { attrs: { span: 24 } },
                             [
                               _c("label", [
-                                _vm._v("Current Loan Interest Rate")
+                                _vm._v(
+                                  _vm._s(_vm.allRefinanceCalcTable.loanIntRate)
+                                )
                               ]),
                               _vm._v(" "),
                               _c("el-input", {
@@ -64536,7 +64557,13 @@ var render = function() {
                             "el-col",
                             { attrs: { span: 24 } },
                             [
-                              _c("label", [_vm._v("Balance left on mortgage")]),
+                              _c("label", [
+                                _vm._v(
+                                  _vm._s(
+                                    _vm.allRefinanceCalcTable.balanceMortgage
+                                  )
+                                )
+                              ]),
                               _vm._v(" "),
                               _c("el-input", {
                                 attrs: { type: "text" },
@@ -64569,7 +64596,11 @@ var render = function() {
                             "el-col",
                             { attrs: { span: 24 } },
                             [
-                              _c("label", [_vm._v("New Interest Rate")]),
+                              _c("label", [
+                                _vm._v(
+                                  _vm._s(_vm.allRefinanceCalcTable.newIntRate)
+                                )
+                              ]),
                               _vm._v(" "),
                               _c("el-input", {
                                 attrs: { type: "text" },
@@ -64601,7 +64632,13 @@ var render = function() {
                             "el-col",
                             { attrs: { span: 24 } },
                             [
-                              _c("label", [_vm._v("Remaining Loan Term")]),
+                              _c("label", [
+                                _vm._v(
+                                  _vm._s(
+                                    _vm.allRefinanceCalcTable.remainingLoanTerm
+                                  )
+                                )
+                              ]),
                               _vm._v(" "),
                               _c("el-input", {
                                 attrs: { type: "text" },
@@ -64634,7 +64671,11 @@ var render = function() {
                             "el-col",
                             { attrs: { span: 24 } },
                             [
-                              _c("label", [_vm._v("New Loan Term")]),
+                              _c("label", [
+                                _vm._v(
+                                  _vm._s(_vm.allRefinanceCalcTable.newLoanTerm)
+                                )
+                              ]),
                               _vm._v(" "),
                               _c("el-input", {
                                 attrs: { type: "text" },
@@ -64674,7 +64715,11 @@ var render = function() {
                             "el-col",
                             { attrs: { span: 24 } },
                             [
-                              _c("label", [_vm._v("Mortgage Amount")]),
+                              _c("label", [
+                                _vm._v(
+                                  _vm._s(_vm.allPaymentCalcTable.mortgageAmount)
+                                )
+                              ]),
                               _vm._v(" "),
                               _c("el-input", {
                                 attrs: { type: "text" },
@@ -64707,7 +64752,11 @@ var render = function() {
                             "el-col",
                             { attrs: { span: 24 } },
                             [
-                              _c("label", [_vm._v("Term in years")]),
+                              _c("label", [
+                                _vm._v(
+                                  _vm._s(_vm.allPaymentCalcTable.termInYears)
+                                )
+                              ]),
                               _vm._v(" "),
                               _c("el-input", {
                                 attrs: { type: "text" },
@@ -64740,7 +64789,11 @@ var render = function() {
                             "el-col",
                             { attrs: { span: 24 } },
                             [
-                              _c("label", [_vm._v("Interest Rate")]),
+                              _c("label", [
+                                _vm._v(
+                                  _vm._s(_vm.allPaymentCalcTable.interestRate)
+                                )
+                              ]),
                               _vm._v(" "),
                               _c("el-input", {
                                 attrs: { type: "text" },
@@ -64773,40 +64826,13 @@ var render = function() {
                             "el-col",
                             { attrs: { span: 24 } },
                             [
-                              _c("label", [_vm._v("Annual Property Taxes")]),
-                              _vm._v(" "),
-                              _c("el-input", {
-                                attrs: { type: "text" },
-                                model: {
-                                  value:
-                                    _vm.allPaymentCalcTableDefVal
-                                      .annualHomeInsuranceDefVal,
-                                  callback: function($$v) {
-                                    _vm.$set(
-                                      _vm.allPaymentCalcTableDefVal,
-                                      "annualHomeInsuranceDefVal",
-                                      $$v
-                                    )
-                                  },
-                                  expression:
-                                    "allPaymentCalcTableDefVal.annualHomeInsuranceDefVal"
-                                }
-                              })
-                            ],
-                            1
-                          )
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "el-row",
-                        [
-                          _c(
-                            "el-col",
-                            { attrs: { span: 24 } },
-                            [
-                              _c("label", [_vm._v("Annual Home Insurance")]),
+                              _c("label", [
+                                _vm._v(
+                                  _vm._s(
+                                    _vm.allPaymentCalcTable.annualPropertyTaxes
+                                  )
+                                )
+                              ]),
                               _vm._v(" "),
                               _c("el-input", {
                                 attrs: { type: "text" },
@@ -64823,6 +64849,45 @@ var render = function() {
                                   },
                                   expression:
                                     "allPaymentCalcTableDefVal.annualPropertyTaxesDefVal"
+                                }
+                              })
+                            ],
+                            1
+                          )
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "el-row",
+                        [
+                          _c(
+                            "el-col",
+                            { attrs: { span: 24 } },
+                            [
+                              _c("label", [
+                                _vm._v(
+                                  _vm._s(
+                                    _vm.allPaymentCalcTable.annualHomeInsurance
+                                  )
+                                )
+                              ]),
+                              _vm._v(" "),
+                              _c("el-input", {
+                                attrs: { type: "text" },
+                                model: {
+                                  value:
+                                    _vm.allPaymentCalcTableDefVal
+                                      .annualHomeInsuranceDefVal,
+                                  callback: function($$v) {
+                                    _vm.$set(
+                                      _vm.allPaymentCalcTableDefVal,
+                                      "annualHomeInsuranceDefVal",
+                                      $$v
+                                    )
+                                  },
+                                  expression:
+                                    "allPaymentCalcTableDefVal.annualHomeInsuranceDefVal"
                                 }
                               })
                             ],
