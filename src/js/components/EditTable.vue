@@ -4,7 +4,7 @@
 	<el-row class="header">
 		<el-col :span="24">
 			<el-col :span="20">
-				<h1>{{ title }} <span><code>[ninja_mortgage_cal id="{{ table_id }}"]</code></span></h1>
+				<h1>{{ post_title }} <span><code>[ninja_mortgage_cal id="{{ table_id }}"]</code></span></h1>
 			</el-col>
 			<el-col :span="4">
 				<el-button class="common_btn" @click="updateTableConfig()">Update</el-button>
@@ -141,9 +141,12 @@
 		<el-col :span="8" class="tabs_col">
 			<!-- Tabs Component -->
 			<app-tabs :calcType="calc_type" 
-							 :allMortCalcTable="all_mort_calc_table" 
-							 :allRefinanceCalcTable="all_refinance_calc_table"
-							 :allPaymentCalcTable="all_payment_calc_table"></app-tabs>
+					  :allMortCalcTable="all_mort_calc_table" 
+					  :allRefinanceCalcTable="all_refinance_calc_table"
+					  :allPaymentCalcTable="all_payment_calc_table"
+					  :allMortCalcDefVal="all_mort_calc_table_def_val"
+					  :allRefinanceDefVal="all_refinance_calc_table_def_val"
+					  :allPaymentCalcTableDefVal="all_payment_calc_table_def_val"></app-tabs>
 		</el-col>
 	</el-row>
 </div>
@@ -160,26 +163,52 @@ export default {
 			return {
 				table_id: this.$route.params.table_id,
 				table: {},
-				title: '',
+				post_title: '',
 				calc_type: '',
 				tableConfig:'',
 				activeName: '',
 				MortgageCalConfig: {},
-				all_mort_calc_table: {},
+				all_mort_calc_table: {
+					homePrice: 'Home Price', 
+					downPament: 'Down Pament',
+					mortgageTerm: 'Mortgage Term', 
+					annualInterestRate: 'Annual Interest Rate'
+				},
+				all_mort_calc_table_def_val: {
+					homePriceDefVal: 120000,
+					downPamentDefVal: 20000,
+					mortgageTermDefVal: 30,
+					annualInterestRateDefVal: 12
+				},
 				all_refinance_calc_table: {
-					currentlyMonthlyPayment: 'Currently Monthly Payment',
-					loanIntRate: 'Current Loan interest rate',
+					currentlyMonthlyPayment: 'Currently Monthly Pament', 
+					loanIntRate: 'Current loan interest rate',
 					balanceMortgage: 'Balance left on mortgage',
-					newIntRate: 'New Interest Rate',
+					newIntRate: 'New Interest Rate', 
 					remainingLoanTerm: 'Remaining Loan Term',
 					newLoanTerm: 'New Loan Term'
 				},
+				all_refinance_calc_table_def_val: {
+					currentlyMonthlyPaymentDefVal: 1200,
+					loanIntRateDefVal: 25,
+					balanceMortgageDefVal: 25000,
+					newIntRateDefVal: 15,
+					remainingLoanTermDefVal: 20,
+					newLoanTermDefVal: 26
+				},
 				all_payment_calc_table: {
 					mortgageAmount: 'Mortgage Amount',
-					termInYears: 'Term in years',
-					interestRate: 'Interest Rate',
-					annualPropertyTaxes: 'Annual Property Taxes',
-					annualHomeInsurance: 'Annual Home Insurance'
+					termInYears: 'Term in Years',
+					interestRate: 'Interest Rate', 
+					annualHomeInsurance: 'Annual Home Insurance',
+					annualPropertyTaxes: 'Annual Property Taxes'
+				},
+				all_payment_calc_table_def_val: {
+					mortgageAmountDefVal: 2500,
+					termInYearsDefVal: 5,
+					interestRateDefVal: 25,
+					annualHomeInsuranceDefVal: 3500,
+					annualPropertyTaxesDefVal: 1500
 				},
 				calc_types: [
                 {
@@ -195,7 +224,8 @@ export default {
                     label: 'Mortgage Payment Calculator'
                 }
             ],
-			updatedData: {}
+			updatedData: {},
+			bool: false
 			}
 		},
 		methods: {
@@ -206,55 +236,77 @@ export default {
 					table_id: this.table_id,
 
 				}).then(
-					response => {
-					console.log(response)
-
-						this.MortgageCalConfig = response.data.MortgageCalConfig;
-					 	this.all_mort_calc_table = this.MortgageCalConfig.all_mort_calc_table;
-					 	console.log(this.all_mort_calc_table)
-
-						this.title = response.data.table.post_title;
-
-						this.tableConfig = response.data.table_config;
-						this.calc_type = this.tableConfig.post_content;
-						console.log(this.tableConfig)	
-
+					(response) => {
+						console.log(response)
+						if(response.data.table_config.post_content) {
+							this.calc_type = response.data.table_config.post_content;
+						} else {
+							this.calc_type = response.data.table.post_content;
+						}
+						
+						this.post_title = response.data.table.post_title;
 
 						if(this.calc_type == 'mortgage_calculator' ) {
-							this.all_mort_calc_table = this.tableConfig.selectedLabel;
+			
+							if(response.data.table_config.selectedLabel) {
+								this.all_mort_calc_table = response.data.table_config.selectedLabel;
+							}
+
+							if(response.data.table_config.selectedDefault) {
+								this.all_mort_calc_table_def_val = response.data.table_config.selectedDefault;
+							}
+
 						}
-						else if(this.calc_type == 'mortgage_refinance' ) {
-							this.all_mort_calc_table = this.tableConfig.selectedLabel;
+						else if(this.calc_type == 'mortgage_refinance') {
+							
+							if(response.data.table_config.selectedLabel) {
+								this.all_refinance_calc_table = response.data.table_config.selectedLabel;
+							}
+
+							if(response.data.table_config.selectedDefault) {
+								this.all_refinance_calc_table_def_val = response.data.table_config.selectedDefault;
+							}
+
 						}
 
-						else {
-							this.all_mort_calc_table = this.tableConfig.selectedLabel;
-						
+						else if(this.calc_type == 'mortgage_payment') {
+							
+							if(response.data.table_config.selectedLabel) {
+								this.all_payment_calc_table = response.data.table_config.selectedLabel;
+							}
+
+							if(response.data.table_config.selectedDefault) {
+								this.all_payment_calc_table_def_val = response.data.table_config.selectedDefault;
+							}
+
 						}
-
-
-						
-
-
 					}
 				).fail(
-                error => {
-                    console.log(error)
-                }
-            )
+	                error => {
+	                    console.log(error)
+	                }
+            	)
 			},
 
 			updateTableConfig() {
 
+				this.bool = true;
+
+				console.log(this.all_mort_calc_table_def_val)
+
 				if( this.calc_type === 'mortgage_calculator' ) {
 					var selected_label = this.all_mort_calc_table;
+					var selected_default = this.all_mort_calc_table_def_val;
 				}
 				else if( this.calc_type === 'mortgage_refinance' ) {
 					var selected_label = this.all_refinance_calc_table;
+					var selected_default = this.all_refinance_calc_table_def_val;
 				}
 				else {
 					var selected_label = this.all_payment_calc_table;
+					var selected_default = this.all_payment_calc_table_def_val;
 				}
+
 
 
 				console.log(selected_label);
@@ -262,10 +314,13 @@ export default {
 
 
 				this.updatedData = {
-					post_title: this.table.post_title,
+					post_title: this.post_title,
 					post_content: this.calc_type,
-					selectedLabel: selected_label 
+					selectedLabel: selected_label ,
+					selectedDefault: selected_default
 				}
+
+				console.log(this.updatedData)
 
 				jQuery.post(ajaxurl, {
                     action: 'ninja_mortgage_ajax_actions',
@@ -278,6 +333,18 @@ export default {
                         message: response.data.message
 					});
 					console.log(response)
+					if( this.calc_type == 'mortgage_calculator' ) {
+						this.all_mort_calc_table = response.data.updatedData.selectedLabel;
+						this.all_mort_calc_table_def_val = response.data.updatedData.selectedDefault;
+					}
+					else if( this.calc_type == 'mortgage_refinance' ) {
+						this.all_refinance_calc_table = response.data.updatedData.selectedLabel;
+						this.all_refinance_calc_table_def_val = response.data.updatedData.selectedDefault
+					}
+					else if( this.calc_type == 'mortgage_payment' ) {
+						this.all_payment_calc_table = response.data.updatedData.selectedLabel;
+						this.all_payment_calc_table_def_val = response.data.updatedData.selectedDefault
+					}
                 })
 			}
 		},

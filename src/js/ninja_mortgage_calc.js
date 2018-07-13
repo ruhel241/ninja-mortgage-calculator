@@ -10,7 +10,7 @@ import lang from 'element-ui/lib/locale/lang/en';
 locale.use(lang);
 Vue.use(VueRouter);
 
-import { Button, Col, Dialog, Input, Select, Row, Option, Table,  Icon, TableColumn, Loading, Notification, Pagination, Tabs, TabPane, Popover } from 'element-ui';
+import { Button, Col, Dialog, Input, Select, Row, Option, Table,  Icon, TableColumn, Loading, Notification, Pagination, Tabs, TabPane, Popover, Switch } from 'element-ui';
 
 Vue.use(Button)
 Vue.use(Col)
@@ -26,6 +26,7 @@ Vue.use(TableColumn)
 Vue.use(Pagination)
 Vue.use(Tabs)
 Vue.use(Popover)
+Vue.use(Switch)
 
 
 Vue.use(Loading.directive);

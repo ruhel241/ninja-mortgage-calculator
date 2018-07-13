@@ -40,7 +40,36 @@ class MortgageCalculatorHandler
 
 
 	}
-	
+
+
+	 public static function handleShortCode($atts)
+    {
+        $atts = shortcode_atts(array(
+            'id' => null,
+        ), $atts);
+
+        extract($atts);
+
+        if ( ! $id ) {
+            return '';
+        }
+
+        // $displayItem = get_posts();
+
+        // return View::makeView('views.test', $id);
+
+
+        // $tableConfig = get_post_meta($id, '_ninija_mortgage_table_config', true);
+
+        // $CalRenderer = new CalculatorRenderer($tableConfig, $id);
+
+        // return $CalRenderer->render();
+
+
+    }
+
+
+
 
 
 	public static function addTable($tableTitle = '', $selectCalculator = '')
@@ -84,7 +113,6 @@ class MortgageCalculatorHandler
 	}
 
 
-
 	public  static function getTable($tableId, $returnType = 'ajax')
 	{
 		$table = get_post($tableId);
@@ -99,12 +127,8 @@ class MortgageCalculatorHandler
             'table'        => $formattedTable,
             'table_config' => $tableConfig,
             'MortgageCalConfig' => static::getMortgageCalConfig(),
-           'demo_url' => home_url().'?ninja_mortgage_calculator_preview='.$tableId.'#ninja_mortgage_demo'
+            'demo_url' => home_url().'?ninja_mortgage_calculator_preview='.$tableId.'#ninja_mortgage_demo'
         ));
-
-		 // wp_send_json_success(array(
-		 // 	'MortgageCalConfig' => $MortgageCalConfig
-		 // ));
 	}
 
 
@@ -148,14 +172,12 @@ class MortgageCalculatorHandler
 
 	public static function updateTableConfig($tableId, $table_config)
 	{
-		 update_post_meta($tableId, '_ninija_mortgage_table_config', $table_config);
-
-		// $updatedData = get_post_meta($tableId, '_ninija_mortgage_table_config', true);
-
+		update_post_meta($tableId, '_ninija_mortgage_table_config', $table_config);
 		do_action('ninija_mortgage_table_config_updated', $tableId, $table_config);
+		$tableConfig = get_post_meta($tableId, '_ninija_mortgage_table_config', true);
 		wp_send_json_success(array(
             'message' => __('Table Content has been updated', 'ninja_mortgage'),
-             // 'updatedData' => $updatedData
+            'updatedData' => $tableConfig
         ));
 
         

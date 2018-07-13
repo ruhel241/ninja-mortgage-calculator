@@ -47909,6 +47909,7 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_2_elem
 __WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_2_element_ui__["Pagination"]);
 __WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_2_element_ui__["Tabs"]);
 __WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_2_element_ui__["Popover"]);
+__WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_2_element_ui__["Switch"]);
 
 __WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_2_element_ui__["Loading"].directive);
 __WEBPACK_IMPORTED_MODULE_0_vue___default.a.prototype.$loading = __WEBPACK_IMPORTED_MODULE_2_element_ui__["Loading"].service;
@@ -62428,6 +62429,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             }).then(function (response) {
                 _this2.tableData = response.data.tables;
                 _this2.total = response.data.total;
+                console.log(response);
             }).fail(function (error) {
                 console.log(error);
             }).always(function () {
@@ -63219,6 +63221,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -63230,30 +63235,52 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 		return {
 			table_id: this.$route.params.table_id,
 			table: {},
-			title: '',
+			post_title: '',
 			calc_type: '',
 			tableConfig: '',
 			activeName: '',
+			MortgageCalConfig: {},
 			all_mort_calc_table: {
 				homePrice: 'Home Price',
 				downPament: 'Down Pament',
 				mortgageTerm: 'Mortgage Term',
 				annualInterestRate: 'Annual Interest Rate'
 			},
+			all_mort_calc_table_def_val: {
+				homePriceDefVal: 120000,
+				downPamentDefVal: 20000,
+				mortgageTermDefVal: 30,
+				annualInterestRateDefVal: 12
+			},
 			all_refinance_calc_table: {
-				currentlyMonthlyPayment: 'Currently Monthly Payment',
-				loanIntRate: 'Current Loan interest rate',
+				currentlyMonthlyPayment: 'Currently Monthly Pament',
+				loanIntRate: 'Current loan interest rate',
 				balanceMortgage: 'Balance left on mortgage',
 				newIntRate: 'New Interest Rate',
 				remainingLoanTerm: 'Remaining Loan Term',
 				newLoanTerm: 'New Loan Term'
 			},
+			all_refinance_calc_table_def_val: {
+				currentlyMonthlyPaymentDefVal: 1200,
+				loanIntRateDefVal: 25,
+				balanceMortgageDefVal: 25000,
+				newIntRateDefVal: 15,
+				remainingLoanTermDefVal: 20,
+				newLoanTermDefVal: 26
+			},
 			all_payment_calc_table: {
 				mortgageAmount: 'Mortgage Amount',
-				termInYears: 'Term in years',
+				termInYears: 'Term in Years',
 				interestRate: 'Interest Rate',
-				annualPropertyTaxes: 'Annual Property Taxes',
-				annualHomeInsurance: 'Annual Home Insurance'
+				annualHomeInsurance: 'Annual Home Insurance',
+				annualPropertyTaxes: 'Annual Property Taxes'
+			},
+			all_payment_calc_table_def_val: {
+				mortgageAmountDefVal: 2500,
+				termInYearsDefVal: 5,
+				interestRateDefVal: 25,
+				annualHomeInsuranceDefVal: 3500,
+				annualPropertyTaxesDefVal: 1500
 			},
 			calc_types: [{
 				value: 'mortgage_calculator',
@@ -63265,7 +63292,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 				value: 'mortgage_payment',
 				label: 'Mortgage Payment Calculator'
 			}],
-			updatedData: {}
+			updatedData: {},
+			bool: false
 		};
 	},
 
@@ -63277,21 +63305,44 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 				action: 'ninja_mortgage_ajax_actions',
 				route: 'get_table',
 				table_id: this.table_id
+
 			}).then(function (response) {
 				console.log(response);
+				if (response.data.table_config.post_content) {
+					_this.calc_type = response.data.table_config.post_content;
+				} else {
+					_this.calc_type = response.data.table.post_content;
+				}
 
-				_this.title = response.data.table.post_title;
-
-				_this.tableConfig = response.data.table_config;
-				_this.calc_type = _this.tableConfig.post_content;
-				console.log(_this.tableConfig);
+				_this.post_title = response.data.table.post_title;
 
 				if (_this.calc_type == 'mortgage_calculator') {
-					_this.all_mort_calc_table = _this.tableConfig.selectedLabel;
+
+					if (response.data.table_config.selectedLabel) {
+						_this.all_mort_calc_table = response.data.table_config.selectedLabel;
+					}
+
+					if (response.data.table_config.selectedDefault) {
+						_this.all_mort_calc_table_def_val = response.data.table_config.selectedDefault;
+					}
 				} else if (_this.calc_type == 'mortgage_refinance') {
-					_this.all_mort_calc_table = _this.tableConfig.selectedLabel;
-				} else {
-					_this.all_mort_calc_table = _this.tableConfig.selectedLabel;
+
+					if (response.data.table_config.selectedLabel) {
+						_this.all_refinance_calc_table = response.data.table_config.selectedLabel;
+					}
+
+					if (response.data.table_config.selectedDefault) {
+						_this.all_refinance_calc_table_def_val = response.data.table_config.selectedDefault;
+					}
+				} else if (_this.calc_type == 'mortgage_payment') {
+
+					if (response.data.table_config.selectedLabel) {
+						_this.all_payment_calc_table = response.data.table_config.selectedLabel;
+					}
+
+					if (response.data.table_config.selectedDefault) {
+						_this.all_payment_calc_table_def_val = response.data.table_config.selectedDefault;
+					}
 				}
 			}).fail(function (error) {
 				console.log(error);
@@ -63300,21 +63351,31 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 		updateTableConfig: function updateTableConfig() {
 			var _this2 = this;
 
+			this.bool = true;
+
+			console.log(this.all_mort_calc_table_def_val);
+
 			if (this.calc_type === 'mortgage_calculator') {
 				var selected_label = this.all_mort_calc_table;
+				var selected_default = this.all_mort_calc_table_def_val;
 			} else if (this.calc_type === 'mortgage_refinance') {
 				var selected_label = this.all_refinance_calc_table;
+				var selected_default = this.all_refinance_calc_table_def_val;
 			} else {
 				var selected_label = this.all_payment_calc_table;
+				var selected_default = this.all_payment_calc_table_def_val;
 			}
 
 			console.log(selected_label);
 
 			this.updatedData = {
-				post_title: this.table.post_title,
+				post_title: this.post_title,
 				post_content: this.calc_type,
-				selectedLabel: selected_label
+				selectedLabel: selected_label,
+				selectedDefault: selected_default
 			};
+
+			console.log(this.updatedData);
 
 			jQuery.post(ajaxurl, {
 				action: 'ninja_mortgage_ajax_actions',
@@ -63327,6 +63388,16 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 					message: response.data.message
 				});
 				console.log(response);
+				if (_this2.calc_type == 'mortgage_calculator') {
+					_this2.all_mort_calc_table = response.data.updatedData.selectedLabel;
+					_this2.all_mort_calc_table_def_val = response.data.updatedData.selectedDefault;
+				} else if (_this2.calc_type == 'mortgage_refinance') {
+					_this2.all_refinance_calc_table = response.data.updatedData.selectedLabel;
+					_this2.all_refinance_calc_table_def_val = response.data.updatedData.selectedDefault;
+				} else if (_this2.calc_type == 'mortgage_payment') {
+					_this2.all_payment_calc_table = response.data.updatedData.selectedLabel;
+					_this2.all_payment_calc_table_def_val = response.data.updatedData.selectedDefault;
+				}
 			});
 		}
 	},
@@ -63388,6 +63459,109 @@ module.exports = Component.exports
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__ShowAmortization_vue__ = __webpack_require__(215);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__ShowAmortization_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__ShowAmortization_vue__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -63511,9 +63685,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 
+
+
 /* harmony default export */ __webpack_exports__["default"] = ({
     name: 'tabs',
-    props: ['calcType', 'allMortCalcTable', 'allRefinanceCalcTable', 'allPaymentCalcTable'],
+    components: {
+        'app-show-amortization': __WEBPACK_IMPORTED_MODULE_0__ShowAmortization_vue___default.a
+    },
+    props: ['calcType', 'allMortCalcTable', 'allRefinanceCalcTable', 'allPaymentCalcTable', 'allMortCalcDefVal', 'allRefinanceDefVal', 'allPaymentCalcTableDefVal'],
     data: function data() {
         return {
             activeName: 'first',
@@ -63522,28 +63701,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             downPamentDef: 20000,
             mortgageTermDef: 30,
             mortgageTermMonthDef: 360,
-            annualInterestRateDef: 12
+            annualInterestRateDef: 12,
+            amortization: true
         };
     },
 
     methods: {
-        handleClick: function handleClick(tab, event) {
-            console.log(tab, event);
-        }
-    },
-    watch: {
-        homePrice: function homePrice() {
-            this.$emit('homePriceUpd', this.homePrice);
-        },
-        downPament: function downPament() {
-            this.$emit('downPamentUpd', this.downPament);
-        },
-        mortgageTerm: function mortgageTerm() {
-            this.$emit('mortgageTermUpd', this.mortgageTerm);
-        },
-        annualInterestRate: function annualInterestRate() {
-            this.$emit('annualInterestRateUpd', this.annualInterestRate);
-        }
+        handleClick: function handleClick(tab, event) {}
     }
 });
 
@@ -64146,40 +64310,6 @@ var render = function() {
                         )
                       ],
                       1
-                    ),
-                    _vm._v(" "),
-                    _c(
-                      "el-row",
-                      [
-                        _c(
-                          "el-col",
-                          { attrs: { span: 24 } },
-                          [
-                            _c("label", [
-                              _vm._v(
-                                _vm._s(_vm.allPaymentCalcTable.newLoanTerm)
-                              )
-                            ]),
-                            _vm._v(" "),
-                            _c("el-input", {
-                              attrs: { type: "text" },
-                              model: {
-                                value: _vm.allPaymentCalcTable.newLoanTerm,
-                                callback: function($$v) {
-                                  _vm.$set(
-                                    _vm.allPaymentCalcTable,
-                                    "newLoanTerm",
-                                    $$v
-                                  )
-                                },
-                                expression: "allPaymentCalcTable.newLoanTerm"
-                              }
-                            })
-                          ],
-                          1
-                        )
-                      ],
-                      1
                     )
                   ],
                   1
@@ -64187,8 +64317,531 @@ var render = function() {
               : _vm._e()
           ]),
           _vm._v(" "),
+          _c(
+            "el-tab-pane",
+            { attrs: { label: "Default Values", name: "second" } },
+            [
+              _vm.calcType == "mortgage_calculator"
+                ? _c(
+                    "div",
+                    [
+                      _c(
+                        "el-row",
+                        [
+                          _c(
+                            "el-col",
+                            { attrs: { span: 24 } },
+                            [
+                              _c("label", [_vm._v("Home Price")]),
+                              _vm._v(" "),
+                              _c("el-input", {
+                                attrs: { type: "text" },
+                                model: {
+                                  value: _vm.allMortCalcDefVal.homePriceDefVal,
+                                  callback: function($$v) {
+                                    _vm.$set(
+                                      _vm.allMortCalcDefVal,
+                                      "homePriceDefVal",
+                                      $$v
+                                    )
+                                  },
+                                  expression:
+                                    "allMortCalcDefVal.homePriceDefVal"
+                                }
+                              })
+                            ],
+                            1
+                          )
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "el-row",
+                        [
+                          _c(
+                            "el-col",
+                            { attrs: { span: 24 } },
+                            [
+                              _c("label", [_vm._v("Down Pament")]),
+                              _vm._v(" "),
+                              _c("el-input", {
+                                attrs: { type: "text" },
+                                model: {
+                                  value: _vm.allMortCalcDefVal.downPamentDefVal,
+                                  callback: function($$v) {
+                                    _vm.$set(
+                                      _vm.allMortCalcDefVal,
+                                      "downPamentDefVal",
+                                      $$v
+                                    )
+                                  },
+                                  expression:
+                                    "allMortCalcDefVal.downPamentDefVal"
+                                }
+                              })
+                            ],
+                            1
+                          )
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "el-row",
+                        [
+                          _c(
+                            "el-col",
+                            { attrs: { span: 24 } },
+                            [
+                              _c("label", [_vm._v("Mortgage Term")]),
+                              _vm._v(" "),
+                              _c("el-input", {
+                                attrs: { type: "text" },
+                                model: {
+                                  value:
+                                    _vm.allMortCalcDefVal.mortgageTermDefVal,
+                                  callback: function($$v) {
+                                    _vm.$set(
+                                      _vm.allMortCalcDefVal,
+                                      "mortgageTermDefVal",
+                                      $$v
+                                    )
+                                  },
+                                  expression:
+                                    "allMortCalcDefVal.mortgageTermDefVal"
+                                }
+                              })
+                            ],
+                            1
+                          )
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "el-row",
+                        [
+                          _c(
+                            "el-col",
+                            { attrs: { span: 24 } },
+                            [
+                              _c("label", [_vm._v("Annual Interest Rate")]),
+                              _vm._v(" "),
+                              _c("el-input", {
+                                attrs: { type: "text" },
+                                model: {
+                                  value:
+                                    _vm.allMortCalcDefVal
+                                      .annualInterestRateDefVal,
+                                  callback: function($$v) {
+                                    _vm.$set(
+                                      _vm.allMortCalcDefVal,
+                                      "annualInterestRateDefVal",
+                                      $$v
+                                    )
+                                  },
+                                  expression:
+                                    "allMortCalcDefVal.annualInterestRateDefVal"
+                                }
+                              })
+                            ],
+                            1
+                          )
+                        ],
+                        1
+                      )
+                    ],
+                    1
+                  )
+                : _vm._e(),
+              _vm._v(" "),
+              _vm.calcType == "mortgage_refinance"
+                ? _c(
+                    "div",
+                    [
+                      _c(
+                        "el-row",
+                        [
+                          _c(
+                            "el-col",
+                            { attrs: { span: 24 } },
+                            [
+                              _c("label", [
+                                _vm._v("Currently Monthly Payment")
+                              ]),
+                              _vm._v(" "),
+                              _c("el-input", {
+                                attrs: { type: "text" },
+                                model: {
+                                  value:
+                                    _vm.allRefinanceDefVal
+                                      .currentlyMonthlyPaymentDefVal,
+                                  callback: function($$v) {
+                                    _vm.$set(
+                                      _vm.allRefinanceDefVal,
+                                      "currentlyMonthlyPaymentDefVal",
+                                      $$v
+                                    )
+                                  },
+                                  expression:
+                                    "allRefinanceDefVal.currentlyMonthlyPaymentDefVal"
+                                }
+                              })
+                            ],
+                            1
+                          )
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "el-row",
+                        [
+                          _c(
+                            "el-col",
+                            { attrs: { span: 24 } },
+                            [
+                              _c("label", [
+                                _vm._v("Current Loan Interest Rate")
+                              ]),
+                              _vm._v(" "),
+                              _c("el-input", {
+                                attrs: { type: "text" },
+                                model: {
+                                  value:
+                                    _vm.allRefinanceDefVal.loanIntRateDefVal,
+                                  callback: function($$v) {
+                                    _vm.$set(
+                                      _vm.allRefinanceDefVal,
+                                      "loanIntRateDefVal",
+                                      $$v
+                                    )
+                                  },
+                                  expression:
+                                    "allRefinanceDefVal.loanIntRateDefVal"
+                                }
+                              })
+                            ],
+                            1
+                          )
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "el-row",
+                        [
+                          _c(
+                            "el-col",
+                            { attrs: { span: 24 } },
+                            [
+                              _c("label", [_vm._v("Balance left on mortgage")]),
+                              _vm._v(" "),
+                              _c("el-input", {
+                                attrs: { type: "text" },
+                                model: {
+                                  value:
+                                    _vm.allRefinanceDefVal
+                                      .balanceMortgageDefVal,
+                                  callback: function($$v) {
+                                    _vm.$set(
+                                      _vm.allRefinanceDefVal,
+                                      "balanceMortgageDefVal",
+                                      $$v
+                                    )
+                                  },
+                                  expression:
+                                    "allRefinanceDefVal.balanceMortgageDefVal"
+                                }
+                              })
+                            ],
+                            1
+                          )
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "el-row",
+                        [
+                          _c(
+                            "el-col",
+                            { attrs: { span: 24 } },
+                            [
+                              _c("label", [_vm._v("New Interest Rate")]),
+                              _vm._v(" "),
+                              _c("el-input", {
+                                attrs: { type: "text" },
+                                model: {
+                                  value:
+                                    _vm.allRefinanceDefVal.newIntRateDefVal,
+                                  callback: function($$v) {
+                                    _vm.$set(
+                                      _vm.allRefinanceDefVal,
+                                      "newIntRateDefVal",
+                                      $$v
+                                    )
+                                  },
+                                  expression:
+                                    "allRefinanceDefVal.newIntRateDefVal"
+                                }
+                              })
+                            ],
+                            1
+                          )
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "el-row",
+                        [
+                          _c(
+                            "el-col",
+                            { attrs: { span: 24 } },
+                            [
+                              _c("label", [_vm._v("Remaining Loan Term")]),
+                              _vm._v(" "),
+                              _c("el-input", {
+                                attrs: { type: "text" },
+                                model: {
+                                  value:
+                                    _vm.allRefinanceDefVal
+                                      .remainingLoanTermDefVal,
+                                  callback: function($$v) {
+                                    _vm.$set(
+                                      _vm.allRefinanceDefVal,
+                                      "remainingLoanTermDefVal",
+                                      $$v
+                                    )
+                                  },
+                                  expression:
+                                    "allRefinanceDefVal.remainingLoanTermDefVal"
+                                }
+                              })
+                            ],
+                            1
+                          )
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "el-row",
+                        [
+                          _c(
+                            "el-col",
+                            { attrs: { span: 24 } },
+                            [
+                              _c("label", [_vm._v("New Loan Term")]),
+                              _vm._v(" "),
+                              _c("el-input", {
+                                attrs: { type: "text" },
+                                model: {
+                                  value:
+                                    _vm.allRefinanceDefVal.newLoanTermDefVal,
+                                  callback: function($$v) {
+                                    _vm.$set(
+                                      _vm.allRefinanceDefVal,
+                                      "newLoanTermDefVal",
+                                      $$v
+                                    )
+                                  },
+                                  expression:
+                                    "allRefinanceDefVal.newLoanTermDefVal"
+                                }
+                              })
+                            ],
+                            1
+                          )
+                        ],
+                        1
+                      )
+                    ],
+                    1
+                  )
+                : _vm._e(),
+              _vm._v(" "),
+              _vm.calcType == "mortgage_payment"
+                ? _c(
+                    "div",
+                    [
+                      _c(
+                        "el-row",
+                        [
+                          _c(
+                            "el-col",
+                            { attrs: { span: 24 } },
+                            [
+                              _c("label", [_vm._v("Mortgage Amount")]),
+                              _vm._v(" "),
+                              _c("el-input", {
+                                attrs: { type: "text" },
+                                model: {
+                                  value:
+                                    _vm.allPaymentCalcTableDefVal
+                                      .mortgageAmountDefVal,
+                                  callback: function($$v) {
+                                    _vm.$set(
+                                      _vm.allPaymentCalcTableDefVal,
+                                      "mortgageAmountDefVal",
+                                      $$v
+                                    )
+                                  },
+                                  expression:
+                                    "allPaymentCalcTableDefVal.mortgageAmountDefVal"
+                                }
+                              })
+                            ],
+                            1
+                          )
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "el-row",
+                        [
+                          _c(
+                            "el-col",
+                            { attrs: { span: 24 } },
+                            [
+                              _c("label", [_vm._v("Term in years")]),
+                              _vm._v(" "),
+                              _c("el-input", {
+                                attrs: { type: "text" },
+                                model: {
+                                  value:
+                                    _vm.allPaymentCalcTableDefVal
+                                      .termInYearsDefVal,
+                                  callback: function($$v) {
+                                    _vm.$set(
+                                      _vm.allPaymentCalcTableDefVal,
+                                      "termInYearsDefVal",
+                                      $$v
+                                    )
+                                  },
+                                  expression:
+                                    "allPaymentCalcTableDefVal.termInYearsDefVal"
+                                }
+                              })
+                            ],
+                            1
+                          )
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "el-row",
+                        [
+                          _c(
+                            "el-col",
+                            { attrs: { span: 24 } },
+                            [
+                              _c("label", [_vm._v("Interest Rate")]),
+                              _vm._v(" "),
+                              _c("el-input", {
+                                attrs: { type: "text" },
+                                model: {
+                                  value:
+                                    _vm.allPaymentCalcTableDefVal
+                                      .interestRateDefVal,
+                                  callback: function($$v) {
+                                    _vm.$set(
+                                      _vm.allPaymentCalcTableDefVal,
+                                      "interestRateDefVal",
+                                      $$v
+                                    )
+                                  },
+                                  expression:
+                                    "allPaymentCalcTableDefVal.interestRateDefVal"
+                                }
+                              })
+                            ],
+                            1
+                          )
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "el-row",
+                        [
+                          _c(
+                            "el-col",
+                            { attrs: { span: 24 } },
+                            [
+                              _c("label", [_vm._v("Annual Property Taxes")]),
+                              _vm._v(" "),
+                              _c("el-input", {
+                                attrs: { type: "text" },
+                                model: {
+                                  value:
+                                    _vm.allPaymentCalcTableDefVal
+                                      .annualHomeInsuranceDefVal,
+                                  callback: function($$v) {
+                                    _vm.$set(
+                                      _vm.allPaymentCalcTableDefVal,
+                                      "annualHomeInsuranceDefVal",
+                                      $$v
+                                    )
+                                  },
+                                  expression:
+                                    "allPaymentCalcTableDefVal.annualHomeInsuranceDefVal"
+                                }
+                              })
+                            ],
+                            1
+                          )
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "el-row",
+                        [
+                          _c(
+                            "el-col",
+                            { attrs: { span: 24 } },
+                            [
+                              _c("label", [_vm._v("Annual Home Insurance")]),
+                              _vm._v(" "),
+                              _c("el-input", {
+                                attrs: { type: "text" },
+                                model: {
+                                  value:
+                                    _vm.allPaymentCalcTableDefVal
+                                      .annualPropertyTaxesDefVal,
+                                  callback: function($$v) {
+                                    _vm.$set(
+                                      _vm.allPaymentCalcTableDefVal,
+                                      "annualPropertyTaxesDefVal",
+                                      $$v
+                                    )
+                                  },
+                                  expression:
+                                    "allPaymentCalcTableDefVal.annualPropertyTaxesDefVal"
+                                }
+                              })
+                            ],
+                            1
+                          )
+                        ],
+                        1
+                      )
+                    ],
+                    1
+                  )
+                : _vm._e()
+            ]
+          ),
+          _vm._v(" "),
           _c("el-tab-pane", { attrs: { label: "Settings", name: "third" } }, [
-            _vm._v("Settings")
+            _vm.calcType == "mortgage_calculator"
+              ? _c("div", [_c("app-show-amortization")], 1)
+              : _vm._e()
           ])
         ],
         1
@@ -64228,7 +64881,7 @@ var render = function() {
             [
               _c("el-col", { attrs: { span: 20 } }, [
                 _c("h1", [
-                  _vm._v(_vm._s(_vm.title) + " "),
+                  _vm._v(_vm._s(_vm.post_title) + " "),
                   _c("span", [
                     _c("code", [
                       _vm._v(
@@ -64961,7 +65614,10 @@ var render = function() {
                   calcType: _vm.calc_type,
                   allMortCalcTable: _vm.all_mort_calc_table,
                   allRefinanceCalcTable: _vm.all_refinance_calc_table,
-                  allPaymentCalcTable: _vm.all_payment_calc_table
+                  allPaymentCalcTable: _vm.all_payment_calc_table,
+                  allMortCalcDefVal: _vm.all_mort_calc_table_def_val,
+                  allRefinanceDefVal: _vm.all_refinance_calc_table_def_val,
+                  allPaymentCalcTableDefVal: _vm.all_payment_calc_table_def_val
                 }
               })
             ],
@@ -66035,6 +66691,126 @@ if (false) {
     require("vue-hot-reload-api")      .rerender("data-v-bf37c1a2", module.exports)
   }
 }
+
+/***/ }),
+/* 215 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__(18)
+/* script */
+var __vue_script__ = __webpack_require__(217)
+/* template */
+var __vue_template__ = __webpack_require__(216)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "src/js/components/ShowAmortization.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-26b539e8", Component.options)
+  } else {
+    hotAPI.reload("data-v-26b539e8", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 216 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "el-row",
+    [
+      _c(
+        "el-col",
+        { attrs: { span: 8 } },
+        [
+          _c("label", [_vm._v("Show Amortization Field")]),
+          _vm._v(" "),
+          _c("el-switch", {
+            attrs: { "active-color": "#13ce66", "inactive-color": "#ff4949" },
+            model: {
+              value: _vm.amortization,
+              callback: function($$v) {
+                _vm.amortization = $$v
+              },
+              expression: "amortization"
+            }
+          })
+        ],
+        1
+      )
+    ],
+    1
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-26b539e8", module.exports)
+  }
+}
+
+/***/ }),
+/* 217 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+	name: 'ShowAmortization',
+	data: function data() {
+		return {
+			amortization: true
+		};
+	}
+});
 
 /***/ })
 /******/ ]);

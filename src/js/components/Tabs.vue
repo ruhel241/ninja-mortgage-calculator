@@ -105,25 +105,139 @@
                                 <el-input type="text" v-model="allPaymentCalcTable.annualHomeInsurance"></el-input>
                             </el-col>
                         </el-row>
+                    </div>
+
+                </el-tab-pane>
+
+                <el-tab-pane label="Default Values" name="second">
+                    <div v-if="calcType=='mortgage_calculator'">
                         <el-row>
                             <el-col :span="24">
-                                <label>{{ allPaymentCalcTable.newLoanTerm }}</label>
-                                <el-input type="text" v-model="allPaymentCalcTable.newLoanTerm"></el-input>
+                                <label>Home Price</label>
+                                <el-input type="text" v-model="allMortCalcDefVal.homePriceDefVal"></el-input>
+                            </el-col>
+                        </el-row>
+                        <el-row>
+                            <el-col :span="24">
+                                <label>Down Pament</label>
+                                <el-input type="text" v-model="allMortCalcDefVal.downPamentDefVal"></el-input>
+                            </el-col>
+                        </el-row>
+                        <el-row>
+                            <el-col :span="24">
+                                <label>Mortgage Term</label>
+                                <el-input type="text" v-model="allMortCalcDefVal.mortgageTermDefVal"></el-input>
+                            </el-col>
+                        </el-row>
+                        <el-row>
+                            <el-col :span="24">
+                                <label>Annual Interest Rate</label>
+                                <el-input type="text" v-model="allMortCalcDefVal.annualInterestRateDefVal"></el-input>
                             </el-col>
                         </el-row>
                     </div>
 
+
+                    <div v-if="calcType=='mortgage_refinance'">
+                        <el-row>
+                            <el-col :span="24">
+                                <label>Currently Monthly Payment</label>
+                                <el-input type="text" v-model="allRefinanceDefVal.currentlyMonthlyPaymentDefVal"></el-input>
+                            </el-col>
+                        </el-row>
+                        <el-row>
+                            <el-col :span="24">
+                                <label>Current Loan Interest Rate</label>
+                                <el-input type="text" v-model="allRefinanceDefVal.loanIntRateDefVal"></el-input>
+                            </el-col>
+                        </el-row>
+                        <el-row>
+                            <el-col :span="24">
+                                <label>Balance left on mortgage</label>
+                                <el-input type="text" v-model="allRefinanceDefVal.balanceMortgageDefVal"></el-input>
+                            </el-col>
+                        </el-row>
+                        <el-row>
+                            <el-col :span="24">
+                                <label>New Interest Rate</label>
+                                <el-input type="text" v-model="allRefinanceDefVal.newIntRateDefVal"></el-input>
+                            </el-col>
+                        </el-row>
+                        <el-row>
+                            <el-col :span="24">
+                                <label>Remaining Loan Term</label>
+                                <el-input type="text" v-model="allRefinanceDefVal.remainingLoanTermDefVal"></el-input>
+                            </el-col>
+                        </el-row>
+                        <el-row>
+                            <el-col :span="24">
+                                <label>New Loan Term</label>
+                                <el-input type="text" v-model="allRefinanceDefVal.newLoanTermDefVal"></el-input>
+                            </el-col>
+                        </el-row>
+                    </div>
+
+
+                    <div v-if="calcType=='mortgage_payment'">
+                        <el-row>
+                            <el-col :span="24">
+                                <label>Mortgage Amount</label>
+                                <el-input type="text" v-model="allPaymentCalcTableDefVal.mortgageAmountDefVal"></el-input>
+                            </el-col>
+                        </el-row>
+                        <el-row>
+                            <el-col :span="24">
+                                <label>Term in years</label>
+                                <el-input type="text" v-model="allPaymentCalcTableDefVal.termInYearsDefVal"></el-input>
+                            </el-col>
+                        </el-row>
+                        <el-row>
+                            <el-col :span="24">
+                                <label>Interest Rate</label>
+                                <el-input type="text" v-model="allPaymentCalcTableDefVal.interestRateDefVal"></el-input>
+                            </el-col>
+                        </el-row>
+                        <el-row>
+                            <el-col :span="24">
+                                <label>Annual Property Taxes</label>
+                                <el-input type="text" v-model="allPaymentCalcTableDefVal.annualHomeInsuranceDefVal"></el-input>
+                            </el-col>
+                        </el-row>
+                        <el-row>
+                            <el-col :span="24">
+                                <label>Annual Home Insurance</label>
+                                <el-input type="text" v-model="allPaymentCalcTableDefVal.annualPropertyTaxesDefVal"></el-input>
+                            </el-col>
+                        </el-row>
+                    </div>
                 </el-tab-pane>
                     
-				<el-tab-pane label="Settings" name="third">Settings</el-tab-pane>
+				<el-tab-pane label="Settings" name="third">
+                    <div v-if="calcType=='mortgage_calculator'">
+                        <app-show-amortization></app-show-amortization>
+                    </div>
+                </el-tab-pane>
 			</el-tabs>
 		</div>
 </template>
 
 <script>
+import ShowAmortization from './ShowAmortization.vue'
+
 export default {
     name: 'tabs',
-    props: ['calcType', 'allMortCalcTable', 'allRefinanceCalcTable', 'allPaymentCalcTable'],
+    components: {
+        'app-show-amortization': ShowAmortization,
+    },
+    props: [
+            'calcType', 
+            'allMortCalcTable', 
+            'allRefinanceCalcTable', 
+            'allPaymentCalcTable', 
+            'allMortCalcDefVal',
+            'allRefinanceDefVal',
+            'allPaymentCalcTableDefVal'
+           ],
     data() {
         return {
             activeName: 'first',
@@ -132,27 +246,12 @@ export default {
             downPamentDef: 20000,
             mortgageTermDef: 30,
             mortgageTermMonthDef: 360,
-            annualInterestRateDef: 12
+            annualInterestRateDef: 12,
+            amortization: true
         }
     },
     methods: {
-        handleClick(tab, event) {
-				console.log(tab, event);
-			}
-    },
-    watch: {
-        homePrice() {
-            this.$emit('homePriceUpd', this.homePrice);
-        },
-        downPament() {
-            this.$emit('downPamentUpd', this.downPament);
-        },
-        mortgageTerm() {
-            this.$emit('mortgageTermUpd', this.mortgageTerm);
-        },
-        annualInterestRate() {
-            this.$emit('annualInterestRateUpd', this.annualInterestRate);
-        }
+        handleClick(tab, event) {}
     }
 }
 </script>

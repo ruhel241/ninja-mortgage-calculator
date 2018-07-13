@@ -185,6 +185,7 @@ export default {
                     .then(response => {
                         this.tableData = response.data.tables;
                         this.total = response.data.total;
+                        console.log(response)
                     })
                     .fail(error => {
                          console.log(error);
