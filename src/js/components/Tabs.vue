@@ -1,35 +1,29 @@
 <template>
     <div class="tabs">
-			<el-tabs v-model="activeName" @tab-click="handleClick">
-				<el-tab-pane label="Label" name="first">
+            <el-tabs v-model="activeName" @tab-click="handleClick">
+                <el-tab-pane label="Label" name="first">
                     <div v-if="calcType=='mortgage_calculator'">
                         <el-row>
                             <el-col :span="24">
-                                <label>{{ allMortCalcTable.homePrice }}</label>
-                                <el-input v-model="allMortCalcTable.homePrice" type="text"></el-input>
+                                <label>Loan Amount</label>
+                                <el-input v-model="allMortCalcTable.loanAmount" type="text"></el-input>
                             </el-col>
                         </el-row>
                         <el-row>
                             <el-col :span="24">
-                                <label>{{ allMortCalcTable.downPament }}</label>
+                                <label>Down Pament</label>
                                 <el-input v-model="allMortCalcTable.downPament" type="text"></el-input>
                             </el-col>
                         </el-row>
                         <el-row>
                             <el-col :span="24">
-                                <label>{{ allMortCalcTable.mortgageTerm }}</label>
+                                <label>Mortgage Term</label>
                                 <el-input v-model="allMortCalcTable.mortgageTerm" type="text"></el-input>
                             </el-col>
                         </el-row>
                         <el-row>
                             <el-col :span="24">
-                                <label>{{mortgageTermMonth}}</label>
-                                <el-input v-model="mortgageTermMonth" type="text"></el-input>
-                            </el-col>
-                        </el-row>
-                        <el-row>
-                            <el-col :span="24">
-                                <label>{{allMortCalcTable.annualInterestRate}}</label>
+                                <label>Annual Interest Rate</label>
                                 <el-input v-model="allMortCalcTable.annualInterestRate" type="text"></el-input>
                             </el-col>
                         </el-row>
@@ -113,8 +107,8 @@
                     <div v-if="calcType=='mortgage_calculator'">
                         <el-row>
                             <el-col :span="24">
-                                <label>{{ allMortCalcTable.homePrice }}</label>
-                                <el-input type="text" v-model="allMortCalcDefVal.homePriceDefVal"></el-input>
+                                <label>{{ allMortCalcTable.loanAmount }}</label>
+                                <el-input type="text" v-model="allMortCalcDefVal.loanAmountDefVal"></el-input>
                             </el-col>
                         </el-row>
                         <el-row>
@@ -212,23 +206,28 @@
                     </div>
                 </el-tab-pane>
                     
-				<el-tab-pane label="Settings" name="third">
+                <el-tab-pane label="Settings" name="third">
                     <div v-if="calcType=='mortgage_calculator'">
-                        <app-show-amortization></app-show-amortization>
+                        <el-row>
+                            <el-col :span="8">
+                                <label>Show Amortization Field</label>
+                                <el-switch
+                                v-model="amortizationtable"
+                                active-color="#13ce66"
+                                inactive-color="#ff4949">
+                                </el-switch>
+                            </el-col>
+                        </el-row>
                     </div>
                 </el-tab-pane>
-			</el-tabs>
-		</div>
+            </el-tabs>
+        </div>
 </template>
 
 <script>
-import ShowAmortization from './ShowAmortization.vue'
 
 export default {
     name: 'tabs',
-    components: {
-        'app-show-amortization': ShowAmortization,
-    },
     props: [
             'calcType', 
             'allMortCalcTable', 
@@ -236,22 +235,26 @@ export default {
             'allPaymentCalcTable', 
             'allMortCalcDefVal',
             'allRefinanceDefVal',
-            'allPaymentCalcTableDefVal'
+            'allPaymentCalcTableDefVal',
+            'amortTable'
            ],
     data() {
         return {
             activeName: 'first',
             mortgageTermMonth: 'Mortgage Term Month',
-            homePriceDef: 120000,
-            downPamentDef: 20000,
-            mortgageTermDef: 30,
-            mortgageTermMonthDef: 360,
-            annualInterestRateDef: 12,
-            amortization: true
+            amortizationtable: this.amortTable
         }
     },
     methods: {
         handleClick(tab, event) {}
+    },
+    created() {
+        console.log("From child " + this.amortizationtable)
+    },
+    watch: {
+        amortizationtable() {
+            this.$emit('changedAmort', this.amortizationtable);
+        }
     }
 }
 </script>

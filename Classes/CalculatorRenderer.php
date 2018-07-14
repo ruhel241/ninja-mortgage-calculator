@@ -1,15 +1,38 @@
 <?php namespace NinjaMortgage\Classes;
 
 
-class CalculatorRenderer
-{	
+// class CalculatorRenderer
+// {	
 	
-	// public static function render($displayItem, $tableConfig, $id)
-	// {
+// 	private $data;
+// 	private $postId;
 
-	// 	// return View::makeView('views.test', array($tableConfig, $id) );
+// 	public function __construct($data, $postId)
+// 	{
+// 		$this->data 	= $data;	
+// 		$this->postId   = $postId;
+// 		$this->setSerials();
+// 	}
 
 
+// 	public function setSerials()
+// 	{
+// 		$labelComponents = $this->data['selectedLabel'];
+// 		$defaultComponents = $this->data['selectedDefault'];
 
-	// }
-}
+
+// 		foreach ($labelComponents as $labelKey => $labelValue) {
+			
+// 		}
+
+		
+// 	}
+
+
+// 	public static function render($data, $postId)
+// 	{
+		
+// 	}
+// }
+
+

@@ -174,6 +174,7 @@ export default {
            
 
         },
+        
         fetchTables() {
                 this.tableLoading = true;
                 jQuery.get(ajaxurl, {

@@ -44,32 +44,39 @@ class MortgageCalculatorHandler
 
 	 public static function handleShortCode($atts)
     {
-        $atts = shortcode_atts(array(
-            'id' => null,
-        ), $atts);
 
-        extract($atts);
+    	$defaults = apply_filters('mortgage_calculator_shortcode_defaults', array(
+    		'id' => null
+    	));
+		
+		$attributes = shortcode_atts($defaults, $atts);
 
-        if ( ! $id ) {
-            return '';
-        }
+		$post = get_post($id);
+		$tableId = $attributes['id'];
+		$settings = get_post_meta($tableId, '_ninija_mortgage_table_config', true);
+		
+		wp_enqueue_script('mortgage_calculator', NINJA_MORTGAGE_PLUGIN_DIR_URL.'public/js/UserShowApp.js', array('jquery'), NINJA_MORTGAGE_PLUGIN_DIR_VERSION, true);
 
-        // $displayItem = get_posts();
+	
+		
+		return "<div id='mortgage_calculator'></div>";
 
-        // return View::makeView('views.test', $id);
-
-
-        // $tableConfig = get_post_meta($id, '_ninija_mortgage_table_config', true);
-
-        // $CalRenderer = new CalculatorRenderer($tableConfig, $id);
-
-        // return $CalRenderer->render();
+	}
 
 
-    }
+	private static function getViewNameByDisplay( $display ) {
+		$displayArray = array(
+			'mortgage_calculator'   => 'mortgage_calculator', //file name
+			'mortgage_refinance'	=> 'mortgage_refinance',
+			'mortgage_payment'      => 'mortgage_payment'
+		);
+		$return       = 'mortgage_calculator';
+		if ( isset( $displayArray[ $display ] ) ) {
+			$return = $displayArray[ $display ];
+		}
 
-
-
+		return apply_filters( 'mortgage_calculator_get_view_name_by_display', $return, $display );
+	}
 
 
 	public static function addTable($tableTitle = '', $selectCalculator = '')
@@ -196,7 +203,7 @@ class MortgageCalculatorHandler
     	return array(
 			
 			'all_mort_calc_table' => array(
-                'homePrice' 	     => 'Home Price',
+                'loanAmount' 	     => 'Loan Amount',
                 'downPament'	     => 'Down Pament',
                 'mortgageTerm'	     => 'Mortgage Term',
                 'annualInterestRate' => 'Annual Interest Rate'
@@ -218,6 +225,8 @@ class MortgageCalculatorHandler
 				'annualPropertyTaxes' => 'Annual Property Taxes',
 				'annualHomeInsurance' => 'Annual Home Insurance'
 			),
+
+
 
 			'component_settings' => array(
                 array('key' => 'all_mort_calc_table'),

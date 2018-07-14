@@ -35,8 +35,8 @@
 			<div v-if="calc_type=='mortgage_calculator'"  style="margin-top: 20px">
 				<el-row :gutter="15">
 					<el-col :span="24">
-						<label>{{ all_mort_calc_table.homePrice }} </label>
-						<el-input type="text"  v-model="all_mort_calc_table.homePrice" disabled></el-input>
+						<label>{{ all_mort_calc_table.loanAmount }} </label>
+						<el-input type="text"  v-model="all_mort_calc_table.loanAmount" disabled></el-input>
 					</el-col>
 				</el-row>
 				<el-row :gutter="15">
@@ -146,7 +146,9 @@
 					  :allPaymentCalcTable="all_payment_calc_table"
 					  :allMortCalcDefVal="all_mort_calc_table_def_val"
 					  :allRefinanceDefVal="all_refinance_calc_table_def_val"
-					  :allPaymentCalcTableDefVal="all_payment_calc_table_def_val"></app-tabs>
+					  :allPaymentCalcTableDefVal="all_payment_calc_table_def_val"
+					  :amortTable="amortization_table"
+					  @changedAmort="updateAmort($event)"></app-tabs>
 		</el-col>
 	</el-row>
 </div>
@@ -168,14 +170,15 @@ export default {
 				tableConfig:'',
 				activeName: '',
 				MortgageCalConfig: {},
+				amortization_table: true,
 				all_mort_calc_table: {
-					homePrice: 'Home Price', 
+					loanAmount: 'Loan Amount', 
 					downPament: 'Down Pament',
 					mortgageTerm: 'Mortgage Term', 
 					annualInterestRate: 'Annual Interest Rate'
 				},
 				all_mort_calc_table_def_val: {
-					homePriceDefVal: 120000,
+					loanAmountDefVal: 120000,
 					downPamentDefVal: 20000,
 					mortgageTermDefVal: 30,
 					annualInterestRateDefVal: 12
@@ -238,6 +241,10 @@ export default {
 				}).then(
 					(response) => {
 						console.log(response)
+						if(response.data.table_config.amortization_table) {
+							this.amortization_table = response.data.table_config.amortization_table;
+						}
+
 						if(response.data.table_config.post_content) {
 							this.calc_type = response.data.table_config.post_content;
 						} else {
@@ -247,7 +254,8 @@ export default {
 						this.post_title = response.data.table.post_title;
 
 						if(this.calc_type == 'mortgage_calculator' ) {
-			
+							
+							console.log("Amortization table " + response.data.table_config.amortization_table)
 							if(response.data.table_config.selectedLabel) {
 								this.all_mort_calc_table = response.data.table_config.selectedLabel;
 							}
@@ -317,7 +325,8 @@ export default {
 					post_title: this.post_title,
 					post_content: this.calc_type,
 					selectedLabel: selected_label ,
-					selectedDefault: selected_default
+					selectedDefault: selected_default,
+					amortization_table: this.ammortization_table
 				}
 
 				console.log(this.updatedData)
@@ -346,6 +355,10 @@ export default {
 						this.all_payment_calc_table_def_val = response.data.updatedData.selectedDefault
 					}
                 })
+			},
+			updateAmort(ammortization) {
+				this.ammortization_table = ammortization;
+				console.log(this.ammortization_table)
 			}
 		},
 		created() {
