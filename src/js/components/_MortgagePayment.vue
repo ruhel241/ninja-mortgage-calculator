@@ -1,36 +1,36 @@
 <template>
 	<div class="mortgage_payment_calc">
-		<h1>Mortgage Payment Calculator</h1>
+		<h1>{{ tableTitle }}</h1> 
 		<div class="loan-info">
 			<p><strong>Loan Information:</strong></p>
 			<div class="mortgage_amount">
-				<label>Mortgage Amount</label>
+				<label>{{ mortgage_amount }}</label>
 				<input type="number" min=0 name="mortgage_amount"
-					   id="mortgage_amount" v-model="mortgage_amount"
+					   id="mortgage_amount" v-model="mortgage_amount_def_val"
 					   class="typeNumbersField">
 			</div>
 			<div class="term_in_years">
-				<label>Term in years</label>
+				<label>{{ term_in_years }}</label>
 				<input type="number" min=0 name="term_in_years"
-					   id="term_in_years" v-model="term_in_years"
-					   class="typeNumbersField">
-			</div>
-			<div class="term_in_years">
-				<label>Term in years</label>
-				<input type="number" min=0 name="term_in_years"
-					   id="term_in_years" v-model="term_in_years"
+					   id="term_in_years" v-model="term_in_years_def_val"
 					   class="typeNumbersField">
 			</div>
 			<div class="interest_rate">
-				<label>Interest Rate</label>
+				<label>{{ interest_rate }}</label>
 				<input type="number" min=0 name="interest_rate"
-					   id="interest_rate" v-model="interest_rate"
+					   id="interest_rate" v-model="interest_rate_def_val"
 					   class="typeNumbersField">
 			</div>
 			<div class="annual_property_taxes">
-				<label>Annual Property Taxes</label>
+				<label>{{ annual_property_taxes }}</label>
 				<input type="number" min=0 name="annual_property_taxes"
-					   id="annual_property_taxes" v-model="annual_property_taxes"
+					   id="annual_property_taxes" v-model="annual_property_taxes_def_val"
+					   class="typeNumbersField" placeholder="Annual Property Taxes">
+			</div>
+			<div class="annual_property_insurance">
+				<label>{{ annual_property_insurance }}</label>
+				<input type="number" min=0 name="annual_property_insurance"
+					   id="annual_property_insurance" v-model="annual_property_insurance_def_val"
 					   class="typeNumbersField" placeholder="Annual Property Taxes">
 			</div>
 			<div class="mortgage_payment_pi">
@@ -47,22 +47,44 @@
 
 <script>
 export default {
+	props: [
+		'tableTitle',
+		'mortgagePaymentLabel',
+		'mortgagePaymentDefault'
+	],
     data() {
         return {
-            mortgage_amount: 120000,
-            term_in_years: 30,
-            interest_rate: 12,
-            annual_property_taxes: 15,
-            annual_property_insurance: 15
+        	mortgage_amount: 'Mortgage Amount',
+            mortgage_amount_def_val: 120000,
+            term_in_years: 'Term in years',
+            term_in_years_def_val: 30,
+            interest_rate: 'Interest rate',
+            interest_rate_def_val: 12,
+            annual_property_taxes: 'Annual Property Taxes',
+            annual_property_taxes_def_val: 15,
+            annual_property_insurance: 'Annual Property Insurance',
+            annual_property_insurance_def_val: 15
         }
+    },
+    created() {
+    	this.mortgage_amount = this.mortgagePaymentLabel.mortgageAmount;
+    	this.mortgage_amount_def_val = this.mortgagePaymentDefault.mortgageAmountDefVal;
+    	this.term_in_years = this.mortgagePaymentLabel.termInYears;
+    	this.term_in_years_def_val = this.mortgagePaymentDefault.termInYearsDefVal;
+    	this.interest_rate = this.mortgagePaymentLabel.interestRate;
+    	this.interest_rate_def_val = this.mortgagePaymentDefault.interestRateDefVal;
+    	this.annual_property_taxes = this.mortgagePaymentLabel.annualPropertyTaxes;
+    	this.annual_property_taxes_def_val = this.mortgagePaymentDefault.annualPropertyTaxesDefVal;
+    	this.annual_property_insurance = this.mortgagePaymentLabel.annualHomeInsurance;
+    	this.annual_property_insurance_def_val = this.mortgagePaymentDefault.annualHomeInsuranceDefVal;
     },
     computed: {
         pi() {
-            if( this.interest_rate != 0 && this.mortgage_amount != 0 && this.term_in_years != 0 ) {
-                var interest_rate_perc = parseFloat( this.interest_rate ) / 12;
+            if( this.interest_rate_def_val != 0 && this.mortgage_amount_def_val != 0 && this.term_in_years_def_val != 0 ) {
+                var interest_rate_perc = parseFloat( this.interest_rate_def_val ) / 12;
                 var interest_rate_ans = parseFloat( interest_rate_perc ) / 100;
-                var int_rate_amnt = parseFloat(interest_rate_ans * this.mortgage_amount);
-                var total_month = parseFloat( this.term_in_years ) * 12;
+                var int_rate_amnt = parseFloat(interest_rate_ans * this.mortgage_amount_def_val);
+                var total_month = parseFloat( this.term_in_years_def_val ) * 12;
                 var pi = int_rate_amnt / (  1 - (Math.pow((1 + interest_rate_ans), -(total_month) )));
                 return pi;
             } else {
@@ -70,15 +92,15 @@ export default {
             }
         },
         piti() {
-            if( this.interest_rate != 0 && this.mortgage_amount != 0 && this.term_in_years != 0 && ( this.annual_property_taxes != 0 || this.annual_property_insurance != 0 )) {
-                var interest_rate_perc = parseFloat( this.interest_rate ) / 12;
+            if( this.interest_rate_def_val != 0 && this.mortgage_amount_def_val != 0 && this.term_in_years_def_val != 0 && ( this.annual_property_taxes_def_val != 0 || this.annual_property_insurance_def_val != 0 )) {
+                var interest_rate_perc = parseFloat( this.interest_rate_def_val ) / 12;
                 var interest_rate_ans = parseFloat( interest_rate_perc ) / 100;
-                var int_rate_amnt = parseFloat(interest_rate_ans * this.mortgage_amount);
-                var total_month = parseFloat( this.term_in_years ) * 12;
+                var int_rate_amnt = parseFloat(interest_rate_ans * this.mortgage_amount_def_val);
+                var total_month = parseFloat( this.term_in_years_def_val ) * 12;
                 var pi = int_rate_amnt / (  1 - (Math.pow((1 + interest_rate_ans), -(total_month) )));
                 
                 
-                var piti = pi + ( this.annual_property_taxes / 12 ) + (this.annual_property_insurance / 12);
+                var piti = pi + ( this.annual_property_taxes_def_val / 12 ) + (this.annual_property_insurance_def_val / 12);
                 return piti;
             } else {
                 return 0;

@@ -67,7 +67,7 @@
 				</div>
 			</div>
 			<div class="annualIntRateSection">
-				<label>Annual Interest Rate</label><br />
+				<label>{{ mortgageCalcLabel.annualInterestRate }}</label><br />
 				<input type="number" min=0 id="annualInterestRate" 
 								   class="typeNumber"
 						   	 	   name="annualInterestRate" 
@@ -95,6 +95,61 @@
         
         </div>
 
+        <div class="btns" v-if="amortizationTable=='true'">
+            <button @click="paymentSchedule()" v-if="showAmortBtn" class="paymentBtn">Payment Schedule</button>
+            <button @click="hidePaymentSchedule()" v-if="!showAmortBtn" class="hidePaymentBtn">Hide Payment Schedule</button>
+        </div>
+
+        <div class="ammortization_section" v-if="showTable">
+
+            <p>
+                <strong>Amortization Schedule</strong>
+            </p>
+
+            <div class="est_payoff">
+                    
+                    <label>Start Date</label>
+                    <input type="text" v-model="date" name="date" v-on:blur="myBlurFun()">
+                    <p>Estimated Payoff Date</p>
+                    <h4 class="date_est">{{ date_selected }} {{ estPayOffDate }}</h4>
+
+            </div>
+
+            <table>
+
+                <thead>
+
+                    <tr>
+
+                        <th v-for="key in gridColumns"
+                               :key="key">
+                            
+                            {{ key | capitalize }}
+
+                        </th>
+
+                    </tr>
+
+                </thead>
+                <tbody>
+                    
+                    <tr v-for="(entry, i) in gridData" :key="i">
+
+                        <td v-for="(key, j) in gridColumns" :key="j">
+
+                            {{ entry[key] }}
+
+                        </td>
+
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+
+        </div>
+
 	</div>
 </template>
 
@@ -103,22 +158,24 @@
     props: [
         'tableTitle', 
         'mortgageCalcLabel',
-        'mortgageCalcDef'
+        'mortgageCalcDef',
+        'amortizationTable'
     ],
     data() {
         return {
-            loanAmount: 120000,
-            downPament: 20000,
+            loanAmount: 0,
+            downPament: 0,
             downPamentPerc: 0,
-            mortgageTerm: 30,
-            mortgageTermMonth: 360,
-            annualInterestRate: 12,
+            mortgageTerm: 0,
+            mortgageTermMonth: 0,
+            annualInterestRate: 0,
             monthlyPayment: 0,
             principalPaid: 0,
             annualInterestRateUpd: 0,
             newValue: 0,
             date: "",
-            showTable: false,
+            showAmortBtn: true,
+            showTable: true,
             gridColumns: [
                 'PaymentDate', 'payment', 'principal', 'interest', 'totalInterest', 'balance'
             ],
@@ -137,6 +194,8 @@
         }
     },
     created() {
+        console.log("My Component " + this.mortgageCalcLabel);
+        //this.showAmort = this.amortizationTable;
         this.loanAmount = this.mortgageCalcDef.loanAmountDefVal;
         this.downPament = this.mortgageCalcDef.downPamentDefVal;
         this.mortgageTerm = this.mortgageCalcDef.mortgageTermDefVal;
@@ -344,10 +403,14 @@
     methods: {
         paymentSchedule() {
             this.showTable= true;
+            this.showAmortBtn = false;
             var p;
             var i = 0;
+
             while( i <= this.monthlyPayment ) {
+
                 var root_year = this.year_selected;
+
                 this.gridData.push({
                     PaymentDate: '',
                     payment: 0,
@@ -356,10 +419,12 @@
                     totalInterest: 0,
                     balance: 0
                 });
+
                 p = this.principalPaid;
                 var ann_int = this.annualInterestRate;
                 var total_interest = 0;
                 var monthIndex = this.month;
+
                 this.gridData.forEach(element => {
                     
                     if( this.months[monthIndex] == 'Jan' || monthIndex == 12) {
@@ -382,6 +447,7 @@
                     element.totalInterest = total_interest.toFixed(2);
                     element.principal = ( this.monthlyPayment - element.interest ).toFixed(2);
                     var principal_upd = ( this.monthlyPayment - element.interest );
+
                     if(  p - principal_upd < 1  ) {
                         var balance_final = 0;
                         element.balance = balance_final.toFixed(2);
@@ -396,19 +462,23 @@
                     var balance_upd = ( p - principal_upd );
                     p = balance_upd;
                     monthIndex+=1;
+
                     if(monthIndex == 12) {
                         monthIndex = 0;
                     }
                 });
+
                 if( p < 1 ) {
                     break;
                 }
+
                 i = this.monthlyPayment - p;
             
             }
         },
         hidePaymentSchedule() {
             this.showTable = false;
+            this.showAmortBtn = true;
             this.gridData.length = 0;
         },
         myBlurFun() {
@@ -479,4 +549,72 @@
 	    border-color: red;
 	    box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 5px rgba(232,68,68,.6);
 	}
+
+    .paymentBtn {
+        background-color: #4CAF50;
+        border: none;
+        color: white;
+        padding: 15px 32px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        margin: 4px 2px;
+        cursor: pointer;
+    }
+
+    .hidePaymentBtn {
+        background-color: #f44336;
+        border: none;
+        color: white;
+        padding: 15px 32px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        margin: 4px 2px;
+        cursor: pointer;
+    }
+
+    table {
+      border: 2px solid #42b983;
+      border-radius: 3px;
+      background-color: #fff;
+      width: 100%;
+    }
+
+    th {
+      background-color: #4CAF50;
+      color: rgba(255,255,255,0.66);
+      cursor: pointer;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+    }
+
+    td {
+      background-color: #f9f9f9;
+    }
+
+    th, td {
+      padding: 10px 18px;
+    }
+
+    th.active {
+      color: #fff;
+    }
+
+    th.active .arrow {
+      opacity: 1;
+    }
+
+    tr {
+        text-align: center;
+    }
+
+    .date_est {
+        padding: 0;
+        margin-top: -17px;
+    }
 </style>

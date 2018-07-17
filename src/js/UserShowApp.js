@@ -12,5 +12,3 @@ new Vue({
 	el: "#ninja_mortgage_calculator",
 	render: h => h(App)
 })
-
-console.log("User Show App rendered successfully")

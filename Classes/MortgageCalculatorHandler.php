@@ -35,11 +35,8 @@ class MortgageCalculatorHandler
         if ($route == 'update_table_config') {
             $tableId = intval($_REQUEST['table_id']);
             $table_config = wp_unslash($_REQUEST['table_config']);
-
-            $calculatorType = sanitize_text_field($_REQUEST['calculator_type']); 
-
-
-            static::updateTableConfig($tableId, $table_config, $calculatorType);
+			$calculatorType = sanitize_text_field($_REQUEST['calculator_type']); 
+			static::updateTableConfig($tableId, $table_config, $calculatorType);
         }
 
 
@@ -57,34 +54,17 @@ class MortgageCalculatorHandler
 
 		$tableId = $attributes['id'];
 		$post = get_post($tableId);
-		$settings = get_post_meta($tableId, '_ninija_mortgage_table_config', true);
+		$mortgageMeta_Data = get_post_meta($tableId, '_ninija_mortgage_table_config', true);
 		
 		wp_enqueue_script('ninja_mortgage_calculator', NINJA_MORTGAGE_PLUGIN_DIR_URL.'public/js/UserShowApp.js', array('jquery'), NINJA_MORTGAGE_PLUGIN_DIR_VERSION, true);
 
-?>
-        <script type="text/javascript">
-            var ninja_mortgage_cal_vars = {
-                post: <?php echo json_encode( $post ); ?>,
-                tableId: <?php echo json_encode( $tableId ); ?>,
-                settings: <?php echo json_encode( $settings ); ?>,
-             }
-        </script>
+		wp_localize_script('ninja_mortgage_calculator', 'ninja_mortgage_cal_vars', array(
+			'post' => $post,
+			'tableId' => $tableId,
+			'mortgageMetaData' => $mortgageMeta_Data
+		));
 
-
-
-<?php 
-
-
-
-
-
-
-
-
-
-
-
-		
+	
 		return "<div id='ninja_mortgage_calculator'></div>";
 
 	}
@@ -234,11 +214,20 @@ class MortgageCalculatorHandler
     	return array(
 			
 			'all_mort_calc_table' => array(
-                'loanAmount' 	     => 'Loan Amount',
-                'downPament'	     => 'Down Pament',
-                'mortgageTerm'	     => 'Mortgage Term',
-                'annualInterestRate' => 'Annual Interest Rate'
+                'loanAmountLabel' 	     => 'Loan Amount',
+                'downPamentLabel'	     => 'Down Pament',
+                'mortgageTermLabel'	     => 'Mortgage Term',
+                'annualInterestRateLabel' => 'Annual Interest Rate',
             ),
+
+			'all_mort_calc_table_def_val' => array(
+				'loanAmountDefVal' 		  => 120000,
+				'downPamentDefVal'		  => 20000,
+				'mortgageTermDefVal'	  => 30,
+				'annualInterestRateDefVal'=> 12
+			),
+				
+			'settings' => true,
 
 			'all_refinance_calc_table' => array(
 				'currentlyMonthlyPayment' => 'Currently Monthly Payment',
@@ -249,6 +238,15 @@ class MortgageCalculatorHandler
 				'newLoanTerm' 			  => 'New Loan Term'
 			),
 			
+			'all_refinance_calc_table_def_val' => array(
+				'currentlyMonthlyPaymentDefVal'=> 1200,
+				'loanIntRateDefVal'			   => 25,
+				'balanceMortgageDefVal'		   => 25000,
+				'newIntRateDefVal'			   => 15,
+				'remainingLoanTermDefVal'	   => 20,
+				'newLoanTermDefVal'			   => 26
+			),
+		
 			'all_payment_calc_table' => array(
 				'mortgageAmount' 	  => 'Mortgage Amount',
 				'termInYears' 		  => 'Term in years',
@@ -258,11 +256,22 @@ class MortgageCalculatorHandler
 			),
 
 
+			'all_payment_calc_table_def_val' => array(
+				'mortgageAmountDefVal'	   => 2500,
+				'termInYearsDefVal'		   => 5,
+				'interestRateDefVal'	   => 25,
+				'annualHomeInsuranceDefVal'=> 3500,
+				'annualPropertyTaxesDefVal'=> 1500
+			),
+
 
 			'component_settings' => array(
                 array('key' => 'all_mort_calc_table'),
-                array('key' => 'all_refinance_calc_table'),
+                array('key' => 'all_mort_calc_table_def_val'),
+				array('key' => 'all_refinance_calc_table'),
+                array('key' => 'all_refinance_calc_table_def_val'),
                 array('key' => 'all_payment_calc_table'),
+                array('key' => 'all_payment_calc_table_def_val'),
             ),
 
 		);

@@ -170,7 +170,8 @@ export default {
 				tableConfig:'',
 				activeName: '',
 				MortgageCalConfig: {},
-				amortization_table: true,
+				settings: {},
+				amortization_table: false,
 				all_mort_calc_table: {
 					loanAmount: 'Loan Amount', 
 					downPament: 'Down Pament',
@@ -305,6 +306,7 @@ export default {
 				if( this.calc_type === 'mortgage_calculator' ) {
 					var selected_label = this.all_mort_calc_table;
 					var selected_default = this.all_mort_calc_table_def_val;
+					var amort_table = this.ammortization_table;
 				}
 				else if( this.calc_type === 'mortgage_refinance' ) {
 					var selected_label = this.all_refinance_calc_table;
@@ -324,7 +326,7 @@ export default {
 				this.updatedData = {
 					selectedLabel: selected_label ,
 					selectedDefault: selected_default,
-					amortization_table: this.ammortization_table
+					settings: amort_table
 				}
 
 				console.log(this.updatedData)
@@ -357,7 +359,7 @@ export default {
 			},
 			updateAmort(ammortization) {
 				this.ammortization_table = ammortization;
-				console.log(this.ammortization_table)
+				console.log("child passing as emit " + this.ammortization_table)
 			}
 		},
 		created() {

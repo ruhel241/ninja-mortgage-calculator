@@ -65,7 +65,7 @@
 /************************************************************************/
 /******/ ({
 
-/***/ 1:
+/***/ 0:
 /***/ (function(module, exports) {
 
 /*
@@ -148,110 +148,229 @@ function toComment(sourceMap) {
 
 /***/ }),
 
-/***/ 10:
-/***/ (function(module, exports) {
+/***/ 17:
+/***/ (function(module, exports, __webpack_require__) {
 
-/* globals __VUE_SSR_CONTEXT__ */
+/*
+  MIT License http://www.opensource.org/licenses/mit-license.php
+  Author Tobias Koppers @sokra
+  Modified by Evan You @yyx990803
+*/
 
-// IMPORTANT: Do NOT use ES2015 features in this file.
-// This module is a runtime utility for cleaner component module output and will
-// be included in the final webpack user bundle.
+var hasDocument = typeof document !== 'undefined'
 
-module.exports = function normalizeComponent (
-  rawScriptExports,
-  compiledTemplate,
-  functionalTemplate,
-  injectStyles,
-  scopeId,
-  moduleIdentifier /* server only */
-) {
-  var esModule
-  var scriptExports = rawScriptExports = rawScriptExports || {}
+if (typeof DEBUG !== 'undefined' && DEBUG) {
+  if (!hasDocument) {
+    throw new Error(
+    'vue-style-loader cannot be used in a non-browser environment. ' +
+    "Use { target: 'node' } in your Webpack config to indicate a server-rendering environment."
+  ) }
+}
 
-  // ES6 modules interop
-  var type = typeof rawScriptExports.default
-  if (type === 'object' || type === 'function') {
-    esModule = rawScriptExports
-    scriptExports = rawScriptExports.default
+var listToStyles = __webpack_require__(53)
+
+/*
+type StyleObject = {
+  id: number;
+  parts: Array<StyleObjectPart>
+}
+
+type StyleObjectPart = {
+  css: string;
+  media: string;
+  sourceMap: ?string
+}
+*/
+
+var stylesInDom = {/*
+  [id: number]: {
+    id: number,
+    refs: number,
+    parts: Array<(obj?: StyleObjectPart) => void>
   }
+*/}
 
-  // Vue.extend constructor export interop
-  var options = typeof scriptExports === 'function'
-    ? scriptExports.options
-    : scriptExports
+var head = hasDocument && (document.head || document.getElementsByTagName('head')[0])
+var singletonElement = null
+var singletonCounter = 0
+var isProduction = false
+var noop = function () {}
+var options = null
+var ssrIdKey = 'data-vue-ssr-id'
 
-  // render functions
-  if (compiledTemplate) {
-    options.render = compiledTemplate.render
-    options.staticRenderFns = compiledTemplate.staticRenderFns
-    options._compiled = true
-  }
+// Force single-tag solution on IE6-9, which has a hard limit on the # of <style>
+// tags it will allow on a page
+var isOldIE = typeof navigator !== 'undefined' && /msie [6-9]\b/.test(navigator.userAgent.toLowerCase())
 
-  // functional template
-  if (functionalTemplate) {
-    options.functional = true
-  }
+module.exports = function (parentId, list, _isProduction, _options) {
+  isProduction = _isProduction
 
-  // scopedId
-  if (scopeId) {
-    options._scopeId = scopeId
-  }
+  options = _options || {}
 
-  var hook
-  if (moduleIdentifier) { // server build
-    hook = function (context) {
-      // 2.3 injection
-      context =
-        context || // cached call
-        (this.$vnode && this.$vnode.ssrContext) || // stateful
-        (this.parent && this.parent.$vnode && this.parent.$vnode.ssrContext) // functional
-      // 2.2 with runInNewContext: true
-      if (!context && typeof __VUE_SSR_CONTEXT__ !== 'undefined') {
-        context = __VUE_SSR_CONTEXT__
-      }
-      // inject component styles
-      if (injectStyles) {
-        injectStyles.call(this, context)
-      }
-      // register component module identifier for async chunk inferrence
-      if (context && context._registeredComponents) {
-        context._registeredComponents.add(moduleIdentifier)
-      }
+  var styles = listToStyles(parentId, list)
+  addStylesToDom(styles)
+
+  return function update (newList) {
+    var mayRemove = []
+    for (var i = 0; i < styles.length; i++) {
+      var item = styles[i]
+      var domStyle = stylesInDom[item.id]
+      domStyle.refs--
+      mayRemove.push(domStyle)
     }
-    // used by ssr in case component is cached and beforeCreate
-    // never gets called
-    options._ssrRegister = hook
-  } else if (injectStyles) {
-    hook = injectStyles
-  }
-
-  if (hook) {
-    var functional = options.functional
-    var existing = functional
-      ? options.render
-      : options.beforeCreate
-
-    if (!functional) {
-      // inject component registration as beforeCreate hook
-      options.beforeCreate = existing
-        ? [].concat(existing, hook)
-        : [hook]
+    if (newList) {
+      styles = listToStyles(parentId, newList)
+      addStylesToDom(styles)
     } else {
-      // for template-only hot-reload because in that case the render fn doesn't
-      // go through the normalizer
-      options._injectStyles = hook
-      // register for functioal component in vue file
-      options.render = function renderWithStyleInjection (h, context) {
-        hook.call(context)
-        return existing(h, context)
+      styles = []
+    }
+    for (var i = 0; i < mayRemove.length; i++) {
+      var domStyle = mayRemove[i]
+      if (domStyle.refs === 0) {
+        for (var j = 0; j < domStyle.parts.length; j++) {
+          domStyle.parts[j]()
+        }
+        delete stylesInDom[domStyle.id]
       }
     }
   }
+}
 
-  return {
-    esModule: esModule,
-    exports: scriptExports,
-    options: options
+function addStylesToDom (styles /* Array<StyleObject> */) {
+  for (var i = 0; i < styles.length; i++) {
+    var item = styles[i]
+    var domStyle = stylesInDom[item.id]
+    if (domStyle) {
+      domStyle.refs++
+      for (var j = 0; j < domStyle.parts.length; j++) {
+        domStyle.parts[j](item.parts[j])
+      }
+      for (; j < item.parts.length; j++) {
+        domStyle.parts.push(addStyle(item.parts[j]))
+      }
+      if (domStyle.parts.length > item.parts.length) {
+        domStyle.parts.length = item.parts.length
+      }
+    } else {
+      var parts = []
+      for (var j = 0; j < item.parts.length; j++) {
+        parts.push(addStyle(item.parts[j]))
+      }
+      stylesInDom[item.id] = { id: item.id, refs: 1, parts: parts }
+    }
+  }
+}
+
+function createStyleElement () {
+  var styleElement = document.createElement('style')
+  styleElement.type = 'text/css'
+  head.appendChild(styleElement)
+  return styleElement
+}
+
+function addStyle (obj /* StyleObjectPart */) {
+  var update, remove
+  var styleElement = document.querySelector('style[' + ssrIdKey + '~="' + obj.id + '"]')
+
+  if (styleElement) {
+    if (isProduction) {
+      // has SSR styles and in production mode.
+      // simply do nothing.
+      return noop
+    } else {
+      // has SSR styles but in dev mode.
+      // for some reason Chrome can't handle source map in server-rendered
+      // style tags - source maps in <style> only works if the style tag is
+      // created and inserted dynamically. So we remove the server rendered
+      // styles and inject new ones.
+      styleElement.parentNode.removeChild(styleElement)
+    }
+  }
+
+  if (isOldIE) {
+    // use singleton mode for IE9.
+    var styleIndex = singletonCounter++
+    styleElement = singletonElement || (singletonElement = createStyleElement())
+    update = applyToSingletonTag.bind(null, styleElement, styleIndex, false)
+    remove = applyToSingletonTag.bind(null, styleElement, styleIndex, true)
+  } else {
+    // use multi-style-tag mode in all other cases
+    styleElement = createStyleElement()
+    update = applyToTag.bind(null, styleElement)
+    remove = function () {
+      styleElement.parentNode.removeChild(styleElement)
+    }
+  }
+
+  update(obj)
+
+  return function updateStyle (newObj /* StyleObjectPart */) {
+    if (newObj) {
+      if (newObj.css === obj.css &&
+          newObj.media === obj.media &&
+          newObj.sourceMap === obj.sourceMap) {
+        return
+      }
+      update(obj = newObj)
+    } else {
+      remove()
+    }
+  }
+}
+
+var replaceText = (function () {
+  var textStore = []
+
+  return function (index, replacement) {
+    textStore[index] = replacement
+    return textStore.filter(Boolean).join('\n')
+  }
+})()
+
+function applyToSingletonTag (styleElement, index, remove, obj) {
+  var css = remove ? '' : obj.css
+
+  if (styleElement.styleSheet) {
+    styleElement.styleSheet.cssText = replaceText(index, css)
+  } else {
+    var cssNode = document.createTextNode(css)
+    var childNodes = styleElement.childNodes
+    if (childNodes[index]) styleElement.removeChild(childNodes[index])
+    if (childNodes.length) {
+      styleElement.insertBefore(cssNode, childNodes[index])
+    } else {
+      styleElement.appendChild(cssNode)
+    }
+  }
+}
+
+function applyToTag (styleElement, obj) {
+  var css = obj.css
+  var media = obj.media
+  var sourceMap = obj.sourceMap
+
+  if (media) {
+    styleElement.setAttribute('media', media)
+  }
+  if (options.ssrId) {
+    styleElement.setAttribute(ssrIdKey, obj.id)
+  }
+
+  if (sourceMap) {
+    // https://developer.chrome.com/devtools/docs/javascript-debugging
+    // this makes source maps inside style tags work properly in Chrome
+    css += '\n/*# sourceURL=' + sourceMap.sources[0] + ' */'
+    // http://stackoverflow.com/a/26603875
+    css += '\n/*# sourceMappingURL=data:application/json;base64,' + btoa(unescape(encodeURIComponent(JSON.stringify(sourceMap)))) + ' */'
+  }
+
+  if (styleElement.styleSheet) {
+    styleElement.styleSheet.cssText = css
+  } else {
+    while (styleElement.firstChild) {
+      styleElement.removeChild(styleElement.firstChild)
+    }
+    styleElement.appendChild(document.createTextNode(css))
   }
 }
 
@@ -274,8 +393,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue__ = __webpack_require__(4);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_vue__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vue_router__ = __webpack_require__(32);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_vee_validate__ = __webpack_require__(222);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_UserCalculator_vue__ = __webpack_require__(217);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_vee_validate__ = __webpack_require__(217);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_UserCalculator_vue__ = __webpack_require__(218);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_UserCalculator_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__components_UserCalculator_vue__);
 
 
@@ -292,194 +411,9 @@ new __WEBPACK_IMPORTED_MODULE_0_vue___default.a({
 	}
 });
 
-console.log("User Show App rendered successfully");
-
 /***/ }),
 
 /***/ 217:
-/***/ (function(module, exports, __webpack_require__) {
-
-var disposed = false
-var normalizeComponent = __webpack_require__(10)
-/* script */
-var __vue_script__ = __webpack_require__(220)
-/* template */
-var __vue_template__ = __webpack_require__(221)
-/* template functional */
-var __vue_template_functional__ = false
-/* styles */
-var __vue_styles__ = null
-/* scopeId */
-var __vue_scopeId__ = null
-/* moduleIdentifier (server only) */
-var __vue_module_identifier__ = null
-var Component = normalizeComponent(
-  __vue_script__,
-  __vue_template__,
-  __vue_template_functional__,
-  __vue_styles__,
-  __vue_scopeId__,
-  __vue_module_identifier__
-)
-Component.options.__file = "src/js/components/UserCalculator.vue"
-
-/* hot reload */
-if (false) {(function () {
-  var hotAPI = require("vue-hot-reload-api")
-  hotAPI.install(require("vue"), false)
-  if (!hotAPI.compatible) return
-  module.hot.accept()
-  if (!module.hot.data) {
-    hotAPI.createRecord("data-v-0c5cfb0e", Component.options)
-  } else {
-    hotAPI.reload("data-v-0c5cfb0e", Component.options)
-  }
-  module.hot.dispose(function (data) {
-    disposed = true
-  })
-})()}
-
-module.exports = Component.exports
-
-
-/***/ }),
-
-/***/ 220:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__MortgageCalculator_vue__ = __webpack_require__(223);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__MortgageCalculator_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__MortgageCalculator_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__MortgageRefinance_vue__ = __webpack_require__(228);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__MortgageRefinance_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__MortgageRefinance_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__MortgagePayment_vue__ = __webpack_require__(229);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__MortgagePayment_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__MortgagePayment_vue__);
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-
-
-
-
-
-/* harmony default export */ __webpack_exports__["default"] = ({
-    name: 'user_calculator',
-    data: function data() {
-        return {
-            calculator_type: '',
-            table_id: 0,
-            table_title: '',
-            mortgage_calculator_label: {},
-            mortgage_calculator_default: {},
-            mortgage_refinance_label: {},
-            mortgage_refinance_default: {}
-        };
-    },
-
-    components: {
-        'app-mortgage-calc': __WEBPACK_IMPORTED_MODULE_0__MortgageCalculator_vue___default.a,
-        'app-mortgage-refinance': __WEBPACK_IMPORTED_MODULE_1__MortgageRefinance_vue___default.a,
-        'app-mortgage-payment': __WEBPACK_IMPORTED_MODULE_2__MortgagePayment_vue___default.a
-    },
-    created: function created() {
-        console.log(window.ninja_mortgage_cal_vars);
-        var res = window.ninja_mortgage_cal_vars.post;
-        this.calculator_type = res.post_content;
-        console.log(this.calculator_type);
-        this.table_id = res.ID;
-        console.log(this.table_id);
-        this.table_title = res.post_title;
-        console.log(this.table_title);
-        if (this.calculator_type === 'mortgage_calculator') {
-            this.mortgage_calculator_label = window.ninja_mortgage_cal_vars.settings.selectedLabel;
-            console.log(this.mortgage_calculator_label);
-            this.mortgage_calculator_default = window.ninja_mortgage_cal_vars.settings.selectedDefault;
-            console.log(this.mortgage_calculator_default);
-        } else if (this.calculator_type === 'mortgage_refinance') {
-            this.mortgage_refinance_label = window.ninja_mortgage_cal_vars.settings.selectedLabel;
-            console.log(this.mortgage_refinance_label);
-            this.mortgage_refinance_default = window.ninja_mortgage_cal_vars.settings.selectedDefault;
-            console.log(this.mortgage_refinance_default);
-        }
-    }
-});
-
-/***/ }),
-
-/***/ 221:
-/***/ (function(module, exports, __webpack_require__) {
-
-var render = function() {
-  var _vm = this
-  var _h = _vm.$createElement
-  var _c = _vm._self._c || _h
-  return _c("div", [
-    _vm.table_id && _vm.calculator_type == "mortgage_calculator"
-      ? _c(
-          "div",
-          [
-            _c("app-mortgage-calc", {
-              attrs: {
-                tableTitle: _vm.table_title,
-                mortgageCalcLabel: _vm.mortgage_calculator_label,
-                mortgageCalcDef: _vm.mortgage_calculator_default
-              }
-            })
-          ],
-          1
-        )
-      : _vm._e(),
-    _vm._v(" "),
-    _vm.table_id && _vm.calculator_type == "mortgage_refinance"
-      ? _c(
-          "div",
-          [
-            _c("app-mortgage-refinance", {
-              attrs: {
-                tableTitle: _vm.table_title,
-                mortgageRefinanceLabel: _vm.mortgage_refinance_label,
-                mortgageRefinanceDef: _vm.mortgage_refinance_default
-              }
-            })
-          ],
-          1
-        )
-      : _vm._e(),
-    _vm._v(" "),
-    _vm.table_id && _vm.calculator_type == "mortgage_payment"
-      ? _c("div", [_c("app-mortgage-payment")], 1)
-      : _vm._e()
-  ])
-}
-var staticRenderFns = []
-render._withStripped = true
-module.exports = { render: render, staticRenderFns: staticRenderFns }
-if (false) {
-  module.hot.accept()
-  if (module.hot.data) {
-    require("vue-hot-reload-api")      .rerender("data-v-0c5cfb0e", module.exports)
-  }
-}
-
-/***/ }),
-
-/***/ 222:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -8233,19 +8167,194 @@ var index_esm = {
 
 /***/ }),
 
-/***/ 223:
+/***/ 218:
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__(5)
+/* script */
+var __vue_script__ = __webpack_require__(219)
+/* template */
+var __vue_template__ = __webpack_require__(235)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "src/js/components/UserCalculator.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-0c5cfb0e", Component.options)
+  } else {
+    hotAPI.reload("data-v-0c5cfb0e", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+
+/***/ 219:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__MortgageCalculator_vue__ = __webpack_require__(220);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__MortgageCalculator_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__MortgageCalculator_vue__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__MortgageRefinance_vue__ = __webpack_require__(225);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__MortgageRefinance_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__MortgageRefinance_vue__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__MortgagePayment_vue__ = __webpack_require__(230);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__MortgagePayment_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__MortgagePayment_vue__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    name: 'user_calculator',
+    data: function data() {
+        return {
+            calculator_type: '',
+            table_id: 0,
+            table_title: '',
+            mortgage_calculator_label: {},
+            mortgage_calculator_default: {},
+            mortgage_refinance_label: {},
+            mortgage_refinance_default: {},
+            mortgage_payment_label: {},
+            mortgage_payment_default: {},
+            amortization_table: true
+        };
+    },
+
+    components: {
+        'app-mortgage-calc': __WEBPACK_IMPORTED_MODULE_0__MortgageCalculator_vue___default.a,
+        'app-mortgage-refinance': __WEBPACK_IMPORTED_MODULE_1__MortgageRefinance_vue___default.a,
+        'app-mortgage-payment': __WEBPACK_IMPORTED_MODULE_2__MortgagePayment_vue___default.a
+    },
+    created: function created() {
+        console.log(window.ninja_mortgage_cal_vars);
+        var res = window.ninja_mortgage_cal_vars.mortgageMetaData;
+        var post = window.ninja_mortgage_cal_vars.post;
+        this.calculator_type = post.post_content;
+        this.table_id = post.ID;
+        this.table_title = post.post_title;
+
+        if (this.calculator_type === 'mortgage_calculator') {
+            console.log("All Mortgage Calculator" + content.all_mort_calc_table);
+            this.mortgage_calculator_label = res.selectedLabel;
+            this.mortgage_calculator_default = res.selectedDefault;
+            this.amortization_table = res.settings;
+            console.log("Amortization Table is " + this.amortization_table);
+        }
+        // this.calculator_type = res.post_content;
+        // this.table_id = res.ID;
+        // var res = window.ninja_mortgage_cal_vars.post;
+        // this.table_title = res.post_title;
+        // this.calculator_type = res.post_content;
+        // this.table_id = res.ID;
+        // var content = window.ninja_mortgage_cal_vars.settings;
+        // console.log(content);
+
+        // if( this.calculator_type === 'mortgage_calculator' ) {
+        //     console.log("All Mortgage Calculator" + content.all_mort_calc_table)
+        //     this.mortgage_calculator_label = content.all_mort_calc_table;
+        //     this.mortgage_calculator_default = content.all_mort_calc_table_def_val;
+        //     this.amortization_table = content.all_mort_calc_table.amortizationTable;
+        //     console.log("Amortization Table is " + this.amortization_table);
+        // }
+        // else if( this.calculator_type === 'mortgage_refinance' ) {
+        //     alert("Mortgage Refinance")
+        // }
+        /*
+        var res = window.ninja_mortgage_cal_vars.post;
+        console.log(res);
+        this.calculator_type = res.post_content;
+        this.table_id = res.ID;
+        this.table_title = res.post_title;
+         jQuery.get(ajaxurl, {
+                action: 'ninja_mortgage_ajax_actions',
+                route: 'get_table',
+                table_id: this.table_id
+            }).then(
+                (response) => {
+                    console.log(response)
+        })
+         
+        if( this.calculator_type === 'mortgage_calculator' ) {
+            this.mortgage_calculator_label = window.ninja_mortgage_cal_vars.settings.selectedLabel;
+            this.mortgage_calculator_default = window.ninja_mortgage_cal_vars.settings.selectedDefault;
+            this.amortization_table = window.ninja_mortgage_cal_vars.settings.settings;
+        }
+        else if( this.calculator_type === 'mortgage_refinance' ) {
+            this.mortgage_refinance_label = window.ninja_mortgage_cal_vars.settings.selectedLabel;
+            this.mortgage_refinance_default = window.ninja_mortgage_cal_vars.settings.selectedDefault;
+            
+        }
+        else if( this.calculator_type === 'mortgage_payment' ) {
+            this.mortgage_payment_label = window.ninja_mortgage_cal_vars.settings.selectedLabel;
+            this.mortgage_payment_default = window.ninja_mortgage_cal_vars.settings.selectedDefault;
+        }*/
+    }
+});
+
+/***/ }),
+
+/***/ 220:
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(234)
+  __webpack_require__(221)
 }
-var normalizeComponent = __webpack_require__(10)
+var normalizeComponent = __webpack_require__(5)
 /* script */
-var __vue_script__ = __webpack_require__(226)
+var __vue_script__ = __webpack_require__(223)
 /* template */
-var __vue_template__ = __webpack_require__(236)
+var __vue_template__ = __webpack_require__(224)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -8285,7 +8394,49 @@ module.exports = Component.exports
 
 /***/ }),
 
-/***/ 226:
+/***/ 221:
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(222);
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__(17)("cb847ab6", content, false, {});
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../node_modules/css-loader/index.js!../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-8d4d39fe\",\"scoped\":true,\"hasInlineConfig\":true}!../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./_MortgageCalculator.vue", function() {
+     var newContent = require("!!../../../node_modules/css-loader/index.js!../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-8d4d39fe\",\"scoped\":true,\"hasInlineConfig\":true}!../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./_MortgageCalculator.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+
+/***/ 222:
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(0)(false);
+// imports
+
+
+// module
+exports.push([module.i, "\ninput[type=text][data-v-8d4d39fe] {\n\t    width: 100%;\n\t    padding: 12px 20px;\n\t    margin: 8px 0;\n\t    display: inline-block;\n\t    border: 1px solid #ccc;\n\t    border-radius: 4px;\n    \tbox-sizing: border-box;\n}\n.typeNumber[data-v-8d4d39fe] {\n\t\twidth: 100%;\n\t\tpadding: 12px 20px;\n\t    margin: 8px 0;\n\t    display: inline-block;\n\t    border: 1px solid #ccc;\n\t    border-radius: 4px;\n    \tbox-sizing: border-box;\n}\n.typeNumbers[data-v-8d4d39fe] {\n\t\twidth: 100%;\n\t\tpadding: 12px 20px;\n\t    margin: 8px 0;\n\t    display: inline-block;\n\t    border: 1px solid #ccc;\n\t    border-radius: 4px;\n    \tbox-sizing: border-box;\n}\n.downPament[data-v-8d4d39fe] {\n\t\twidth: 50%;\n\t\tfloat: left;\n}\n.downPamentPerc[data-v-8d4d39fe] {\n\t\twidth: 50%;\n\t\tfloat: left;\n}\n.mortgageTerm[data-v-8d4d39fe] {\n\t\twidth: 50%;\n\t\tfloat: left;\n}\n.mortgageTermMonth[data-v-8d4d39fe] {\n\t\twidth: 50%;\n\t\tfloat: left;\n}\n.error[data-v-8d4d39fe] {\n\t    border-color: red;\n\t    box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 5px rgba(232,68,68,.6);\n}\n.paymentBtn[data-v-8d4d39fe] {\n        background-color: #4CAF50;\n        border: none;\n        color: white;\n        padding: 15px 32px;\n        text-align: center;\n        text-decoration: none;\n        display: inline-block;\n        font-size: 16px;\n        margin: 4px 2px;\n        cursor: pointer;\n}\n.hidePaymentBtn[data-v-8d4d39fe] {\n        background-color: #f44336;\n        border: none;\n        color: white;\n        padding: 15px 32px;\n        text-align: center;\n        text-decoration: none;\n        display: inline-block;\n        font-size: 16px;\n        margin: 4px 2px;\n        cursor: pointer;\n}\ntable[data-v-8d4d39fe] {\n      border: 2px solid #42b983;\n      border-radius: 3px;\n      background-color: #fff;\n      width: 100%;\n}\nth[data-v-8d4d39fe] {\n      background-color: #4CAF50;\n      color: rgba(255,255,255,0.66);\n      cursor: pointer;\n      -webkit-user-select: none;\n      -moz-user-select: none;\n      -ms-user-select: none;\n      user-select: none;\n}\ntd[data-v-8d4d39fe] {\n      background-color: #f9f9f9;\n}\nth[data-v-8d4d39fe], td[data-v-8d4d39fe] {\n      padding: 10px 18px;\n}\nth.active[data-v-8d4d39fe] {\n      color: #fff;\n}\nth.active .arrow[data-v-8d4d39fe] {\n      opacity: 1;\n}\ntr[data-v-8d4d39fe] {\n        text-align: center;\n}\n.date_est[data-v-8d4d39fe] {\n        padding: 0;\n        margin-top: -17px;\n}\n", ""]);
+
+// exports
+
+
+/***/ }),
+
+/***/ 223:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -8390,23 +8541,79 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-    props: ['tableTitle', 'mortgageCalcLabel', 'mortgageCalcDef'],
+    props: ['tableTitle', 'mortgageCalcLabel', 'mortgageCalcDef', 'amortizationTable'],
     data: function data() {
         return {
-            loanAmount: 120000,
-            downPament: 20000,
+            loanAmount: 0,
+            downPament: 0,
             downPamentPerc: 0,
-            mortgageTerm: 30,
-            mortgageTermMonth: 360,
-            annualInterestRate: 12,
+            mortgageTerm: 0,
+            mortgageTermMonth: 0,
+            annualInterestRate: 0,
             monthlyPayment: 0,
             principalPaid: 0,
             annualInterestRateUpd: 0,
             newValue: 0,
             date: "",
-            showTable: false,
+            showAmortBtn: true,
+            showTable: true,
             gridColumns: ['PaymentDate', 'payment', 'principal', 'interest', 'totalInterest', 'balance'],
             gridData: [],
             months: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June', 'July', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
@@ -8421,6 +8628,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         };
     },
     created: function created() {
+        console.log("My Component " + this.mortgageCalcLabel);
+        //this.showAmort = this.amortizationTable;
         this.loanAmount = this.mortgageCalcDef.loanAmountDefVal;
         this.downPament = this.mortgageCalcDef.downPamentDefVal;
         this.mortgageTerm = this.mortgageCalcDef.mortgageTermDefVal;
@@ -8600,10 +8809,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             var _this = this;
 
             this.showTable = true;
+            this.showAmortBtn = false;
             var p;
             var i = 0;
+
             while (i <= this.monthlyPayment) {
+
                 var root_year = this.year_selected;
+
                 this.gridData.push({
                     PaymentDate: '',
                     payment: 0,
@@ -8612,10 +8825,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                     totalInterest: 0,
                     balance: 0
                 });
+
                 p = this.principalPaid;
                 var ann_int = this.annualInterestRate;
                 var total_interest = 0;
                 var monthIndex = this.month;
+
                 this.gridData.forEach(function (element) {
 
                     if (_this.months[monthIndex] == 'Jan' || monthIndex == 12) {
@@ -8638,6 +8853,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                     element.totalInterest = total_interest.toFixed(2);
                     element.principal = (_this.monthlyPayment - element.interest).toFixed(2);
                     var principal_upd = _this.monthlyPayment - element.interest;
+
                     if (p - principal_upd < 1) {
                         var balance_final = 0;
                         element.balance = balance_final.toFixed(2);
@@ -8649,18 +8865,22 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                     var balance_upd = p - principal_upd;
                     p = balance_upd;
                     monthIndex += 1;
+
                     if (monthIndex == 12) {
                         monthIndex = 0;
                     }
                 });
+
                 if (p < 1) {
                     break;
                 }
+
                 i = this.monthlyPayment - p;
             }
         },
         hidePaymentSchedule: function hidePaymentSchedule() {
             this.showTable = false;
+            this.showAmortBtn = true;
             this.gridData.length = 0;
         },
         myBlurFun: function myBlurFun() {
@@ -8677,19 +8897,454 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 /***/ }),
 
-/***/ 228:
+/***/ 224:
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", { attrs: { id: "mortgage_calculator" } }, [
+    _c("div", [
+      _c("h3", [_vm._v(_vm._s(_vm.tableTitle))]),
+      _vm._v(" "),
+      _c("div", { staticClass: "loanAmountSection" }, [
+        _c("label", [_vm._v(_vm._s(_vm.mortgageCalcLabel.loanAmount))]),
+        _c("br"),
+        _vm._v(" "),
+        _c("input", {
+          directives: [
+            {
+              name: "model",
+              rawName: "v-model",
+              value: _vm.loanAmount,
+              expression: "loanAmount"
+            },
+            {
+              name: "validate",
+              rawName: "v-validate",
+              value: _vm.rules,
+              expression: "rules"
+            }
+          ],
+          staticClass: "typeNumber",
+          class: { error: _vm.errors.has("loanAmount") },
+          attrs: {
+            type: "number",
+            min: "0",
+            id: "loanAmount",
+            name: "loanAmount",
+            pattern: "/^-?\\d+\\.?\\d*$/",
+            onKeyPress: "if(this.value.length==8) return false;"
+          },
+          domProps: { value: _vm.loanAmount },
+          on: {
+            input: function($event) {
+              if ($event.target.composing) {
+                return
+              }
+              _vm.loanAmount = $event.target.value
+            }
+          }
+        }),
+        _vm._v(" "),
+        _vm.errors.has("loanAmount")
+          ? _c("span", { staticStyle: { color: "red" } }, [
+              _vm._v(
+                "\n                    " +
+                  _vm._s(_vm.errors.first("loanAmount")) +
+                  "\n                "
+              )
+            ])
+          : _vm._e()
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "downPamentSection" }, [
+        _c("div", { staticClass: "downPament" }, [
+          _c("label", [_vm._v(_vm._s(_vm.mortgageCalcLabel.downPament))]),
+          _c("br"),
+          _vm._v(" "),
+          _c("input", {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model",
+                value: _vm.downPament,
+                expression: "downPament"
+              }
+            ],
+            staticClass: "typeNumbers",
+            attrs: {
+              type: "number",
+              min: "0",
+              id: "downPament",
+              name: "downPament",
+              placeholder: "Down Pament"
+            },
+            domProps: { value: _vm.downPament },
+            on: {
+              input: function($event) {
+                if ($event.target.composing) {
+                  return
+                }
+                _vm.downPament = $event.target.value
+              }
+            }
+          })
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "downPamentPerc" }, [
+          _c("label", [_vm._v("Down Pament Percentage")]),
+          _vm._v(" "),
+          _c("input", {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model",
+                value: _vm.downPamentPerc,
+                expression: "downPamentPerc"
+              }
+            ],
+            staticClass: "typeNumbers",
+            attrs: {
+              type: "number",
+              min: "0",
+              id: "downPamentPerc",
+              name: "downPamentPerc",
+              placeholder: "Down Pament Percentage"
+            },
+            domProps: { value: _vm.downPamentPerc },
+            on: {
+              input: function($event) {
+                if ($event.target.composing) {
+                  return
+                }
+                _vm.downPamentPerc = $event.target.value
+              }
+            }
+          })
+        ])
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "mortgageTermSection" }, [
+        _c("div", { staticClass: "mortgageTerm" }, [
+          _c("label", [_vm._v(_vm._s(_vm.mortgageCalcLabel.mortgageTerm))]),
+          _vm._v(" "),
+          _c("input", {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model",
+                value: _vm.mortgageTerm,
+                expression: "mortgageTerm"
+              },
+              {
+                name: "validate",
+                rawName: "v-validate",
+                value: _vm.term_rule,
+                expression: "term_rule"
+              }
+            ],
+            staticClass: "typeNumbers",
+            class: { error: _vm.errors.has("mortgageTerm") },
+            attrs: {
+              type: "number",
+              min: "0",
+              id: "mortgageTerm",
+              name: "mortgageTerm",
+              placeholder: "Mortgage Term",
+              pattern: "/^-?\\d+\\.?\\d*$/",
+              onKeyPress: "if(this.value.length==2) return false;"
+            },
+            domProps: { value: _vm.mortgageTerm },
+            on: {
+              input: function($event) {
+                if ($event.target.composing) {
+                  return
+                }
+                _vm.mortgageTerm = $event.target.value
+              }
+            }
+          }),
+          _vm._v(" "),
+          _vm.errors.has("mortgageTerm")
+            ? _c("span", { staticStyle: { color: "red" } }, [
+                _vm._v(
+                  "\n\t                    " +
+                    _vm._s(_vm.errors.first("mortgageTerm")) +
+                    "\n\t                "
+                )
+              ])
+            : _vm._e()
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "mortgageTermMonth" }, [
+          _c("label", [_vm._v("Mortgage Month Term")]),
+          _vm._v(" "),
+          _c("input", {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model",
+                value: _vm.mortgageTermMonth,
+                expression: "mortgageTermMonth"
+              },
+              {
+                name: "validate",
+                rawName: "v-validate",
+                value: _vm.term_rule_month,
+                expression: "term_rule_month"
+              }
+            ],
+            staticClass: "typeNumbers",
+            class: { error: _vm.errors.has("mortgageTermMonth") },
+            attrs: {
+              type: "number",
+              min: "0",
+              id: "mortgageTermMonth",
+              name: "mortgageTermMonth",
+              placeholder: "Mortgage Term Month",
+              pattern: "/^-?\\d+\\.?\\d*$/",
+              onKeyPress: "if(this.value.length==3) return false;"
+            },
+            domProps: { value: _vm.mortgageTermMonth },
+            on: {
+              input: function($event) {
+                if ($event.target.composing) {
+                  return
+                }
+                _vm.mortgageTermMonth = $event.target.value
+              }
+            }
+          }),
+          _vm._v(" "),
+          _vm.errors.has("mortgageTermMonth")
+            ? _c("span", { staticStyle: { color: "red" } }, [
+                _vm._v(
+                  "\n\t                    " +
+                    _vm._s(_vm.errors.first("mortgageTermMonth")) +
+                    "\n\t                "
+                )
+              ])
+            : _vm._e()
+        ])
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "annualIntRateSection" }, [
+        _c("label", [_vm._v(_vm._s(_vm.mortgageCalcLabel.annualInterestRate))]),
+        _c("br"),
+        _vm._v(" "),
+        _c("input", {
+          directives: [
+            {
+              name: "model",
+              rawName: "v-model",
+              value: _vm.annualInterestRate,
+              expression: "annualInterestRate"
+            },
+            {
+              name: "validate",
+              rawName: "v-validate",
+              value: _vm.interest_rate_rule,
+              expression: "interest_rate_rule"
+            }
+          ],
+          staticClass: "typeNumber",
+          class: { error: _vm.errors.has("annualInterestRate") },
+          attrs: {
+            type: "number",
+            min: "0",
+            id: "annualInterestRate",
+            name: "annualInterestRate",
+            placeholder: "Annual Interest Rate",
+            pattern: "/^-?\\d+\\.?\\d*$/",
+            onKeyPress: "if(this.value.length==2) return false;"
+          },
+          domProps: { value: _vm.annualInterestRate },
+          on: {
+            input: function($event) {
+              if ($event.target.composing) {
+                return
+              }
+              _vm.annualInterestRate = $event.target.value
+            }
+          }
+        }),
+        _vm._v(" "),
+        _vm.errors.has("annualInterestRate")
+          ? _c("span", { staticStyle: { color: "red" } }, [
+              _vm._v(
+                "\n                    " +
+                  _vm._s(_vm.errors.first("annualInterestRate")) +
+                  "\n                "
+              )
+            ])
+          : _vm._e()
+      ])
+    ]),
+    _vm._v(" "),
+    _c("div", { staticStyle: { "margin-top": "10px", "margin-left": "0" } }, [
+      _c("p", [_vm._v("Your estimated monthly payment:")]),
+      _vm._v(" "),
+      _c("h1", [
+        _c("span", [_vm._v("$")]),
+        _vm._v(" " + _vm._s(_vm.monthlyPayment.toFixed(2)))
+      ]),
+      _vm._v(" "),
+      _c("p", [
+        _vm._v("Total principal paid: $" + _vm._s(_vm.principalPaid.toFixed(2)))
+      ]),
+      _vm._v(" "),
+      _c("p", [
+        _vm._v("Total interest paid: $" + _vm._s(_vm.total_interest.toFixed(2)))
+      ])
+    ]),
+    _vm._v(" "),
+    _vm.amortizationTable == "true"
+      ? _c("div", { staticClass: "btns" }, [
+          _vm.showAmortBtn
+            ? _c(
+                "button",
+                {
+                  staticClass: "paymentBtn",
+                  on: {
+                    click: function($event) {
+                      _vm.paymentSchedule()
+                    }
+                  }
+                },
+                [_vm._v("Payment Schedule")]
+              )
+            : _vm._e(),
+          _vm._v(" "),
+          !_vm.showAmortBtn
+            ? _c(
+                "button",
+                {
+                  staticClass: "hidePaymentBtn",
+                  on: {
+                    click: function($event) {
+                      _vm.hidePaymentSchedule()
+                    }
+                  }
+                },
+                [_vm._v("Hide Payment Schedule")]
+              )
+            : _vm._e()
+        ])
+      : _vm._e(),
+    _vm._v(" "),
+    _vm.showTable
+      ? _c("div", { staticClass: "ammortization_section" }, [
+          _vm._m(0),
+          _vm._v(" "),
+          _c("div", { staticClass: "est_payoff" }, [
+            _c("label", [_vm._v("Start Date")]),
+            _vm._v(" "),
+            _c("input", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.date,
+                  expression: "date"
+                }
+              ],
+              attrs: { type: "text", name: "date" },
+              domProps: { value: _vm.date },
+              on: {
+                blur: function($event) {
+                  _vm.myBlurFun()
+                },
+                input: function($event) {
+                  if ($event.target.composing) {
+                    return
+                  }
+                  _vm.date = $event.target.value
+                }
+              }
+            }),
+            _vm._v(" "),
+            _c("p", [_vm._v("Estimated Payoff Date")]),
+            _vm._v(" "),
+            _c("h4", { staticClass: "date_est" }, [
+              _vm._v(
+                _vm._s(_vm.date_selected) + " " + _vm._s(_vm.estPayOffDate)
+              )
+            ])
+          ]),
+          _vm._v(" "),
+          _c("table", [
+            _c("thead", [
+              _c(
+                "tr",
+                _vm._l(_vm.gridColumns, function(key) {
+                  return _c("th", { key: key }, [
+                    _vm._v(
+                      "\n                            \n                            " +
+                        _vm._s(_vm._f("capitalize")(key)) +
+                        "\n\n                        "
+                    )
+                  ])
+                })
+              )
+            ]),
+            _vm._v(" "),
+            _c(
+              "tbody",
+              _vm._l(_vm.gridData, function(entry, i) {
+                return _c(
+                  "tr",
+                  { key: i },
+                  _vm._l(_vm.gridColumns, function(key, j) {
+                    return _c("td", { key: j }, [
+                      _vm._v(
+                        "\n\n                            " +
+                          _vm._s(entry[key]) +
+                          "\n\n                        "
+                      )
+                    ])
+                  })
+                )
+              })
+            )
+          ])
+        ])
+      : _vm._e()
+  ])
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("p", [_c("strong", [_vm._v("Amortization Schedule")])])
+  }
+]
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-8d4d39fe", module.exports)
+  }
+}
+
+/***/ }),
+
+/***/ 225:
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(230)
+  __webpack_require__(226)
 }
-var normalizeComponent = __webpack_require__(10)
+var normalizeComponent = __webpack_require__(5)
 /* script */
-var __vue_script__ = __webpack_require__(232)
+var __vue_script__ = __webpack_require__(228)
 /* template */
-var __vue_template__ = __webpack_require__(233)
+var __vue_template__ = __webpack_require__(229)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -8729,69 +9384,17 @@ module.exports = Component.exports
 
 /***/ }),
 
-/***/ 229:
-/***/ (function(module, exports, __webpack_require__) {
-
-var disposed = false
-function injectStyle (ssrContext) {
-  if (disposed) return
-  __webpack_require__(242)
-}
-var normalizeComponent = __webpack_require__(10)
-/* script */
-var __vue_script__ = __webpack_require__(241)
-/* template */
-var __vue_template__ = __webpack_require__(240)
-/* template functional */
-var __vue_template_functional__ = false
-/* styles */
-var __vue_styles__ = injectStyle
-/* scopeId */
-var __vue_scopeId__ = null
-/* moduleIdentifier (server only) */
-var __vue_module_identifier__ = null
-var Component = normalizeComponent(
-  __vue_script__,
-  __vue_template__,
-  __vue_template_functional__,
-  __vue_styles__,
-  __vue_scopeId__,
-  __vue_module_identifier__
-)
-Component.options.__file = "src/js/components/_MortgagePayment.vue"
-
-/* hot reload */
-if (false) {(function () {
-  var hotAPI = require("vue-hot-reload-api")
-  hotAPI.install(require("vue"), false)
-  if (!hotAPI.compatible) return
-  module.hot.accept()
-  if (!module.hot.data) {
-    hotAPI.createRecord("data-v-5a88cc97", Component.options)
-  } else {
-    hotAPI.reload("data-v-5a88cc97", Component.options)
-  }
-  module.hot.dispose(function (data) {
-    disposed = true
-  })
-})()}
-
-module.exports = Component.exports
-
-
-/***/ }),
-
-/***/ 230:
+/***/ 226:
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(231);
+var content = __webpack_require__(227);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(28)("db106932", content, false, {});
+var update = __webpack_require__(17)("db106932", content, false, {});
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags
@@ -8808,10 +9411,10 @@ if(false) {
 
 /***/ }),
 
-/***/ 231:
+/***/ 227:
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(1)(false);
+exports = module.exports = __webpack_require__(0)(false);
 // imports
 
 
@@ -8823,7 +9426,7 @@ exports.push([module.i, "\n.typeNumber {\n        width: 100%;\n        padding:
 
 /***/ }),
 
-/***/ 232:
+/***/ 228:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -9202,7 +9805,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 /***/ }),
 
-/***/ 233:
+/***/ 229:
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -9971,23 +10574,75 @@ if (false) {
 
 /***/ }),
 
-/***/ 234:
+/***/ 230:
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__(231)
+}
+var normalizeComponent = __webpack_require__(5)
+/* script */
+var __vue_script__ = __webpack_require__(233)
+/* template */
+var __vue_template__ = __webpack_require__(234)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = injectStyle
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "src/js/components/_MortgagePayment.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-5a88cc97", Component.options)
+  } else {
+    hotAPI.reload("data-v-5a88cc97", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+
+/***/ 231:
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(235);
+var content = __webpack_require__(232);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(28)("cb847ab6", content, false, {});
+var update = __webpack_require__(17)("10b04e87", content, false, {});
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags
  if(!content.locals) {
-   module.hot.accept("!!../../../node_modules/css-loader/index.js!../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-8d4d39fe\",\"scoped\":true,\"hasInlineConfig\":true}!../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./_MortgageCalculator.vue", function() {
-     var newContent = require("!!../../../node_modules/css-loader/index.js!../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-8d4d39fe\",\"scoped\":true,\"hasInlineConfig\":true}!../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./_MortgageCalculator.vue");
+   module.hot.accept("!!../../../node_modules/css-loader/index.js!../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-5a88cc97\",\"scoped\":false,\"hasInlineConfig\":true}!../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./_MortgagePayment.vue", function() {
+     var newContent = require("!!../../../node_modules/css-loader/index.js!../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-5a88cc97\",\"scoped\":false,\"hasInlineConfig\":true}!../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./_MortgagePayment.vue");
      if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
      update(newContent);
    });
@@ -9998,552 +10653,22 @@ if(false) {
 
 /***/ }),
 
-/***/ 235:
+/***/ 232:
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(1)(false);
+exports = module.exports = __webpack_require__(0)(false);
 // imports
 
 
 // module
-exports.push([module.i, "\ninput[type=text][data-v-8d4d39fe] {\n\t    width: 100%;\n\t    padding: 12px 20px;\n\t    margin: 8px 0;\n\t    display: inline-block;\n\t    border: 1px solid #ccc;\n\t    border-radius: 4px;\n    \tbox-sizing: border-box;\n}\n.typeNumber[data-v-8d4d39fe] {\n\t\twidth: 100%;\n\t\tpadding: 12px 20px;\n\t    margin: 8px 0;\n\t    display: inline-block;\n\t    border: 1px solid #ccc;\n\t    border-radius: 4px;\n    \tbox-sizing: border-box;\n}\n.typeNumbers[data-v-8d4d39fe] {\n\t\twidth: 100%;\n\t\tpadding: 12px 20px;\n\t    margin: 8px 0;\n\t    display: inline-block;\n\t    border: 1px solid #ccc;\n\t    border-radius: 4px;\n    \tbox-sizing: border-box;\n}\n.downPament[data-v-8d4d39fe] {\n\t\twidth: 50%;\n\t\tfloat: left;\n}\n.downPamentPerc[data-v-8d4d39fe] {\n\t\twidth: 50%;\n\t\tfloat: left;\n}\n.mortgageTerm[data-v-8d4d39fe] {\n\t\twidth: 50%;\n\t\tfloat: left;\n}\n.mortgageTermMonth[data-v-8d4d39fe] {\n\t\twidth: 50%;\n\t\tfloat: left;\n}\n.error[data-v-8d4d39fe] {\n\t    border-color: red;\n\t    box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 5px rgba(232,68,68,.6);\n}\n", ""]);
+exports.push([module.i, "\n.loan-info {\n\t    background-color: #E7EDF5;\n\t    padding: 30px;\n}\n.typeNumbersField {\n\t\twidth: 100%;\n\t\tpadding: 12px 20px;\n\t    margin: 8px 0;\n\t    display: inline-block;\n\t    border: 1px solid #ccc;\n\t    border-radius: 4px;\n    \tbox-sizing: border-box;\n}\n", ""]);
 
 // exports
 
 
 /***/ }),
 
-/***/ 236:
-/***/ (function(module, exports, __webpack_require__) {
-
-var render = function() {
-  var _vm = this
-  var _h = _vm.$createElement
-  var _c = _vm._self._c || _h
-  return _c("div", { attrs: { id: "mortgage_calculator" } }, [
-    _c("div", [
-      _c("h3", [_vm._v(_vm._s(_vm.tableTitle))]),
-      _vm._v(" "),
-      _c("div", { staticClass: "loanAmountSection" }, [
-        _c("label", [_vm._v(_vm._s(_vm.mortgageCalcLabel.loanAmount))]),
-        _c("br"),
-        _vm._v(" "),
-        _c("input", {
-          directives: [
-            {
-              name: "model",
-              rawName: "v-model",
-              value: _vm.loanAmount,
-              expression: "loanAmount"
-            },
-            {
-              name: "validate",
-              rawName: "v-validate",
-              value: _vm.rules,
-              expression: "rules"
-            }
-          ],
-          staticClass: "typeNumber",
-          class: { error: _vm.errors.has("loanAmount") },
-          attrs: {
-            type: "number",
-            min: "0",
-            id: "loanAmount",
-            name: "loanAmount",
-            pattern: "/^-?\\d+\\.?\\d*$/",
-            onKeyPress: "if(this.value.length==8) return false;"
-          },
-          domProps: { value: _vm.loanAmount },
-          on: {
-            input: function($event) {
-              if ($event.target.composing) {
-                return
-              }
-              _vm.loanAmount = $event.target.value
-            }
-          }
-        }),
-        _vm._v(" "),
-        _vm.errors.has("loanAmount")
-          ? _c("span", { staticStyle: { color: "red" } }, [
-              _vm._v(
-                "\n                    " +
-                  _vm._s(_vm.errors.first("loanAmount")) +
-                  "\n                "
-              )
-            ])
-          : _vm._e()
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "downPamentSection" }, [
-        _c("div", { staticClass: "downPament" }, [
-          _c("label", [_vm._v(_vm._s(_vm.mortgageCalcLabel.downPament))]),
-          _c("br"),
-          _vm._v(" "),
-          _c("input", {
-            directives: [
-              {
-                name: "model",
-                rawName: "v-model",
-                value: _vm.downPament,
-                expression: "downPament"
-              }
-            ],
-            staticClass: "typeNumbers",
-            attrs: {
-              type: "number",
-              min: "0",
-              id: "downPament",
-              name: "downPament",
-              placeholder: "Down Pament"
-            },
-            domProps: { value: _vm.downPament },
-            on: {
-              input: function($event) {
-                if ($event.target.composing) {
-                  return
-                }
-                _vm.downPament = $event.target.value
-              }
-            }
-          })
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "downPamentPerc" }, [
-          _c("label", [_vm._v("Down Pament Percentage")]),
-          _vm._v(" "),
-          _c("input", {
-            directives: [
-              {
-                name: "model",
-                rawName: "v-model",
-                value: _vm.downPamentPerc,
-                expression: "downPamentPerc"
-              }
-            ],
-            staticClass: "typeNumbers",
-            attrs: {
-              type: "number",
-              min: "0",
-              id: "downPamentPerc",
-              name: "downPamentPerc",
-              placeholder: "Down Pament Percentage"
-            },
-            domProps: { value: _vm.downPamentPerc },
-            on: {
-              input: function($event) {
-                if ($event.target.composing) {
-                  return
-                }
-                _vm.downPamentPerc = $event.target.value
-              }
-            }
-          })
-        ])
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "mortgageTermSection" }, [
-        _c("div", { staticClass: "mortgageTerm" }, [
-          _c("label", [_vm._v(_vm._s(_vm.mortgageCalcLabel.mortgageTerm))]),
-          _vm._v(" "),
-          _c("input", {
-            directives: [
-              {
-                name: "model",
-                rawName: "v-model",
-                value: _vm.mortgageTerm,
-                expression: "mortgageTerm"
-              },
-              {
-                name: "validate",
-                rawName: "v-validate",
-                value: _vm.term_rule,
-                expression: "term_rule"
-              }
-            ],
-            staticClass: "typeNumbers",
-            class: { error: _vm.errors.has("mortgageTerm") },
-            attrs: {
-              type: "number",
-              min: "0",
-              id: "mortgageTerm",
-              name: "mortgageTerm",
-              placeholder: "Mortgage Term",
-              pattern: "/^-?\\d+\\.?\\d*$/",
-              onKeyPress: "if(this.value.length==2) return false;"
-            },
-            domProps: { value: _vm.mortgageTerm },
-            on: {
-              input: function($event) {
-                if ($event.target.composing) {
-                  return
-                }
-                _vm.mortgageTerm = $event.target.value
-              }
-            }
-          }),
-          _vm._v(" "),
-          _vm.errors.has("mortgageTerm")
-            ? _c("span", { staticStyle: { color: "red" } }, [
-                _vm._v(
-                  "\n\t                    " +
-                    _vm._s(_vm.errors.first("mortgageTerm")) +
-                    "\n\t                "
-                )
-              ])
-            : _vm._e()
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "mortgageTermMonth" }, [
-          _c("label", [_vm._v("Mortgage Month Term")]),
-          _vm._v(" "),
-          _c("input", {
-            directives: [
-              {
-                name: "model",
-                rawName: "v-model",
-                value: _vm.mortgageTermMonth,
-                expression: "mortgageTermMonth"
-              },
-              {
-                name: "validate",
-                rawName: "v-validate",
-                value: _vm.term_rule_month,
-                expression: "term_rule_month"
-              }
-            ],
-            staticClass: "typeNumbers",
-            class: { error: _vm.errors.has("mortgageTermMonth") },
-            attrs: {
-              type: "number",
-              min: "0",
-              id: "mortgageTermMonth",
-              name: "mortgageTermMonth",
-              placeholder: "Mortgage Term Month",
-              pattern: "/^-?\\d+\\.?\\d*$/",
-              onKeyPress: "if(this.value.length==3) return false;"
-            },
-            domProps: { value: _vm.mortgageTermMonth },
-            on: {
-              input: function($event) {
-                if ($event.target.composing) {
-                  return
-                }
-                _vm.mortgageTermMonth = $event.target.value
-              }
-            }
-          }),
-          _vm._v(" "),
-          _vm.errors.has("mortgageTermMonth")
-            ? _c("span", { staticStyle: { color: "red" } }, [
-                _vm._v(
-                  "\n\t                    " +
-                    _vm._s(_vm.errors.first("mortgageTermMonth")) +
-                    "\n\t                "
-                )
-              ])
-            : _vm._e()
-        ])
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "annualIntRateSection" }, [
-        _c("label", [_vm._v("Annual Interest Rate")]),
-        _c("br"),
-        _vm._v(" "),
-        _c("input", {
-          directives: [
-            {
-              name: "model",
-              rawName: "v-model",
-              value: _vm.annualInterestRate,
-              expression: "annualInterestRate"
-            },
-            {
-              name: "validate",
-              rawName: "v-validate",
-              value: _vm.interest_rate_rule,
-              expression: "interest_rate_rule"
-            }
-          ],
-          staticClass: "typeNumber",
-          class: { error: _vm.errors.has("annualInterestRate") },
-          attrs: {
-            type: "number",
-            min: "0",
-            id: "annualInterestRate",
-            name: "annualInterestRate",
-            placeholder: "Annual Interest Rate",
-            pattern: "/^-?\\d+\\.?\\d*$/",
-            onKeyPress: "if(this.value.length==2) return false;"
-          },
-          domProps: { value: _vm.annualInterestRate },
-          on: {
-            input: function($event) {
-              if ($event.target.composing) {
-                return
-              }
-              _vm.annualInterestRate = $event.target.value
-            }
-          }
-        }),
-        _vm._v(" "),
-        _vm.errors.has("annualInterestRate")
-          ? _c("span", { staticStyle: { color: "red" } }, [
-              _vm._v(
-                "\n                    " +
-                  _vm._s(_vm.errors.first("annualInterestRate")) +
-                  "\n                "
-              )
-            ])
-          : _vm._e()
-      ])
-    ]),
-    _vm._v(" "),
-    _c("div", { staticStyle: { "margin-top": "10px", "margin-left": "0" } }, [
-      _c("p", [_vm._v("Your estimated monthly payment:")]),
-      _vm._v(" "),
-      _c("h1", [
-        _c("span", [_vm._v("$")]),
-        _vm._v(" " + _vm._s(_vm.monthlyPayment.toFixed(2)))
-      ]),
-      _vm._v(" "),
-      _c("p", [
-        _vm._v("Total principal paid: $" + _vm._s(_vm.principalPaid.toFixed(2)))
-      ]),
-      _vm._v(" "),
-      _c("p", [
-        _vm._v("Total interest paid: $" + _vm._s(_vm.total_interest.toFixed(2)))
-      ])
-    ])
-  ])
-}
-var staticRenderFns = []
-render._withStripped = true
-module.exports = { render: render, staticRenderFns: staticRenderFns }
-if (false) {
-  module.hot.accept()
-  if (module.hot.data) {
-    require("vue-hot-reload-api")      .rerender("data-v-8d4d39fe", module.exports)
-  }
-}
-
-/***/ }),
-
-/***/ 240:
-/***/ (function(module, exports, __webpack_require__) {
-
-var render = function() {
-  var _vm = this
-  var _h = _vm.$createElement
-  var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "mortgage_payment_calc" }, [
-    _c("h1", [_vm._v("Mortgage Payment Calculator")]),
-    _vm._v(" "),
-    _c("div", { staticClass: "loan-info" }, [
-      _vm._m(0),
-      _vm._v(" "),
-      _c("div", { staticClass: "mortgage_amount" }, [
-        _c("label", [_vm._v("Mortgage Amount")]),
-        _vm._v(" "),
-        _c("input", {
-          directives: [
-            {
-              name: "model",
-              rawName: "v-model",
-              value: _vm.mortgage_amount,
-              expression: "mortgage_amount"
-            }
-          ],
-          staticClass: "typeNumbersField",
-          attrs: {
-            type: "number",
-            min: "0",
-            name: "mortgage_amount",
-            id: "mortgage_amount"
-          },
-          domProps: { value: _vm.mortgage_amount },
-          on: {
-            input: function($event) {
-              if ($event.target.composing) {
-                return
-              }
-              _vm.mortgage_amount = $event.target.value
-            }
-          }
-        })
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "term_in_years" }, [
-        _c("label", [_vm._v("Term in years")]),
-        _vm._v(" "),
-        _c("input", {
-          directives: [
-            {
-              name: "model",
-              rawName: "v-model",
-              value: _vm.term_in_years,
-              expression: "term_in_years"
-            }
-          ],
-          staticClass: "typeNumbersField",
-          attrs: {
-            type: "number",
-            min: "0",
-            name: "term_in_years",
-            id: "term_in_years"
-          },
-          domProps: { value: _vm.term_in_years },
-          on: {
-            input: function($event) {
-              if ($event.target.composing) {
-                return
-              }
-              _vm.term_in_years = $event.target.value
-            }
-          }
-        })
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "term_in_years" }, [
-        _c("label", [_vm._v("Term in years")]),
-        _vm._v(" "),
-        _c("input", {
-          directives: [
-            {
-              name: "model",
-              rawName: "v-model",
-              value: _vm.term_in_years,
-              expression: "term_in_years"
-            }
-          ],
-          staticClass: "typeNumbersField",
-          attrs: {
-            type: "number",
-            min: "0",
-            name: "term_in_years",
-            id: "term_in_years"
-          },
-          domProps: { value: _vm.term_in_years },
-          on: {
-            input: function($event) {
-              if ($event.target.composing) {
-                return
-              }
-              _vm.term_in_years = $event.target.value
-            }
-          }
-        })
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "interest_rate" }, [
-        _c("label", [_vm._v("Interest Rate")]),
-        _vm._v(" "),
-        _c("input", {
-          directives: [
-            {
-              name: "model",
-              rawName: "v-model",
-              value: _vm.interest_rate,
-              expression: "interest_rate"
-            }
-          ],
-          staticClass: "typeNumbersField",
-          attrs: {
-            type: "number",
-            min: "0",
-            name: "interest_rate",
-            id: "interest_rate"
-          },
-          domProps: { value: _vm.interest_rate },
-          on: {
-            input: function($event) {
-              if ($event.target.composing) {
-                return
-              }
-              _vm.interest_rate = $event.target.value
-            }
-          }
-        })
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "annual_property_taxes" }, [
-        _c("label", [_vm._v("Annual Property Taxes")]),
-        _vm._v(" "),
-        _c("input", {
-          directives: [
-            {
-              name: "model",
-              rawName: "v-model",
-              value: _vm.annual_property_taxes,
-              expression: "annual_property_taxes"
-            }
-          ],
-          staticClass: "typeNumbersField",
-          attrs: {
-            type: "number",
-            min: "0",
-            name: "annual_property_taxes",
-            id: "annual_property_taxes",
-            placeholder: "Annual Property Taxes"
-          },
-          domProps: { value: _vm.annual_property_taxes },
-          on: {
-            input: function($event) {
-              if ($event.target.composing) {
-                return
-              }
-              _vm.annual_property_taxes = $event.target.value
-            }
-          }
-        })
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "mortgage_payment_pi" }, [
-        _vm._m(1),
-        _vm._v(" "),
-        _c("p", [_vm._v("$" + _vm._s(_vm.pi.toFixed(2)))])
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "mortgage_payment_piti" }, [
-        _vm._m(2),
-        _vm._v(" "),
-        _c("p", [_vm._v("$" + _vm._s(_vm.piti.toFixed(2)))])
-      ])
-    ])
-  ])
-}
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("p", [_c("strong", [_vm._v("Loan Information:")])])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("label", [_c("strong", [_vm._v("Monthly Payment(PI):")])])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("label", [_c("strong", [_vm._v("Monthly Payment(PITI):")])])
-  }
-]
-render._withStripped = true
-module.exports = { render: render, staticRenderFns: staticRenderFns }
-if (false) {
-  module.hot.accept()
-  if (module.hot.data) {
-    require("vue-hot-reload-api")      .rerender("data-v-5a88cc97", module.exports)
-  }
-}
-
-/***/ }),
-
-/***/ 241:
+/***/ 233:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -10597,23 +10722,41 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 
 /* harmony default export */ __webpack_exports__["default"] = ({
+    props: ['tableTitle', 'mortgagePaymentLabel', 'mortgagePaymentDefault'],
     data: function data() {
         return {
-            mortgage_amount: 120000,
-            term_in_years: 30,
-            interest_rate: 12,
-            annual_property_taxes: 15,
-            annual_property_insurance: 15
+            mortgage_amount: 'Mortgage Amount',
+            mortgage_amount_def_val: 120000,
+            term_in_years: 'Term in years',
+            term_in_years_def_val: 30,
+            interest_rate: 'Interest rate',
+            interest_rate_def_val: 12,
+            annual_property_taxes: 'Annual Property Taxes',
+            annual_property_taxes_def_val: 15,
+            annual_property_insurance: 'Annual Property Insurance',
+            annual_property_insurance_def_val: 15
         };
+    },
+    created: function created() {
+        this.mortgage_amount = this.mortgagePaymentLabel.mortgageAmount;
+        this.mortgage_amount_def_val = this.mortgagePaymentDefault.mortgageAmountDefVal;
+        this.term_in_years = this.mortgagePaymentLabel.termInYears;
+        this.term_in_years_def_val = this.mortgagePaymentDefault.termInYearsDefVal;
+        this.interest_rate = this.mortgagePaymentLabel.interestRate;
+        this.interest_rate_def_val = this.mortgagePaymentDefault.interestRateDefVal;
+        this.annual_property_taxes = this.mortgagePaymentLabel.annualPropertyTaxes;
+        this.annual_property_taxes_def_val = this.mortgagePaymentDefault.annualPropertyTaxesDefVal;
+        this.annual_property_insurance = this.mortgagePaymentLabel.annualHomeInsurance;
+        this.annual_property_insurance_def_val = this.mortgagePaymentDefault.annualHomeInsuranceDefVal;
     },
 
     computed: {
         pi: function pi() {
-            if (this.interest_rate != 0 && this.mortgage_amount != 0 && this.term_in_years != 0) {
-                var interest_rate_perc = parseFloat(this.interest_rate) / 12;
+            if (this.interest_rate_def_val != 0 && this.mortgage_amount_def_val != 0 && this.term_in_years_def_val != 0) {
+                var interest_rate_perc = parseFloat(this.interest_rate_def_val) / 12;
                 var interest_rate_ans = parseFloat(interest_rate_perc) / 100;
-                var int_rate_amnt = parseFloat(interest_rate_ans * this.mortgage_amount);
-                var total_month = parseFloat(this.term_in_years) * 12;
+                var int_rate_amnt = parseFloat(interest_rate_ans * this.mortgage_amount_def_val);
+                var total_month = parseFloat(this.term_in_years_def_val) * 12;
                 var pi = int_rate_amnt / (1 - Math.pow(1 + interest_rate_ans, -total_month));
                 return pi;
             } else {
@@ -10621,14 +10764,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             }
         },
         piti: function piti() {
-            if (this.interest_rate != 0 && this.mortgage_amount != 0 && this.term_in_years != 0 && (this.annual_property_taxes != 0 || this.annual_property_insurance != 0)) {
-                var interest_rate_perc = parseFloat(this.interest_rate) / 12;
+            if (this.interest_rate_def_val != 0 && this.mortgage_amount_def_val != 0 && this.term_in_years_def_val != 0 && (this.annual_property_taxes_def_val != 0 || this.annual_property_insurance_def_val != 0)) {
+                var interest_rate_perc = parseFloat(this.interest_rate_def_val) / 12;
                 var interest_rate_ans = parseFloat(interest_rate_perc) / 100;
-                var int_rate_amnt = parseFloat(interest_rate_ans * this.mortgage_amount);
-                var total_month = parseFloat(this.term_in_years) * 12;
+                var int_rate_amnt = parseFloat(interest_rate_ans * this.mortgage_amount_def_val);
+                var total_month = parseFloat(this.term_in_years_def_val) * 12;
                 var pi = int_rate_amnt / (1 - Math.pow(1 + interest_rate_ans, -total_month));
 
-                var piti = pi + this.annual_property_taxes / 12 + this.annual_property_insurance / 12;
+                var piti = pi + this.annual_property_taxes_def_val / 12 + this.annual_property_insurance_def_val / 12;
                 return piti;
             } else {
                 return 0;
@@ -10639,274 +10782,288 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 /***/ }),
 
-/***/ 242:
+/***/ 234:
 /***/ (function(module, exports, __webpack_require__) {
 
-// style-loader: Adds some css to the DOM by adding a <style> tag
-
-// load the styles
-var content = __webpack_require__(243);
-if(typeof content === 'string') content = [[module.i, content, '']];
-if(content.locals) module.exports = content.locals;
-// add the styles to the DOM
-var update = __webpack_require__(28)("10b04e87", content, false, {});
-// Hot Module Replacement
-if(false) {
- // When the styles change, update the <style> tags
- if(!content.locals) {
-   module.hot.accept("!!../../../node_modules/css-loader/index.js!../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-5a88cc97\",\"scoped\":false,\"hasInlineConfig\":true}!../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./_MortgagePayment.vue", function() {
-     var newContent = require("!!../../../node_modules/css-loader/index.js!../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-5a88cc97\",\"scoped\":false,\"hasInlineConfig\":true}!../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./_MortgagePayment.vue");
-     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-     update(newContent);
-   });
- }
- // When the module is disposed, remove the <style> tags
- module.hot.dispose(function() { update(); });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", { staticClass: "mortgage_payment_calc" }, [
+    _c("h1", [_vm._v(_vm._s(_vm.tableTitle))]),
+    _vm._v(" "),
+    _c("div", { staticClass: "loan-info" }, [
+      _vm._m(0),
+      _vm._v(" "),
+      _c("div", { staticClass: "mortgage_amount" }, [
+        _c("label", [_vm._v(_vm._s(_vm.mortgage_amount))]),
+        _vm._v(" "),
+        _c("input", {
+          directives: [
+            {
+              name: "model",
+              rawName: "v-model",
+              value: _vm.mortgage_amount_def_val,
+              expression: "mortgage_amount_def_val"
+            }
+          ],
+          staticClass: "typeNumbersField",
+          attrs: {
+            type: "number",
+            min: "0",
+            name: "mortgage_amount",
+            id: "mortgage_amount"
+          },
+          domProps: { value: _vm.mortgage_amount_def_val },
+          on: {
+            input: function($event) {
+              if ($event.target.composing) {
+                return
+              }
+              _vm.mortgage_amount_def_val = $event.target.value
+            }
+          }
+        })
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "term_in_years" }, [
+        _c("label", [_vm._v(_vm._s(_vm.term_in_years))]),
+        _vm._v(" "),
+        _c("input", {
+          directives: [
+            {
+              name: "model",
+              rawName: "v-model",
+              value: _vm.term_in_years_def_val,
+              expression: "term_in_years_def_val"
+            }
+          ],
+          staticClass: "typeNumbersField",
+          attrs: {
+            type: "number",
+            min: "0",
+            name: "term_in_years",
+            id: "term_in_years"
+          },
+          domProps: { value: _vm.term_in_years_def_val },
+          on: {
+            input: function($event) {
+              if ($event.target.composing) {
+                return
+              }
+              _vm.term_in_years_def_val = $event.target.value
+            }
+          }
+        })
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "interest_rate" }, [
+        _c("label", [_vm._v(_vm._s(_vm.interest_rate))]),
+        _vm._v(" "),
+        _c("input", {
+          directives: [
+            {
+              name: "model",
+              rawName: "v-model",
+              value: _vm.interest_rate_def_val,
+              expression: "interest_rate_def_val"
+            }
+          ],
+          staticClass: "typeNumbersField",
+          attrs: {
+            type: "number",
+            min: "0",
+            name: "interest_rate",
+            id: "interest_rate"
+          },
+          domProps: { value: _vm.interest_rate_def_val },
+          on: {
+            input: function($event) {
+              if ($event.target.composing) {
+                return
+              }
+              _vm.interest_rate_def_val = $event.target.value
+            }
+          }
+        })
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "annual_property_taxes" }, [
+        _c("label", [_vm._v(_vm._s(_vm.annual_property_taxes))]),
+        _vm._v(" "),
+        _c("input", {
+          directives: [
+            {
+              name: "model",
+              rawName: "v-model",
+              value: _vm.annual_property_taxes_def_val,
+              expression: "annual_property_taxes_def_val"
+            }
+          ],
+          staticClass: "typeNumbersField",
+          attrs: {
+            type: "number",
+            min: "0",
+            name: "annual_property_taxes",
+            id: "annual_property_taxes",
+            placeholder: "Annual Property Taxes"
+          },
+          domProps: { value: _vm.annual_property_taxes_def_val },
+          on: {
+            input: function($event) {
+              if ($event.target.composing) {
+                return
+              }
+              _vm.annual_property_taxes_def_val = $event.target.value
+            }
+          }
+        })
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "annual_property_insurance" }, [
+        _c("label", [_vm._v(_vm._s(_vm.annual_property_insurance))]),
+        _vm._v(" "),
+        _c("input", {
+          directives: [
+            {
+              name: "model",
+              rawName: "v-model",
+              value: _vm.annual_property_insurance_def_val,
+              expression: "annual_property_insurance_def_val"
+            }
+          ],
+          staticClass: "typeNumbersField",
+          attrs: {
+            type: "number",
+            min: "0",
+            name: "annual_property_insurance",
+            id: "annual_property_insurance",
+            placeholder: "Annual Property Taxes"
+          },
+          domProps: { value: _vm.annual_property_insurance_def_val },
+          on: {
+            input: function($event) {
+              if ($event.target.composing) {
+                return
+              }
+              _vm.annual_property_insurance_def_val = $event.target.value
+            }
+          }
+        })
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "mortgage_payment_pi" }, [
+        _vm._m(1),
+        _vm._v(" "),
+        _c("p", [_vm._v("$" + _vm._s(_vm.pi.toFixed(2)))])
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "mortgage_payment_piti" }, [
+        _vm._m(2),
+        _vm._v(" "),
+        _c("p", [_vm._v("$" + _vm._s(_vm.piti.toFixed(2)))])
+      ])
+    ])
+  ])
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("p", [_c("strong", [_vm._v("Loan Information:")])])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("label", [_c("strong", [_vm._v("Monthly Payment(PI):")])])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("label", [_c("strong", [_vm._v("Monthly Payment(PITI):")])])
+  }
+]
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-5a88cc97", module.exports)
+  }
 }
 
 /***/ }),
 
-/***/ 243:
+/***/ 235:
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(1)(false);
-// imports
-
-
-// module
-exports.push([module.i, "\n.loan-info {\n\t    background-color: #E7EDF5;\n\t    padding: 30px;\n}\n.typeNumbersField {\n\t\twidth: 100%;\n\t\tpadding: 12px 20px;\n\t    margin: 8px 0;\n\t    display: inline-block;\n\t    border: 1px solid #ccc;\n\t    border-radius: 4px;\n    \tbox-sizing: border-box;\n}\n", ""]);
-
-// exports
-
-
-/***/ }),
-
-/***/ 28:
-/***/ (function(module, exports, __webpack_require__) {
-
-/*
-  MIT License http://www.opensource.org/licenses/mit-license.php
-  Author Tobias Koppers @sokra
-  Modified by Evan You @yyx990803
-*/
-
-var hasDocument = typeof document !== 'undefined'
-
-if (typeof DEBUG !== 'undefined' && DEBUG) {
-  if (!hasDocument) {
-    throw new Error(
-    'vue-style-loader cannot be used in a non-browser environment. ' +
-    "Use { target: 'node' } in your Webpack config to indicate a server-rendering environment."
-  ) }
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", [
+    _vm.table_id && _vm.calculator_type == "mortgage_calculator"
+      ? _c(
+          "div",
+          [
+            _c("app-mortgage-calc", {
+              attrs: {
+                tableTitle: _vm.table_title,
+                mortgageCalcLabel: _vm.mortgage_calculator_label,
+                mortgageCalcDef: _vm.mortgage_calculator_default,
+                amortizationTable: _vm.amortization_table
+              }
+            })
+          ],
+          1
+        )
+      : _vm._e(),
+    _vm._v(" "),
+    _vm.table_id && _vm.calculator_type == "mortgage_refinance"
+      ? _c(
+          "div",
+          [
+            _c("app-mortgage-refinance", {
+              attrs: {
+                tableTitle: _vm.table_title,
+                mortgageRefinanceLabel: _vm.mortgage_refinance_label,
+                mortgageRefinanceDef: _vm.mortgage_refinance_default
+              }
+            })
+          ],
+          1
+        )
+      : _vm._e(),
+    _vm._v(" "),
+    _vm.table_id && _vm.calculator_type == "mortgage_payment"
+      ? _c(
+          "div",
+          [
+            _c("app-mortgage-payment", {
+              attrs: {
+                tableTitle: _vm.table_title,
+                mortgagePaymentLabel: _vm.mortgage_payment_label,
+                mortgagePaymentDefault: _vm.mortgage_payment_default
+              }
+            })
+          ],
+          1
+        )
+      : _vm._e()
+  ])
 }
-
-var listToStyles = __webpack_require__(53)
-
-/*
-type StyleObject = {
-  id: number;
-  parts: Array<StyleObjectPart>
-}
-
-type StyleObjectPart = {
-  css: string;
-  media: string;
-  sourceMap: ?string
-}
-*/
-
-var stylesInDom = {/*
-  [id: number]: {
-    id: number,
-    refs: number,
-    parts: Array<(obj?: StyleObjectPart) => void>
-  }
-*/}
-
-var head = hasDocument && (document.head || document.getElementsByTagName('head')[0])
-var singletonElement = null
-var singletonCounter = 0
-var isProduction = false
-var noop = function () {}
-var options = null
-var ssrIdKey = 'data-vue-ssr-id'
-
-// Force single-tag solution on IE6-9, which has a hard limit on the # of <style>
-// tags it will allow on a page
-var isOldIE = typeof navigator !== 'undefined' && /msie [6-9]\b/.test(navigator.userAgent.toLowerCase())
-
-module.exports = function (parentId, list, _isProduction, _options) {
-  isProduction = _isProduction
-
-  options = _options || {}
-
-  var styles = listToStyles(parentId, list)
-  addStylesToDom(styles)
-
-  return function update (newList) {
-    var mayRemove = []
-    for (var i = 0; i < styles.length; i++) {
-      var item = styles[i]
-      var domStyle = stylesInDom[item.id]
-      domStyle.refs--
-      mayRemove.push(domStyle)
-    }
-    if (newList) {
-      styles = listToStyles(parentId, newList)
-      addStylesToDom(styles)
-    } else {
-      styles = []
-    }
-    for (var i = 0; i < mayRemove.length; i++) {
-      var domStyle = mayRemove[i]
-      if (domStyle.refs === 0) {
-        for (var j = 0; j < domStyle.parts.length; j++) {
-          domStyle.parts[j]()
-        }
-        delete stylesInDom[domStyle.id]
-      }
-    }
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-0c5cfb0e", module.exports)
   }
 }
-
-function addStylesToDom (styles /* Array<StyleObject> */) {
-  for (var i = 0; i < styles.length; i++) {
-    var item = styles[i]
-    var domStyle = stylesInDom[item.id]
-    if (domStyle) {
-      domStyle.refs++
-      for (var j = 0; j < domStyle.parts.length; j++) {
-        domStyle.parts[j](item.parts[j])
-      }
-      for (; j < item.parts.length; j++) {
-        domStyle.parts.push(addStyle(item.parts[j]))
-      }
-      if (domStyle.parts.length > item.parts.length) {
-        domStyle.parts.length = item.parts.length
-      }
-    } else {
-      var parts = []
-      for (var j = 0; j < item.parts.length; j++) {
-        parts.push(addStyle(item.parts[j]))
-      }
-      stylesInDom[item.id] = { id: item.id, refs: 1, parts: parts }
-    }
-  }
-}
-
-function createStyleElement () {
-  var styleElement = document.createElement('style')
-  styleElement.type = 'text/css'
-  head.appendChild(styleElement)
-  return styleElement
-}
-
-function addStyle (obj /* StyleObjectPart */) {
-  var update, remove
-  var styleElement = document.querySelector('style[' + ssrIdKey + '~="' + obj.id + '"]')
-
-  if (styleElement) {
-    if (isProduction) {
-      // has SSR styles and in production mode.
-      // simply do nothing.
-      return noop
-    } else {
-      // has SSR styles but in dev mode.
-      // for some reason Chrome can't handle source map in server-rendered
-      // style tags - source maps in <style> only works if the style tag is
-      // created and inserted dynamically. So we remove the server rendered
-      // styles and inject new ones.
-      styleElement.parentNode.removeChild(styleElement)
-    }
-  }
-
-  if (isOldIE) {
-    // use singleton mode for IE9.
-    var styleIndex = singletonCounter++
-    styleElement = singletonElement || (singletonElement = createStyleElement())
-    update = applyToSingletonTag.bind(null, styleElement, styleIndex, false)
-    remove = applyToSingletonTag.bind(null, styleElement, styleIndex, true)
-  } else {
-    // use multi-style-tag mode in all other cases
-    styleElement = createStyleElement()
-    update = applyToTag.bind(null, styleElement)
-    remove = function () {
-      styleElement.parentNode.removeChild(styleElement)
-    }
-  }
-
-  update(obj)
-
-  return function updateStyle (newObj /* StyleObjectPart */) {
-    if (newObj) {
-      if (newObj.css === obj.css &&
-          newObj.media === obj.media &&
-          newObj.sourceMap === obj.sourceMap) {
-        return
-      }
-      update(obj = newObj)
-    } else {
-      remove()
-    }
-  }
-}
-
-var replaceText = (function () {
-  var textStore = []
-
-  return function (index, replacement) {
-    textStore[index] = replacement
-    return textStore.filter(Boolean).join('\n')
-  }
-})()
-
-function applyToSingletonTag (styleElement, index, remove, obj) {
-  var css = remove ? '' : obj.css
-
-  if (styleElement.styleSheet) {
-    styleElement.styleSheet.cssText = replaceText(index, css)
-  } else {
-    var cssNode = document.createTextNode(css)
-    var childNodes = styleElement.childNodes
-    if (childNodes[index]) styleElement.removeChild(childNodes[index])
-    if (childNodes.length) {
-      styleElement.insertBefore(cssNode, childNodes[index])
-    } else {
-      styleElement.appendChild(cssNode)
-    }
-  }
-}
-
-function applyToTag (styleElement, obj) {
-  var css = obj.css
-  var media = obj.media
-  var sourceMap = obj.sourceMap
-
-  if (media) {
-    styleElement.setAttribute('media', media)
-  }
-  if (options.ssrId) {
-    styleElement.setAttribute(ssrIdKey, obj.id)
-  }
-
-  if (sourceMap) {
-    // https://developer.chrome.com/devtools/docs/javascript-debugging
-    // this makes source maps inside style tags work properly in Chrome
-    css += '\n/*# sourceURL=' + sourceMap.sources[0] + ' */'
-    // http://stackoverflow.com/a/26603875
-    css += '\n/*# sourceMappingURL=data:application/json;base64,' + btoa(unescape(encodeURIComponent(JSON.stringify(sourceMap)))) + ' */'
-  }
-
-  if (styleElement.styleSheet) {
-    styleElement.styleSheet.cssText = css
-  } else {
-    while (styleElement.firstChild) {
-      styleElement.removeChild(styleElement.firstChild)
-    }
-    styleElement.appendChild(document.createTextNode(css))
-  }
-}
-
 
 /***/ }),
 
@@ -10977,7 +11134,7 @@ exports.clearImmediate = (typeof self !== "undefined" && self.clearImmediate) ||
                          (typeof global !== "undefined" && global.clearImmediate) ||
                          (this && this.clearImmediate);
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(6)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(7)))
 
 /***/ }),
 
@@ -11171,7 +11328,7 @@ exports.clearImmediate = (typeof self !== "undefined" && self.clearImmediate) ||
     attachTo.clearImmediate = clearImmediate;
 }(typeof self === "undefined" ? typeof global === "undefined" ? this : global : self));
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(6), __webpack_require__(31)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(7), __webpack_require__(31)))
 
 /***/ }),
 
@@ -24960,7 +25117,117 @@ Vue.compile = compileToFunctions;
 
 module.exports = Vue;
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(6), __webpack_require__(29).setImmediate))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(7), __webpack_require__(29).setImmediate))
+
+/***/ }),
+
+/***/ 5:
+/***/ (function(module, exports) {
+
+/* globals __VUE_SSR_CONTEXT__ */
+
+// IMPORTANT: Do NOT use ES2015 features in this file.
+// This module is a runtime utility for cleaner component module output and will
+// be included in the final webpack user bundle.
+
+module.exports = function normalizeComponent (
+  rawScriptExports,
+  compiledTemplate,
+  functionalTemplate,
+  injectStyles,
+  scopeId,
+  moduleIdentifier /* server only */
+) {
+  var esModule
+  var scriptExports = rawScriptExports = rawScriptExports || {}
+
+  // ES6 modules interop
+  var type = typeof rawScriptExports.default
+  if (type === 'object' || type === 'function') {
+    esModule = rawScriptExports
+    scriptExports = rawScriptExports.default
+  }
+
+  // Vue.extend constructor export interop
+  var options = typeof scriptExports === 'function'
+    ? scriptExports.options
+    : scriptExports
+
+  // render functions
+  if (compiledTemplate) {
+    options.render = compiledTemplate.render
+    options.staticRenderFns = compiledTemplate.staticRenderFns
+    options._compiled = true
+  }
+
+  // functional template
+  if (functionalTemplate) {
+    options.functional = true
+  }
+
+  // scopedId
+  if (scopeId) {
+    options._scopeId = scopeId
+  }
+
+  var hook
+  if (moduleIdentifier) { // server build
+    hook = function (context) {
+      // 2.3 injection
+      context =
+        context || // cached call
+        (this.$vnode && this.$vnode.ssrContext) || // stateful
+        (this.parent && this.parent.$vnode && this.parent.$vnode.ssrContext) // functional
+      // 2.2 with runInNewContext: true
+      if (!context && typeof __VUE_SSR_CONTEXT__ !== 'undefined') {
+        context = __VUE_SSR_CONTEXT__
+      }
+      // inject component styles
+      if (injectStyles) {
+        injectStyles.call(this, context)
+      }
+      // register component module identifier for async chunk inferrence
+      if (context && context._registeredComponents) {
+        context._registeredComponents.add(moduleIdentifier)
+      }
+    }
+    // used by ssr in case component is cached and beforeCreate
+    // never gets called
+    options._ssrRegister = hook
+  } else if (injectStyles) {
+    hook = injectStyles
+  }
+
+  if (hook) {
+    var functional = options.functional
+    var existing = functional
+      ? options.render
+      : options.beforeCreate
+
+    if (!functional) {
+      // inject component registration as beforeCreate hook
+      options.beforeCreate = existing
+        ? [].concat(existing, hook)
+        : [hook]
+    } else {
+      // for template-only hot-reload because in that case the render fn doesn't
+      // go through the normalizer
+      options._injectStyles = hook
+      // register for functioal component in vue file
+      options.render = function renderWithStyleInjection (h, context) {
+        hook.call(context)
+        return existing(h, context)
+      }
+    }
+  }
+
+  return {
+    esModule: esModule,
+    exports: scriptExports,
+    options: options
+  }
+}
+
 
 /***/ }),
 
@@ -24998,7 +25265,7 @@ module.exports = function listToStyles (parentId, list) {
 
 /***/ }),
 
-/***/ 6:
+/***/ 7:
 /***/ (function(module, exports) {
 
 var g;
