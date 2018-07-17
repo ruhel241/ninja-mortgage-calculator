@@ -33,13 +33,13 @@
             <el-table-column 
                 label="Caculator Type">
                 <template slot-scope="scope">
-                    <span v-if="scope.row.post_content=='mortgage_calculator'">
+                    <span v-if="scope.row.CalCulatorType=='mortgage_calculator'">
                         Mortgage Calculator
                     </span>
-                    <span v-if="scope.row.post_content=='mortgage_refinance'">
+                    <span v-if="scope.row.CalCulatorType=='mortgage_refinance'">
                         Mortgage Refinance
                     </span>
-                    <span v-if="scope.row.post_content=='mortgage_payment'">
+                    <span v-if="scope.row.CalCulatorType=='mortgage_payment'">
                         Mortgage Payment
                     </span>
                 </template>
@@ -114,7 +114,6 @@ export default {
             addingTableAjax: false,
             addTableModal: false,
             tableLoading: false,
-            selectCalculator: '',
             calc_types: [
                 {
                     value: 'mortgage_calculator',
@@ -131,6 +130,7 @@ export default {
             ],
             tableData: [],
             table_name: '',
+            selectCalculator: '',
             per_page: 3,
             page_number: 1,
             total: 0
@@ -144,7 +144,7 @@ export default {
                 action: 'ninja_mortgage_ajax_actions',
                 route: 'add_table',
                 post_title: this.table_name,
-                post_content: this.selectCalculator
+                calculator_type: this.selectCalculator
             }).then(
                 response => {
                     this.$notify.success({

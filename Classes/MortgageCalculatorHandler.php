@@ -11,8 +11,8 @@ class MortgageCalculatorHandler
 
 		if($route == 'add_table'){
 			$tableTitle = sanitize_text_field($_REQUEST['post_title']); 
-			$selectCalculator = sanitize_text_field($_REQUEST['post_content']); 
-			static::addTable($tableTitle, $selectCalculator);
+			$calculatorType = sanitize_text_field($_REQUEST['calculator_type']); 
+			static::addTable($tableTitle, $calculatorType);
 		}
 
 		if($route == 'get_tables'){
@@ -35,7 +35,11 @@ class MortgageCalculatorHandler
         if ($route == 'update_table_config') {
             $tableId = intval($_REQUEST['table_id']);
             $table_config = wp_unslash($_REQUEST['table_config']);
-            static::updateTableConfig($tableId, $table_config);
+
+            $calculatorType = sanitize_text_field($_REQUEST['calculator_type']); 
+
+
+            static::updateTableConfig($tableId, $table_config, $calculatorType);
         }
 
 
@@ -51,15 +55,37 @@ class MortgageCalculatorHandler
 		
 		$attributes = shortcode_atts($defaults, $atts);
 
-		$post = get_post($id);
 		$tableId = $attributes['id'];
+		$post = get_post($tableId);
 		$settings = get_post_meta($tableId, '_ninija_mortgage_table_config', true);
 		
-		wp_enqueue_script('mortgage_calculator', NINJA_MORTGAGE_PLUGIN_DIR_URL.'public/js/UserShowApp.js', array('jquery'), NINJA_MORTGAGE_PLUGIN_DIR_VERSION, true);
+		wp_enqueue_script('ninja_mortgage_calculator', NINJA_MORTGAGE_PLUGIN_DIR_URL.'public/js/UserShowApp.js', array('jquery'), NINJA_MORTGAGE_PLUGIN_DIR_VERSION, true);
 
-	
+?>
+        <script type="text/javascript">
+            var ninja_mortgage_cal_vars = {
+                post: <?php echo json_encode( $post ); ?>,
+                tableId: <?php echo json_encode( $tableId ); ?>,
+                settings: <?php echo json_encode( $settings ); ?>,
+             }
+        </script>
+
+
+
+<?php 
+
+
+
+
+
+
+
+
+
+
+
 		
-		return "<div id='mortgage_calculator'></div>";
+		return "<div id='ninja_mortgage_calculator'></div>";
 
 	}
 
@@ -79,7 +105,7 @@ class MortgageCalculatorHandler
 	}
 
 
-	public static function addTable($tableTitle = '', $selectCalculator = '')
+	public static function addTable($tableTitle = '', $calculatorType = '')
 	{
 		if( ! $tableTitle ){
 			wp_send_json_error(array(
@@ -87,7 +113,7 @@ class MortgageCalculatorHandler
 			), 423);
 		}
  
-		if( ! $selectCalculator ){
+		if( ! $calculatorType ){
 			wp_send_json_error(array(
 				'message' => __("Please Select Calculator Type", 'ninja_mortgage')
 			), 423);
@@ -96,7 +122,7 @@ class MortgageCalculatorHandler
 
 		$tableData = array(
 			'post_title' => $tableTitle,
-			'post_content' => $selectCalculator,
+			'post_content' => $calculatorType,
 			'post_type' => CPT::$CPTName,
 			'post_status' => 'publish',
 		);
@@ -114,9 +140,7 @@ class MortgageCalculatorHandler
             'message'  => __('Table Successfully created'),
             'table_id' => $tableId
         ), 200);
-
-
-      
+    
 	}
 
 
@@ -127,7 +151,7 @@ class MortgageCalculatorHandler
 		$formattedTable = (object)array(
 			'ID' => $table->ID,
 			'post_title' => $table->post_title,
-			'post_content' => $table->post_content
+			'CalCulatorType' => $table->post_content
 		);
 		$tableConfig = get_post_meta($tableId, '_ninija_mortgage_table_config', true);
 		 wp_send_json_success(array(
@@ -156,7 +180,7 @@ class MortgageCalculatorHandler
             $formattedTables[] = array(
                 'ID'         => $table->ID,
                 'post_title' => $table->post_title,
-                'post_content' => $table->post_content,
+                'CalCulatorType' => $table->post_content,
                 'demo_url' => home_url().'?ninja_mortgage_calculator_preview='.$table->ID.'#ninja_mortgage_demo'
             );
         }
@@ -177,14 +201,21 @@ class MortgageCalculatorHandler
 	}
 
 
-	public static function updateTableConfig($tableId, $table_config)
+	public static function updateTableConfig($tableId, $table_config, $calculatorType)
 	{
+		
+		$UpdateMortgageCalculator = array(
+	      'ID'           => $tableId,
+	      'post_content' => $calculatorType
+		);
+		wp_update_post( $UpdateMortgageCalculator );
 		update_post_meta($tableId, '_ninija_mortgage_table_config', $table_config);
+
 		do_action('ninija_mortgage_table_config_updated', $tableId, $table_config);
 		$tableConfig = get_post_meta($tableId, '_ninija_mortgage_table_config', true);
 		wp_send_json_success(array(
             'message' => __('Table Content has been updated', 'ninja_mortgage'),
-            'updatedData' => $tableConfig
+            'updatedData' => $tableConfig,
         ));
 
         

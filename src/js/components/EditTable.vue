@@ -245,10 +245,10 @@ export default {
 							this.amortization_table = response.data.table_config.amortization_table;
 						}
 
-						if(response.data.table_config.post_content) {
-							this.calc_type = response.data.table_config.post_content;
+						if(response.data.table_config.CalCulatorType) {
+							this.calc_type = response.data.table_config.CalCulatorType;
 						} else {
-							this.calc_type = response.data.table.post_content;
+							this.calc_type = response.data.table.CalCulatorType;
 						}
 						
 						this.post_title = response.data.table.post_title;
@@ -322,8 +322,6 @@ export default {
 
 
 				this.updatedData = {
-					post_title: this.post_title,
-					post_content: this.calc_type,
 					selectedLabel: selected_label ,
 					selectedDefault: selected_default,
 					amortization_table: this.ammortization_table
@@ -335,7 +333,8 @@ export default {
                     action: 'ninja_mortgage_ajax_actions',
                     route: 'update_table_config',
                     table_id: this.table_id,
-					table_config: this.updatedData
+					table_config: this.updatedData,
+					calculator_type: this.calc_type
                 }).then(response => {
                     this.$notify.success({
                         title: 'Updated',

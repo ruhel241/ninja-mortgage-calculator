@@ -1,116 +1,65 @@
 <template>
-	<div id="mortgage_calculator">
-
-		<!-- Field Section -->
-		<div>
-			<div class="loanAmountSection">
-				<label>Loan Amount</label>
-				<input type="text" id="loanAmount" 
-						   	 	   name="loanAmount" 
-						           placeholder="Loan Amount"
-						           v-model="loanAmount">
-			</div>
-			<div class="downPamentSection">
-				<div class="downPament">
-					<label>Down Pament</label>
-					<input type="text" id="downPament" 
-							   	   	   name="downPament" 
-							           placeholder="Down Pament"
-							           v-model="downPament"
-							           >
-				</div>
-				<div class="downPamentPerc">
-					<label>Down Pament Percentage</label>
-					<input type="text" id="downPamentPerc" 
-						   	   	   name="downPamentPerc" 
-						           placeholder="Down Pament Percentage"
-						           v-model="downPamentPerc">
-				</div>
-			</div>
-			<div class="mortgageTermSection">
-				<div class="mortgageTerm">
-					<label>Mortgage Term</label>
-					<input type="text" id="mortgageTerm" 
-							   	   	   name="mortgageTerm" 
-							           placeholder="Mortgage Term"
-							           v-model="mortgageTerm">
-				</div>
-				<div class="mortgageTermMonth">
-					<label>Mortgage Term Month</label>
-					<input type="text" id="mortgageTermMonth" 
-							   	   	   name="mortgageTermMonth" 
-							           placeholder="Mortgage Term Month"
-							           v-model="mortgageTermMonth">
-				</div>
-			</div>
-			<div class="annualIntRateSection">
-				<label>Annual Interest Rate</label>
-				<input type="text" id="annualInterestRate" 
-						   	 	   name="annualInterestRate" 
-						           placeholder="Annual Interest Rate"
-						           v-model="annualInterestRate">
-			</div>
-		</div>
-		<!-- End Field Section -->
-
-		<!-- All Cost Section -->
-
-
-        <div style="margin-top: 10px; margin-left: 0;">
-
-            <p>Your estimated monthly payment:</p>
-            <h3><span>$</span> 5.66</h3>
-            <p>Total principal paid: $5.68</p>
-            <p>Total interest paid: $5.99</p>
-        
+    <div>
+        <div v-if="table_id && calculator_type=='mortgage_calculator'">
+            <app-mortgage-calc :tableTitle="table_title" 
+                               :mortgageCalcLabel="mortgage_calculator_label" 
+                               :mortgageCalcDef="mortgage_calculator_default"/>
         </div>
-
-	</div>
+        <div v-if="table_id && calculator_type=='mortgage_refinance'">
+            <app-mortgage-refinance :tableTitle="table_title"
+                                    :mortgageRefinanceLabel="mortgage_refinance_label"
+                                    :mortgageRefinanceDef="mortgage_refinance_default"/>
+        </div>
+        <div v-if="table_id && calculator_type=='mortgage_payment'">
+            <app-mortgage-payment />
+        </div>
+    </div>
 </template>
 
 <script>
-	export default {
-		data() {
-			return {
-				loanAmount: 120000,
-	            downPament: 20000,
-	            downPamentPerc: 0,
-	            mortgageTerm: 30,
-	            mortgageTermMonth: 360,
-	            annualInterestRate: 12
-			}
-		}
-	}
+    import MortgageCalculator from './_MortgageCalculator.vue'
+    import MortgageRefinance from './_MortgageRefinance.vue'
+    import MortgagePayment from './_MortgagePayment.vue'
+
+    export default {
+        name: 'user_calculator',
+        data() {
+            return {
+                calculator_type: '',
+                table_id: 0,
+                table_title: '',
+                mortgage_calculator_label: {},
+                mortgage_calculator_default: {},
+                mortgage_refinance_label: {},
+                mortgage_refinance_default: {}
+            }
+        },
+        components: {
+            'app-mortgage-calc': MortgageCalculator,
+            'app-mortgage-refinance': MortgageRefinance,
+            'app-mortgage-payment': MortgagePayment
+        },
+        created() {
+            console.log(window.ninja_mortgage_cal_vars)
+            var res = window.ninja_mortgage_cal_vars.post;
+            this.calculator_type = res.post_content;
+            console.log(this.calculator_type);
+            this.table_id = res.ID;
+            console.log(this.table_id);
+            this.table_title = res.post_title;
+            console.log(this.table_title);
+            if( this.calculator_type === 'mortgage_calculator' ) {
+                this.mortgage_calculator_label = window.ninja_mortgage_cal_vars.settings.selectedLabel;
+                console.log(this.mortgage_calculator_label);
+                this.mortgage_calculator_default = window.ninja_mortgage_cal_vars.settings.selectedDefault;
+                console.log(this.mortgage_calculator_default);
+            }
+            else if( this.calculator_type === 'mortgage_refinance' ) {
+                this.mortgage_refinance_label = window.ninja_mortgage_cal_vars.settings.selectedLabel;
+                console.log(this.mortgage_refinance_label);
+                this.mortgage_refinance_default = window.ninja_mortgage_cal_vars.settings.selectedDefault;
+                console.log(this.mortgage_refinance_default);
+            }
+        }   
+    }
 </script>
-
-<style>
-	input[type=text] {
-	    width: 100%;
-	    padding: 12px 20px;
-	    margin: 8px 0;
-	    display: inline-block;
-	    border: 1px solid #ccc;
-	    border-radius: 4px;
-    box-sizing: border-box;
-}
-
-	.downPament {
-		width: 50%;
-		float: left;
-	}
-
-	.downPamentPerc {
-		width: 50%;
-		float: left;
-	}
-
-	.mortgageTerm {
-		width: 50%;
-		float: left;
-	}
-
-	.mortgageTermMonth {
-		width: 50%;
-		float: left;
-	}
-</style>
