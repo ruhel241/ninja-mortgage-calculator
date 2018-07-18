@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import ElementUI from 'element-ui';
+import VeeValidate from 'vee-validate'
 
 import routes from './router.js';
 
@@ -9,8 +10,9 @@ import lang from 'element-ui/lib/locale/lang/en';
 
 locale.use(lang);
 Vue.use(VueRouter);
+Vue.use(VeeValidate)
 
-import { Button, Col, Dialog, Input, Select, Row, Option, Table,  Icon, TableColumn, Loading, Notification, Pagination, Tabs, TabPane, Popover, Switch } from 'element-ui';
+import { Button, Col, Dialog, Input, Select, Row, Option, Table,  Icon, TableColumn, Loading, Notification, Pagination, Tabs, TabPane, Popover, Switch, Message } from 'element-ui';
 
 Vue.use(Button)
 Vue.use(Col)
@@ -32,6 +34,7 @@ Vue.use(Switch)
 Vue.use(Loading.directive);
 Vue.prototype.$loading = Loading.service;
 Vue.prototype.$notify = Notification;
+Vue.prototype.$message = Message;
 
 import 'element-ui/lib/theme-chalk/index.css';
 import 'element-ui/lib/theme-chalk/table.css';

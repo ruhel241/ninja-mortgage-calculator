@@ -32,38 +32,115 @@
                     <div v-if="calcType=='mortgage_refinance'">
                         <el-row>
                             <el-col :span="24">
-                                <label>{{ allRefinanceCalcTable.currentlyMonthlyPayment }}</label>
+                                <label>Currently Monthly Payment</label>
                                 <el-input type="text" v-model="allRefinanceCalcTable.currentlyMonthlyPayment"></el-input>
                             </el-col>
                         </el-row>
                         <el-row>
                             <el-col :span="24">
-                                <label>{{ allRefinanceCalcTable.loanIntRate }}</label>
+                                <label>Current Loan interest rate</label>
                                 <el-input type="text" v-model="allRefinanceCalcTable.loanIntRate"></el-input>
                             </el-col>
                         </el-row>
                         <el-row>
                             <el-col :span="24">
-                                <label>{{ allRefinanceCalcTable.balanceMortgage }}</label>
+                                <label>Balance left on mortgage</label>
                                 <el-input type="text" v-model="allRefinanceCalcTable.balanceMortgage"></el-input>
                             </el-col>
                         </el-row>
                         <el-row>
                             <el-col :span="24">
-                                <label>{{ allRefinanceCalcTable.newIntRate }}</label>
+                                <label>New Interest Rate</label>
                                 <el-input type="text" v-model="allRefinanceCalcTable.newIntRate"></el-input>
                             </el-col>
                         </el-row>
                         <el-row>
                             <el-col :span="24">
-                                <label>{{ allRefinanceCalcTable.remainingLoanTerm }}</label>
+                                <label>Remaining Loan Term </label>
                                 <el-input type="text" v-model="allRefinanceCalcTable.remainingLoanTerm"></el-input>
                             </el-col>
                         </el-row>
                         <el-row>
                             <el-col :span="24">
-                                <label>{{ allRefinanceCalcTable.newLoanTerm }}</label>
+                                <label>New Loan Term </label>
                                 <el-input type="text" v-model="allRefinanceCalcTable.newLoanTerm"></el-input>
+                            </el-col>
+                        </el-row>
+                        <el-row>
+                            <el-col :span="24"> 
+                                <p><strong>Cost Section</strong></p>
+                            </el-col>
+                        </el-row>
+                        <el-row>
+                            <el-col :span="24">
+                                <label>Points</label>
+                                <el-input type="text" v-model="allRefinanceCalcTable.points"></el-input>
+                            </el-col>
+                        </el-row>
+                        <el-row>
+                            <el-col :span="24">
+                                <label>Application Fee</label>
+                                <el-input type="text" v-model="allRefinanceCalcTable.applicationFee"></el-input>
+                            </el-col>
+                        </el-row>
+                        <el-row>
+                            <el-col :span="24">
+                                <label>Credit Check</label>
+                                <el-input type="text" v-model="allRefinanceCalcTable.creditCheck"></el-input>
+                            </el-col>
+                        </el-row>
+                        <el-row>
+                            <el-col :span="24">
+                                <label>Attorney's fee (yours)</label>
+                                <el-input type="text" v-model="allRefinanceCalcTable.attorneyFeeYours"></el-input>
+                            </el-col>
+                        </el-row>
+                        <el-row>
+                            <el-col :span="24">
+                                <label>Attorney's fee (lenders)</label>
+                                <el-input type="text" v-model="allRefinanceCalcTable.attorneyFeeLenders"></el-input>
+                            </el-col>
+                        </el-row>
+                        <el-row>
+                            <el-col :span="24">
+                                <label>Title Search</label>
+                                <el-input type="text" v-model="allRefinanceCalcTable.titleSearch"></el-input>
+                            </el-col>
+                        </el-row>
+                        <el-row>
+                            <el-col :span="24">
+                                <label>Title Insurance</label>
+                                <el-input type="text" v-model="allRefinanceCalcTable.titleInsurance"></el-input>
+                            </el-col>
+                        </el-row>
+                        <el-row>
+                            <el-col :span="24">
+                                <label>Appraisal Fee</label>
+                                <el-input type="text" v-model="allRefinanceCalcTable.appraisalFee"></el-input>
+                            </el-col>
+                        </el-row>
+                        <el-row>
+                            <el-col :span="24">
+                                <label>Inspections</label>
+                                <el-input type="text" v-model="allRefinanceCalcTable.inspections"></el-input>
+                            </el-col>
+                        </el-row>
+                        <el-row>
+                            <el-col :span="24">
+                                <label>Local fees (taxes, transfers)</label>
+                                <el-input type="text" v-model="allRefinanceCalcTable.localFees"></el-input>
+                            </el-col>
+                        </el-row>
+                        <el-row>
+                            <el-col :span="24">
+                                <label>Document preparation</label>
+                                <el-input type="text" v-model="allRefinanceCalcTable.documentPreparation"></el-input>
+                            </el-col>
+                        </el-row>
+                        <el-row>
+                            <el-col :span="24">
+                                <label>Other</label>
+                                <el-input type="text" v-model="allRefinanceCalcTable.other"></el-input>
                             </el-col>
                         </el-row>
                     </div>
@@ -108,25 +185,55 @@
                         <el-row>
                             <el-col :span="24">
                                 <label>{{ allMortCalcTable.loanAmount }}</label>
-                                <el-input type="text" v-model="allMortCalcDefVal.loanAmountDefVal"></el-input>
+                                <el-input type="number" min=0 
+                                          name="loanAmountDefVal"
+                                          class="typeNumber"
+                                          v-model="allMortCalcDefVal.loanAmountDefVal"
+                                          pattern="/^-?\d+\.?\d*$/" onKeyPress="if(this.value.length==8) return false"
+                                          v-validate="rules"
+                                          :class="{'error': errors.has('loanAmountDefVal') }"></el-input>
+                                <span v-if="errors.has('loanAmountDefVal')" style="color: red;">
+                                    The {{ allMortCalcTable.loanAmount }} field must be lesser than 10000000
+                                </span>
                             </el-col>
                         </el-row>
                         <el-row>
                             <el-col :span="24">
                                 <label>{{ allMortCalcTable.downPament }}</label>
-                                <el-input type="text" v-model="allMortCalcDefVal.downPamentDefVal"></el-input>
+                                <el-input type="number" min=0 
+                                          name="downPamentDefVal"
+                                          class="typeNumber"
+                                          v-model="allMortCalcDefVal.downPamentDefVal"></el-input>
                             </el-col>
                         </el-row>
                         <el-row>
                             <el-col :span="24">
                                 <label>{{ allMortCalcTable.mortgageTerm }}</label>
-                                <el-input type="text" v-model="allMortCalcDefVal.mortgageTermDefVal"></el-input>
+                                <el-input type="number" min=0 
+                                          class="typeNumber"
+                                          v-model="allMortCalcDefVal.mortgageTermDefVal"
+                                          pattern="/^-?\d+\.?\d*$/" onKeyPress="if(this.value.length==2) return false"
+                                          name="mortgageTermDefVal"
+                                          v-validate="mortgageTermRules"
+                                          :class="{'error': errors.has('mortgageTermDefVal') }"></el-input>
+                                <span v-if="errors.has('mortgageTermDefVal')" style="color: red;">
+                                    The {{ allMortCalcTable.mortgageTerm }} field must be lesser than 40
+                                </span>
                             </el-col>
                         </el-row>
                         <el-row>
                             <el-col :span="24">
                                 <label>{{ allMortCalcTable.annualInterestRate }}</label>
-                                <el-input type="text" v-model="allMortCalcDefVal.annualInterestRateDefVal"></el-input>
+                                <el-input type="number" min=0 
+                                          class="typeNumber"
+                                          v-model="allMortCalcDefVal.annualInterestRateDefVal"
+                                          pattern="/^-?\d+\.?\d*$/" onKeyPress="if(this.value.length==2) return false"
+                                          name="annualInterestRateDefVal"
+                                          v-validate="annIntRules"
+                                          :class="{'error': errors.has('annualInterestRateDefVal') }"></el-input>
+                                <span v-if="errors.has('annualInterestRateDefVal')" style="color: red;">
+                                    The {{ allMortCalcTable.annualInterestRate }} field must be lesser than 99
+                                </span>
                             </el-col>
                         </el-row>
                     </div>
@@ -167,6 +274,83 @@
                             <el-col :span="24">
                                 <label>{{ allRefinanceCalcTable.newLoanTerm }}</label>
                                 <el-input type="text" v-model="allRefinanceDefVal.newLoanTermDefVal"></el-input>
+                            </el-col>
+                        </el-row>
+                        <el-row>
+                            <el-col :span="24"> 
+                                <p><strong>Cost Section</strong></p>
+                            </el-col>
+                        </el-row>
+                        <el-row>
+                            <el-col :span="24">
+                                <label>{{ allRefinanceCalcTable.points }}</label>
+                                <el-input type="text" v-model="allRefinanceDefVal.pointsDefVal"></el-input>
+                            </el-col>
+                        </el-row>
+                        <el-row>
+                            <el-col :span="24">
+                                <label>{{ allRefinanceCalcTable.applicationFee }}</label>
+                                <el-input type="text" v-model="allRefinanceDefVal.applicationFeeDefVal"></el-input>
+                            </el-col>
+                        </el-row>
+                        <el-row>
+                            <el-col :span="24">
+                                <label>{{ allRefinanceCalcTable.creditCheck }}</label>
+                                <el-input type="text" v-model="allRefinanceDefVal.creditCheckDefVal"></el-input>
+                            </el-col>
+                        </el-row>
+                        <el-row>
+                            <el-col :span="24">
+                                <label>{{ allRefinanceCalcTable.attorneyFeeYours }}</label>
+                                <el-input type="text" v-model="allRefinanceDefVal.attorneyFeeYoursDefVal"></el-input>
+                            </el-col>
+                        </el-row>
+                        <el-row>
+                            <el-col :span="24">
+                                <label>{{ allRefinanceCalcTable.attorneyFeeLenders }}</label>
+                                <el-input type="text" v-model="allRefinanceDefVal.attorneyFeeLendersDefVal"></el-input>
+                            </el-col>
+                        </el-row>
+                        <el-row>
+                            <el-col :span="24">
+                                <label>{{ allRefinanceCalcTable.titleSearch }}</label>
+                                <el-input type="text" v-model="allRefinanceDefVal.titleSearchDefVal"></el-input>
+                            </el-col>
+                        </el-row>
+                        <el-row>
+                            <el-col :span="24">
+                                <label>{{ allRefinanceCalcTable.titleInsurance }}</label>
+                                <el-input type="text" v-model="allRefinanceDefVal.titleInsuranceDefVal"></el-input>
+                            </el-col>
+                        </el-row>
+                        <el-row>
+                            <el-col :span="24">
+                                <label>{{ allRefinanceCalcTable.appraisalFee }}</label>
+                                <el-input type="text" v-model="allRefinanceDefVal.appraisalFeeDefVal"></el-input>
+                            </el-col>
+                        </el-row>
+                        <el-row>
+                            <el-col :span="24">
+                                <label>{{ allRefinanceCalcTable.inspections }}</label>
+                                <el-input type="text" v-model="allRefinanceDefVal.inspectionsDefVal"></el-input>
+                            </el-col>
+                        </el-row>
+                        <el-row>
+                            <el-col :span="24">
+                                <label>{{ allRefinanceCalcTable.localFees }}</label>
+                                <el-input type="text" v-model="allRefinanceDefVal.localFeesDefVal"></el-input>
+                            </el-col>
+                        </el-row>
+                        <el-row>
+                            <el-col :span="24">
+                                <label>{{ allRefinanceCalcTable.documentPreparation }}</label>
+                                <el-input type="text" v-model="allRefinanceDefVal.documentPreparationDefVal"></el-input>
+                            </el-col>
+                        </el-row>
+                        <el-row>
+                            <el-col :span="24">
+                                <label>{{ allRefinanceCalcTable.other }}</label>
+                                <el-input type="text" v-model="allRefinanceDefVal.otherDefVal"></el-input>
                             </el-col>
                         </el-row>
                     </div>
@@ -242,19 +426,64 @@ export default {
         return {
             activeName: 'first',
             mortgageTermMonth: 'Mortgage Term Month',
-            amortizationtable: this.amortTable
+            amortizationtable: this.amortTable,
+            acceptedValue: '',
+            acceptedMortgageTermValue: '',
+            acceptedAnnInt: ''
         }
     },
     methods: {
         handleClick(tab, event) {}
     },
     created() {
+        console.log("Amort Table: " + this.amortTable);
         console.log("From child " + this.amortizationtable)
+        console.log(typeof this.amortizationtable);
+        if(this.amortTable == 'true') {
+            this.amortizationtable = true;
+        }
+        else if( this.amortTable == 'false') {
+            this.amortizationtable = false;
+        }
+        this.acceptedValue = 10000000;
+        this.acceptedMortgageTermValue = 40;
+        this.acceptedAnnInt = 90;
     },
     watch: {
         amortizationtable() {
+            if(this.amortizationtable == true) {
+                this.amortizationtable = true;
+            }
+            else {
+                this.amortizationtable = false;
+            }
             this.$emit('changedAmort', this.amortizationtable);
+        }
+    },
+    computed: {
+        rules() {
+            return `max_value:${this.acceptedValue}`;
+        },
+        mortgageTermRules() {
+            return `max_value:${this.acceptedMortgageTermValue}`;
+        },
+        annIntRules() {
+            return `max_value:${this.acceptedAnnInt}`
         }
     }
 }
 </script>
+
+<style>
+    .error {
+        border-color: red;
+        padding: 0px;
+    }
+
+    .typeNumber {
+        width: 100%;
+        padding: 3px 0px;
+        border-radius: 4px;
+        box-sizing: border-box;
+    }
+</style>

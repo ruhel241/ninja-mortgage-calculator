@@ -3,7 +3,7 @@
         <h3>{{ tableTitle }}</h3>
 
 
-        <div class="currentlyMonthlyPaymentSection">
+        <div class="currentlyMonthlyPaymentSection"> 
             <div class="common">
                 <label>{{ mortgageRefinanceLabel.currentlyMonthlyPayment }}</label><br />
                 <input type="number" min=0 id="current_monthly_payment" 
@@ -233,19 +233,30 @@ export default {
         }
     },
     created() {
+        console.log(this.mortgageRefinanceDef);
+
         this.current_monthly_payment = this.mortgageRefinanceDef.currentlyMonthlyPaymentDefVal;
         this.current_loan_interest_rate = this.mortgageRefinanceDef.loanIntRateDefVal;
         this.balance = this.mortgageRefinanceDef.balanceMortgageDefVal;
         this.new_interest_rate = this.mortgageRefinanceDef.newIntRateDefVal;
         this.remaining_loan_term = this.mortgageRefinanceDef.remainingLoanTermDefVal;
         this.new_loan_term = this.mortgageRefinanceDef.newLoanTermDefVal;
+        this.points = this.mortgageRefinanceDef.pointsDefVal;
+        this.application_fee = this.mortgageRefinanceDef.applicationFeeDefVal;
+        this.credit_check = this.mortgageRefinanceDef.creditCheckDefVal;
+        this.attorney_fee_yours = this.mortgageRefinanceDef.attorneyFeeYoursDefVal;
+        this.attorney_fee_lenders = this.mortgageRefinanceDef.attorneyFeeLendersDefVal;
+        this.title_search = this.mortgageRefinanceDef.titleSearchDefVal;
+        this.title_insurance = this.mortgageRefinanceDef.titleInsuranceDefVal;
+        this.appraisal_fee = this.mortgageRefinanceDef.appraisalFeeDefVal;
+        this.local_fees = this.mortgageRefinanceDef.localFeesDefVal;
+        this.inspections = this.mortgageRefinanceDef.inspectionsDefVal;
+        this.document_preparation = this.mortgageRefinanceDef.documentPreparationDefVal;
+        this.other = this.mortgageRefinanceDef.otherDefVal;
 
         var new_interest_rate_upd = this.new_interest_rate / 12;
-        console.log(new_interest_rate_upd);
         var interest_rate = new_interest_rate_upd / 100;
-        console.log(interest_rate);
         var new_loan_term_mnt = this.new_loan_term * 12;
-        console.log(new_loan_term_mnt);
         this.monthly_payment = parseFloat( ( ( this.balance * interest_rate ) / ( 1 - ( 1 / Math.pow( ( 1 + interest_rate ), new_loan_term_mnt ) ) ) ) );
         this.monthly_savings = this.current_monthly_payment - this.monthly_payment;
         let balancePoints = parseFloat(( this.balance ) / 100);
@@ -253,7 +264,7 @@ export default {
         this.total_cost = this.pointsResult;
         this.acceptedValue = 10000000;
 
-        console.log(this.mortgageRefinanceDef);
+        
     },
     watch: {
         current_monthly_payment() {

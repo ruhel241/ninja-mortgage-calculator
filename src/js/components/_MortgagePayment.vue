@@ -4,31 +4,31 @@
 		<div class="loan-info">
 			<p><strong>Loan Information:</strong></p>
 			<div class="mortgage_amount">
-				<label>{{ mortgage_amount }}</label>
+				<label>{{ mortgagePaymentLabel.mortgageAmount }}</label>
 				<input type="number" min=0 name="mortgage_amount"
 					   id="mortgage_amount" v-model="mortgage_amount_def_val"
 					   class="typeNumbersField">
 			</div>
 			<div class="term_in_years">
-				<label>{{ term_in_years }}</label>
+				<label>{{ mortgagePaymentLabel.termInYears }}</label>
 				<input type="number" min=0 name="term_in_years"
 					   id="term_in_years" v-model="term_in_years_def_val"
 					   class="typeNumbersField">
 			</div>
 			<div class="interest_rate">
-				<label>{{ interest_rate }}</label>
+				<label>{{ mortgagePaymentLabel.interestRate }}</label>
 				<input type="number" min=0 name="interest_rate"
 					   id="interest_rate" v-model="interest_rate_def_val"
 					   class="typeNumbersField">
 			</div>
 			<div class="annual_property_taxes">
-				<label>{{ annual_property_taxes }}</label>
+				<label>{{ mortgagePaymentLabel.annualPropertyTaxes }}</label>
 				<input type="number" min=0 name="annual_property_taxes"
 					   id="annual_property_taxes" v-model="annual_property_taxes_def_val"
 					   class="typeNumbersField" placeholder="Annual Property Taxes">
 			</div>
 			<div class="annual_property_insurance">
-				<label>{{ annual_property_insurance }}</label>
+				<label>{{ mortgagePaymentLabel.annualHomeInsurance }}</label>
 				<input type="number" min=0 name="annual_property_insurance"
 					   id="annual_property_insurance" v-model="annual_property_insurance_def_val"
 					   class="typeNumbersField" placeholder="Annual Property Taxes">
@@ -67,6 +67,7 @@ export default {
         }
     },
     created() {
+    	console.log(this.mortgagePaymentLabel);
     	this.mortgage_amount = this.mortgagePaymentLabel.mortgageAmount;
     	this.mortgage_amount_def_val = this.mortgagePaymentDefault.mortgageAmountDefVal;
     	this.term_in_years = this.mortgagePaymentLabel.termInYears;

@@ -4,7 +4,13 @@
 	<el-row class="header">
 		<el-col :span="24">
 			<el-col :span="20">
-				<h1>{{ post_title }} <span><code>[ninja_mortgage_cal id="{{ table_id }}"]</code></span></h1>
+				<h1>{{ post_title }} 
+					<span>
+						<code class="copy_shortcode" :data-clipboard-text='`[ninja_mortgage_cal id="${table_id}"]`'>
+							[ninja_mortgage_cal id="{{table_id}}"]
+						</code>
+					</span>
+				</h1>
 			</el-col>
 			<el-col :span="4">
 				<el-button class="common_btn" @click="updateTableConfig()">Update</el-button>
@@ -45,7 +51,7 @@
 						<el-input type="text" v-model="all_mort_calc_table.downPament" disabled></el-input>
 					</el-col>
 					<el-col :span="12">
-						<label>Down Pament Percentage</label>
+						<label>{{ all_mort_calc_table.downPament }} Percentage</label>
 						<el-input type="text" placeholder="Down Pament Percentage" disabled></el-input>
 					</el-col>
 				</el-row>
@@ -55,7 +61,7 @@
 						<el-input type="text" placeholder="Mortgage Term" v-model="all_mort_calc_table.mortgageTerm" disabled></el-input>
 					</el-col>
 					<el-col :span="12">
-						<label>Mortgage term month</label>
+						<label>{{ all_mort_calc_table.mortgageTerm }} Month</label>
 						<el-input type="text" 
 										placeholder="Mortgage Term Month" 
 										disabled></el-input>
@@ -100,6 +106,76 @@
 					<el-col :span="24">
 						<label>{{ all_refinance_calc_table.newLoanTerm }}</label>
 						<el-input type="text" placeholder="New Loan Term" v-model="all_refinance_calc_table.newLoanTerm" disabled></el-input>
+					</el-col>
+				</el-row>
+				<el-row :gutter="15">
+					<el-col :span="24">
+						<p><strong>How much will it cost you?</strong></p>
+					</el-col>
+				</el-row>
+				<el-row :gutter="15">
+					<el-col :span="12">
+						<label>{{ all_refinance_calc_table.points }}</label>
+						<el-input type="text" v-model="all_refinance_calc_table.points" disabled></el-input>
+					</el-col>
+					<el-col :span="12">
+						<p>Costs of points: $0.00</p>
+					</el-col>
+				</el-row>
+				<el-row :gutter="15">
+					<el-col :span="12">
+						<label>{{ all_refinance_calc_table.applicationFee }}</label>
+						<el-input type="text" v-model="all_refinance_calc_table.applicationFee" disabled></el-input>
+					</el-col>
+					<el-col :span="12">
+						<label>{{ all_refinance_calc_table.creditCheck }}</label>
+						<el-input type="text" v-model="all_refinance_calc_table.creditCheck" disabled></el-input>
+					</el-col>
+				</el-row>
+				<el-row :gutter="15">
+					<el-col :span="12">
+						<label>{{ all_refinance_calc_table.attorneyFeeYours }}</label>
+						<el-input type="text" v-model="all_refinance_calc_table.attorneyFeeYours" disabled></el-input>
+					</el-col>
+					<el-col :span="12">
+						<label>{{ all_refinance_calc_table.attorneyFeeLenders }}</label>
+						<el-input type="text" v-model="all_refinance_calc_table.attorneyFeeLenders" disabled></el-input>
+					</el-col>
+				</el-row>
+				<el-row :gutter="15">
+					<el-col :span="12">
+						<label>{{ all_refinance_calc_table.titleSearch }}</label>
+						<el-input type="text" v-model="all_refinance_calc_table.titleSearch" disabled></el-input>
+					</el-col>
+					<el-col :span="12">
+						<label>{{ all_refinance_calc_table.titleInsurance }}</label>
+						<el-input type="text" v-model="all_refinance_calc_table.titleInsurance" disabled></el-input>
+					</el-col>
+				</el-row>
+				<el-row :gutter="15">
+					<el-col :span="12">
+						<label>{{ all_refinance_calc_table.appraisalFee }}</label>
+						<el-input type="text" v-model="all_refinance_calc_table.appraisalFee" disabled></el-input>
+					</el-col>
+					<el-col :span="12">
+						<label>{{ all_refinance_calc_table.inspections }}</label>
+						<el-input type="text" v-model="all_refinance_calc_table.inspections" disabled></el-input>
+					</el-col>
+				</el-row>
+				<el-row :gutter="15">
+					<el-col :span="12">
+						<label>{{ all_refinance_calc_table.localFees }}</label>
+						<el-input type="text" v-model="all_refinance_calc_table.localFees" disabled></el-input>
+					</el-col>
+					<el-col :span="12">
+						<label>{{ all_refinance_calc_table.documentPreparation }}</label>
+						<el-input type="text" v-model="all_refinance_calc_table.documentPreparation" disabled></el-input>
+					</el-col>
+				</el-row>
+				<el-row :gutter="15">
+					<el-col :span="24">
+						<label>{{ all_refinance_calc_table.other }}</label>
+						<el-input type="text" v-model="all_refinance_calc_table.other" disabled></el-input>
 					</el-col>
 				</el-row>
 			</div>
@@ -147,7 +223,7 @@
 					  :allMortCalcDefVal="all_mort_calc_table_def_val"
 					  :allRefinanceDefVal="all_refinance_calc_table_def_val"
 					  :allPaymentCalcTableDefVal="all_payment_calc_table_def_val"
-					  :amortTable="amortization_table"
+					  :amortTable="amort_res"
 					  @changedAmort="updateAmort($event)"></app-tabs>
 		</el-col>
 	</el-row>
@@ -156,6 +232,7 @@
 
 <script>
 import Tabs from './Tabs.vue'
+import Clipboard from 'clipboard'
 export default {
 		name: 'editTable',
 		components: {
@@ -169,9 +246,9 @@ export default {
 				calc_type: '',
 				tableConfig:'',
 				activeName: '',
+				amort_res: '',
 				MortgageCalConfig: {},
 				settings: {},
-				amortization_table: false,
 				all_mort_calc_table: {
 					loanAmount: 'Loan Amount', 
 					downPament: 'Down Pament',
@@ -190,7 +267,19 @@ export default {
 					balanceMortgage: 'Balance left on mortgage',
 					newIntRate: 'New Interest Rate', 
 					remainingLoanTerm: 'Remaining Loan Term',
-					newLoanTerm: 'New Loan Term'
+					newLoanTerm: 'New Loan Term',
+					points: 'Points',
+					applicationFee: 'Application Fee',
+					creditCheck: 'Credit Check', 
+					attorneyFeeYours: 'Attorney\'s Fee(yours)',
+					attorneyFeeLenders: 'Attorney\'s Fee(lenders)',
+					titleSearch: 'Title Search', 
+					titleInsurance: 'Title Insurance',
+					appraisalFee: 'Appraisal Fee',
+					inspections: 'Inspections',
+					localFees: 'Local Fees (Taxes, Transfers)',
+					documentPreparation: 'Document Preparation',
+					other: 'Other'
 				},
 				all_refinance_calc_table_def_val: {
 					currentlyMonthlyPaymentDefVal: 1200,
@@ -198,7 +287,19 @@ export default {
 					balanceMortgageDefVal: 25000,
 					newIntRateDefVal: 15,
 					remainingLoanTermDefVal: 20,
-					newLoanTermDefVal: 26
+					newLoanTermDefVal: 26,
+					pointsDefVal: 1,
+					applicationFeeDefVal: 0,
+					creditCheckDefVal: 0, 
+					attorneyFeeYoursDefVal: 0,
+					attorneyFeeLendersDefVal: 0,
+					titleSearchDefVal: 0, 
+					titleInsuranceDefVal: 0,
+					appraisalFeeDefVal: 0,
+					inspectionsDefVal: 0,
+					localFeesDefVal: 0,
+					documentPreparationDefVal: 0,
+					otherDefVal: 0
 				},
 				all_payment_calc_table: {
 					mortgageAmount: 'Mortgage Amount',
@@ -242,9 +343,7 @@ export default {
 				}).then(
 					(response) => {
 						console.log(response)
-						if(response.data.table_config.amortization_table) {
-							this.amortization_table = response.data.table_config.amortization_table;
-						}
+						
 
 						if(response.data.table_config.CalCulatorType) {
 							this.calc_type = response.data.table_config.CalCulatorType;
@@ -256,13 +355,19 @@ export default {
 
 						if(this.calc_type == 'mortgage_calculator' ) {
 							
-							console.log("Amortization table " + response.data.table_config.amortization_table)
+							console.log("Amortization table " + response.data.table_config.settings)
 							if(response.data.table_config.selectedLabel) {
 								this.all_mort_calc_table = response.data.table_config.selectedLabel;
 							}
 
 							if(response.data.table_config.selectedDefault) {
 								this.all_mort_calc_table_def_val = response.data.table_config.selectedDefault;
+							}
+
+							if(response.data.table_config.settings) {
+								var amortization_table = response.data.table_config.settings;
+								this.amort_res = amortization_table;
+								console.log("Fetching from DB : " + this.amortization_table);
 							}
 
 						}
@@ -360,10 +465,20 @@ export default {
 			updateAmort(ammortization) {
 				this.ammortization_table = ammortization;
 				console.log("child passing as emit " + this.ammortization_table)
-			}
+			},
+            clipboardRender(){
+                var clipboard = new Clipboard('.copy_shortcode');
+                clipboard.on('success', (e) => {
+                    this.$message({
+                        message: 'Copied to Clipboard!',
+                        type: 'success'
+                    })
+                })
+            }
 		},
 		created() {
 			this.fetchTable();
+			this.clipboardRender();
 		}
 	}
 </script>
@@ -418,5 +533,11 @@ export default {
 .fields h2{
 	margin-top: 0;
 }
+
+.el-message--success {
+        z-index: 999999!important;
+        top: 5px;
+    }
+
 
 </style>

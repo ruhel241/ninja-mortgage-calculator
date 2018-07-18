@@ -48,7 +48,8 @@
             <el-table-column 
                 label="ShortCode">
                 <template slot-scope="scope">
-                    <code>[ninja_mortgage_cal id="{{ scope.row.ID }}"]</code>
+                    <code class="copy" :data-clipboard-text='`[ninja_mortgage_cal id="${scope.row.ID}"]`'>[ninja_mortgage_cal id="{{ scope.row.ID }}"]</code>             
+
                 </template>
             </el-table-column>
 
@@ -103,6 +104,7 @@
 
 <script>
 import DeleteTable from './deleteTable.vue';
+import Clipboard from 'clipboard';
 
 export default {
     name: 'all_mortgage_tables',
@@ -176,72 +178,84 @@ export default {
         },
         
         fetchTables() {
-                this.tableLoading = true;
-                jQuery.get(ajaxurl, {
-                    action: 'ninja_mortgage_ajax_actions',
-                    route: 'get_tables',
-                    per_page: this.per_page,
-                    page_number: this.page_number
+            this.tableLoading = true;
+            jQuery.get(ajaxurl, {
+                action: 'ninja_mortgage_ajax_actions',
+                route: 'get_tables',
+                per_page: this.per_page,
+                page_number: this.page_number
+            })
+                .then(response => {
+                    this.tableData = response.data.tables;
+                    this.total = response.data.total;
+                    console.log(response)
                 })
-                    .then(response => {
-                        this.tableData = response.data.tables;
-                        this.total = response.data.total;
-                        console.log(response)
+                .fail(error => {
+                     console.log(error);
+                })
+                .always(() => {
+                    this.tableLoading = false
+                })
+        },
+
+        changePage(pageNumber) {
+            this.page_number = pageNumber;
+            this.fetchTables();
+        },
+        
+        deleteItem(tableId) {
+            jQuery.post(ajaxurl, {
+                action: 'ninja_mortgage_ajax_actions',
+                route: 'delete_table',
+                table_id: tableId
+            }).then(
+                response => {
+                    this.$notify.success({
+                        title: 'Deleted',
+                        message: response.data.message
                     })
-                    .fail(error => {
-                         console.log(error);
-                    })
-                    .always(() => {
-                        this.tableLoading = false
-                    })
-            },
-            changePage(pageNumber) {
-                this.page_number = pageNumber;
-                this.fetchTables();
-            },
-            deleteItem(tableId) {
-                jQuery.post(ajaxurl, {
-                    action: 'ninja_mortgage_ajax_actions',
-                    route: 'delete_table',
-                    table_id: tableId
-                }).then(
-                    response => {
-                        this.$notify.success({
-                            title: 'Deleted',
-                            message: response.data.message
-                        })
-                        this.total = this.total - 1;
-                        if(this.total == this.per_page) {
-                            this.page_number = 1;
+                    this.total = this.total - 1;
+                    if(this.total == this.per_page) {
+                        this.page_number = 1;
+                    } 
+                   else  if( (this.total % 2 != 0) && (this.total % this.per_page) == 0 ) {
+                        var res = parseInt(this.total / 2);
+                        console.log(res)
+                        if( this.total - ((res * 2) + 1) == 0 && this.total != this.per_page) {
+                            this.page_number = this.page_number - 1;
+                        }    
+                    }
+                    else if(this.total % 2 == 0 && (this.total % this.per_page) == 0) {
+                        var res = parseInt(this.total / 2);
+                        if( this.total - ((res * 2)) == 0 && this.total != this.per_page ) {
+                            this.page_number = this.page_number - 1;
                         } 
-                       else  if( (this.total % 2 != 0) && (this.total % this.per_page) == 0 ) {
-                            var res = parseInt(this.total / 2);
-                            console.log(res)
-                            if( this.total - ((res * 2) + 1) == 0 && this.total != this.per_page) {
-                                this.page_number = this.page_number - 1;
-                            }    
-                        }
-                        else if(this.total % 2 == 0 && (this.total % this.per_page) == 0) {
-                            var res = parseInt(this.total / 2);
-                            if( this.total - ((res * 2)) == 0 && this.total != this.per_page ) {
-                                this.page_number = this.page_number - 1;
-                            } 
-                        }                 
-                        this.fetchTables();
-                    }
-                ).fail(
-                    error => {
-                        this.$notify.error({
-                            title: 'Error', 
-                            message: error.responseJSON.data.message
-                        })
-                    }
-                )
+                    }                 
+                    this.fetchTables();
+                }
+            ).fail(
+                error => {
+                    this.$notify.error({
+                        title: 'Error', 
+                        message: error.responseJSON.data.message
+                    })
+                }
+            )
+            },
+            clipboardRender(){
+                var clipboard = new Clipboard('.copy');
+                clipboard.on('success', (e) => {
+                    this.$message({
+                        message: 'Copied to Clipboard!',
+                        type: 'success'
+                    });
+                });
             }
 
     },
     created() {
         this.fetchTables();
+        this.clipboardRender();
     }
 }
 </script>
@@ -278,5 +292,10 @@ export default {
 
     hr {
         color: #DDDDDD;
+    }
+
+    .el-message--success {
+        z-index: 999999!important;
+        top: 5px;
     }
 </style>

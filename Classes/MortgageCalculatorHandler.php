@@ -3,7 +3,7 @@
 
 class MortgageCalculatorHandler 
 {
-	
+	public static $selectedCalc;
 
 	public static function handleAjaxCalls()
 	{
@@ -98,7 +98,7 @@ class MortgageCalculatorHandler
 				'message' => __("Please Select Calculator Type", 'ninja_mortgage')
 			), 423);
 		}
-	
+
 
 		$tableData = array(
 			'post_title' => $tableTitle,
@@ -106,6 +106,11 @@ class MortgageCalculatorHandler
 			'post_type' => CPT::$CPTName,
 			'post_status' => 'publish',
 		);
+
+		self::$selectedCalc = $calculatorType;
+
+
+
 
 		$tableId = wp_insert_post($tableData);
 
@@ -210,71 +215,171 @@ class MortgageCalculatorHandler
 
 
     public static function getMortgageCalConfig()
-    {
-    	return array(
-			
-			'all_mort_calc_table' => array(
-                'loanAmountLabel' 	     => 'Loan Amount',
-                'downPamentLabel'	     => 'Down Pament',
-                'mortgageTermLabel'	     => 'Mortgage Term',
-                'annualInterestRateLabel' => 'Annual Interest Rate',
-            ),
+    {	
 
-			'all_mort_calc_table_def_val' => array(
-				'loanAmountDefVal' 		  => 120000,
-				'downPamentDefVal'		  => 20000,
-				'mortgageTermDefVal'	  => 30,
-				'annualInterestRateDefVal'=> 12
-			),
+    	if( self::$selectedCalc == 'mortgage_calculator' ) {
+
+    		return array(
+			
+				'selectedLabel' => array(
+	                'loanAmount' 	     => 'Loan Amount',
+	                'downPament'	     => 'Down Pament',
+	                'mortgageTerm'	     => 'Mortgage Term',
+	                'annualInterestRate' => 'Annual Interest Rate',
+	            ),
+
+				'selectedDefault' => array(
+					'loanAmountDefVal' 		  => 120000,
+					'downPamentDefVal'		  => 20000,
+					'mortgageTermDefVal'	  => 30,
+					'annualInterestRateDefVal'=> 12
+				),
+					
+				'settings' => false
+			);
+
+    	} 
+
+    	elseif( self::$selectedCalc == 'mortgage_refinance' ) {
+
+    		return array(
+
+    			'selectedLabel' => array(
+					'currentlyMonthlyPayment' => 'Currently Monthly Payment',
+					'loanIntRate' 			  => 'Current Loan interest rate',
+					'balanceMortgage'		  => 'Balance left on mortgage',
+					'newIntRate' 			  => 'New Interest Rate',
+					'remainingLoanTerm'		  => 'Remaining Loan Term',
+					'newLoanTerm' 			  => 'New Loan Term',
+					'points'				  => 'Points',
+					'applicationFee' 		  => 'Application Fee',
+					'creditCheck' 			  => 'Credit Check', 
+					'attorneyFeeYours'        => 'Attorney\'s Fee(yours)',
+					'attorneyFeeLenders'      => 'Attorney\'s Fee(lenders)',
+					'titleSearch'             => 'Title Search', 
+					'titleInsurance' 		  => 'Title Insurance',
+					'appraisalFee' 			  => 'Appraisal Fee',
+					'inspections'			  => 'Inspections',
+					'localFees'               => 'Local Fees (Taxes, Transfers)',
+					'documentPreparation'     => 'Document Preparation',
+					'other'                   => 'Other'
+				),
 				
-			'settings' => true,
+				'selectedDefault' => array(
+					'currentlyMonthlyPaymentDefVal'=> 1200,
+					'loanIntRateDefVal'			   => 25,
+					'balanceMortgageDefVal'		   => 25000,
+					'newIntRateDefVal'			   => 15,
+					'remainingLoanTermDefVal'	   => 20,
+					'newLoanTermDefVal'			   => 26,
+					'pointsDefVal' 				   => 1,
+					'applicationFeeDefVal' 		   => 0,
+					'creditCheckDefVal'			   => 0, 
+					'attorneyFeeYoursDefVal'	   => 0,
+					'attorneyFeeLendersDefVal' 	   => 0,
+					'titleSearchDefVal'			   => 0, 
+					'titleInsuranceDefVal' 		   => 0,
+					'appraisalFeeDefVal'           => 0,
+					'inspectionsDefVal'			   => 0,
+					'localFeesDefVal' 			   => 0,
+					'documentPreparationDefVal'    => 0,
+					'otherDefVal'                  => 0
+				)
 
-			'all_refinance_calc_table' => array(
-				'currentlyMonthlyPayment' => 'Currently Monthly Payment',
-				'loanIntRate' 			  => 'Current Loan interest rate',
-				'balanceMortgage'		  => 'Balance left on mortgage',
-				'newIntRate' 			  => 'New Interest Rate',
-				'remainingLoanTerm'		  => 'Remaining Loan Term',
-				'newLoanTerm' 			  => 'New Loan Term'
-			),
+    		);
+
+    	}
+
+    	elseif( self::$selectedCalc == 'mortgage_payment' ) {
+
+    		return array(
+
+    			'selectedLabel' => array(
+					'mortgageAmount' 	  => 'Mortgage Amount',
+					'termInYears' 		  => 'Term in years',
+					'interestRate' 		  => 'Interest Rate',
+					'annualPropertyTaxes' => 'Annual Property Taxes',
+					'annualHomeInsurance' => 'Annual Home Insurance'
+				),
+
+
+				'selectedDefault' => array(
+					'mortgageAmountDefVal'	   => 2500,
+					'termInYearsDefVal'		   => 5,
+					'interestRateDefVal'	   => 25,
+					'annualHomeInsuranceDefVal'=> 3500,
+					'annualPropertyTaxesDefVal'=> 1500
+				)
+
+    		);
+
+    	}
+    	
+
+  //   	return array(
 			
-			'all_refinance_calc_table_def_val' => array(
-				'currentlyMonthlyPaymentDefVal'=> 1200,
-				'loanIntRateDefVal'			   => 25,
-				'balanceMortgageDefVal'		   => 25000,
-				'newIntRateDefVal'			   => 15,
-				'remainingLoanTermDefVal'	   => 20,
-				'newLoanTermDefVal'			   => 26
-			),
+		// 	'all_mort_calc_table' => array(
+  //               'loanAmountLabel' 	     => 'Loan Amount',
+  //               'downPamentLabel'	     => 'Down Pament',
+  //               'mortgageTermLabel'	     => 'Mortgage Term',
+  //               'annualInterestRateLabel' => 'Annual Interest Rate',
+  //           ),
+
+		// 	'all_mort_calc_table_def_val' => array(
+		// 		'loanAmountDefVal' 		  => 120000,
+		// 		'downPamentDefVal'		  => 20000,
+		// 		'mortgageTermDefVal'	  => 30,
+		// 		'annualInterestRateDefVal'=> 12
+		// 	),
+				
+		// 	'settings' => true,
+
+		// 	'all_refinance_calc_table' => array(
+		// 		'currentlyMonthlyPayment' => 'Currently Monthly Payment',
+		// 		'loanIntRate' 			  => 'Current Loan interest rate',
+		// 		'balanceMortgage'		  => 'Balance left on mortgage',
+		// 		'newIntRate' 			  => 'New Interest Rate',
+		// 		'remainingLoanTerm'		  => 'Remaining Loan Term',
+		// 		'newLoanTerm' 			  => 'New Loan Term'
+		// 	),
+			
+		// 	'all_refinance_calc_table_def_val' => array(
+		// 		'currentlyMonthlyPaymentDefVal'=> 1200,
+		// 		'loanIntRateDefVal'			   => 25,
+		// 		'balanceMortgageDefVal'		   => 25000,
+		// 		'newIntRateDefVal'			   => 15,
+		// 		'remainingLoanTermDefVal'	   => 20,
+		// 		'newLoanTermDefVal'			   => 26
+		// 	),
 		
-			'all_payment_calc_table' => array(
-				'mortgageAmount' 	  => 'Mortgage Amount',
-				'termInYears' 		  => 'Term in years',
-				'interestRate' 		  => 'Interest Rate',
-				'annualPropertyTaxes' => 'Annual Property Taxes',
-				'annualHomeInsurance' => 'Annual Home Insurance'
-			),
+		// 	'all_payment_calc_table' => array(
+		// 		'mortgageAmount' 	  => 'Mortgage Amount',
+		// 		'termInYears' 		  => 'Term in years',
+		// 		'interestRate' 		  => 'Interest Rate',
+		// 		'annualPropertyTaxes' => 'Annual Property Taxes',
+		// 		'annualHomeInsurance' => 'Annual Home Insurance'
+		// 	),
 
 
-			'all_payment_calc_table_def_val' => array(
-				'mortgageAmountDefVal'	   => 2500,
-				'termInYearsDefVal'		   => 5,
-				'interestRateDefVal'	   => 25,
-				'annualHomeInsuranceDefVal'=> 3500,
-				'annualPropertyTaxesDefVal'=> 1500
-			),
+		// 	'all_payment_calc_table_def_val' => array(
+		// 		'mortgageAmountDefVal'	   => 2500,
+		// 		'termInYearsDefVal'		   => 5,
+		// 		'interestRateDefVal'	   => 25,
+		// 		'annualHomeInsuranceDefVal'=> 3500,
+		// 		'annualPropertyTaxesDefVal'=> 1500
+		// 	),
 
 
-			'component_settings' => array(
-                array('key' => 'all_mort_calc_table'),
-                array('key' => 'all_mort_calc_table_def_val'),
-				array('key' => 'all_refinance_calc_table'),
-                array('key' => 'all_refinance_calc_table_def_val'),
-                array('key' => 'all_payment_calc_table'),
-                array('key' => 'all_payment_calc_table_def_val'),
-            ),
+		// 	'component_settings' => array(
+  //               array('key' => 'all_mort_calc_table'),
+  //               array('key' => 'all_mort_calc_table_def_val'),
+		// 		array('key' => 'all_refinance_calc_table'),
+  //               array('key' => 'all_refinance_calc_table_def_val'),
+  //               array('key' => 'all_payment_calc_table'),
+  //               array('key' => 'all_payment_calc_table_def_val'),
+  //           ),
 
-		);
+		// );
     }
 
 

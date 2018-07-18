@@ -28,7 +28,7 @@
 							           >
 				</div>
 				<div class="downPamentPerc">
-					<label>Down Pament Percentage</label>
+					<label>{{ mortgageCalcLabel.downPament }} Percentage</label>
 					<input type="number" min=0 id="downPamentPerc" 
 								   class="typeNumbers"
 						   	   	   name="downPamentPerc" 
@@ -52,7 +52,7 @@
 	                </span>
 				</div>
 				<div class="mortgageTermMonth">
-					<label>Mortgage Month Term</label>
+					<label>{{ mortgageCalcLabel.mortgageTerm }} Month</label>
 					<input type="number" min=0 id="mortgageTermMonth"
 									   class="typeNumbers" 
 							   	  	   name="mortgageTermMonth" 
@@ -74,7 +74,7 @@
 						           placeholder="Annual Interest Rate"
 						           v-model="annualInterestRate"
 						           pattern="/^-?\d+\.?\d*$/" onKeyPress="if(this.value.length==2) return false;"
-						           v-validate="interest_rate_rule"
+						           v-validate="annual_int_rate_term"
                                    :class="{'error': errors.has('annualInterestRate') }">
                 <span v-if="errors.has('annualInterestRate')" style="color: red;">
                     {{ errors.first('annualInterestRate') }}
@@ -90,7 +90,7 @@
 
             <p>Your estimated monthly payment:</p>
             <h1><span>$</span> {{ (monthlyPayment).toFixed(2) }}</h1>
-            <p>Total principal paid: ${{ principalPaid.toFixed(2) }}</p>
+            <p>Total principal paid: ${{ principalPaid }}</p>
             <p>Total interest paid: ${{ (total_interest).toFixed(2) }}</p>
         
         </div>
@@ -190,7 +190,7 @@
             acceptedValue: '',
             acceptedTerm: '',
             acceptedTermMonth: '',
-            acceptInterestRate: ''
+            acceptAnnInterestRate: ''
         }
     },
     created() {
@@ -226,7 +226,7 @@
         this.acceptedValue = 10000000;
         this.acceptedTerm = 40;
         this.acceptedTermMonth = 480;
-        this.acceptInterestRate = 99;
+        this.acceptAnnInterestRate = 90;
     },
     computed: {
         total_interest() {
@@ -258,11 +258,11 @@
             }
             return `required|max_value:${this.acceptedTermMonth}`;
         },
-        interest_rate_rule() {
-            if( !this.acceptInterestRate ) {
+        annual_int_rate_term() {
+            if( !this.acceptAnnInterestRate ) {
                 return 'required';
             }
-            return `required|max_value:${this.acceptInterestRate}`;
+            return `required|max_value:${this.acceptAnnInterestRate}`;
         }
     },
     
@@ -370,6 +370,10 @@
             if( this.principalPaid == 0 ) {
                 this.principalPaid = this.loanAmount;
             }
+
+            if( this.loanAmount != 0 ) {
+                this.principalPaid = parseFloat( this.loanAmount - this.downPament );
+            }
             
             if( this.annualInterestRate == 0 || this.annualInterestRate == '' ) {
                 this.monthlyPayment = 0;
@@ -395,7 +399,7 @@
     },
     filters: {
         capitalize: function (str) {
-        
+            
             return str.charAt(0).toUpperCase() + str.slice(1)
         
         }
