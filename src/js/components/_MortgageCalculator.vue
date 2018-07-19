@@ -95,7 +95,7 @@
         
         </div>
 
-        <div class="btns" v-if="amortizationTable=='true'">
+        <div class="btns" v-if="amortizationTable==true">
             <button @click="paymentSchedule()" v-if="showAmortBtn" class="paymentBtn">Payment Schedule</button>
             <button @click="hidePaymentSchedule()" v-if="!showAmortBtn" class="hidePaymentBtn">Hide Payment Schedule</button>
         </div>

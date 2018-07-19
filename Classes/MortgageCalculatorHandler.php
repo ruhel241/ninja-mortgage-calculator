@@ -34,7 +34,11 @@ class MortgageCalculatorHandler
 
         if ($route == 'update_table_config') {
             $tableId = intval($_REQUEST['table_id']);
-            $table_config = wp_unslash($_REQUEST['table_config']);
+            $table_con = wp_unslash($_REQUEST['table_config']);
+
+            $table_config = json_decode(trim(stripslashes($table_con)), true);
+
+
 			$calculatorType = sanitize_text_field($_REQUEST['calculator_type']); 
 			static::updateTableConfig($tableId, $table_config, $calculatorType);
         }

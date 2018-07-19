@@ -72033,6 +72033,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
 
 
 
@@ -72049,7 +72051,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			calc_type: '',
 			tableConfig: '',
 			activeName: '',
-			amort_res: '',
+			amort_res: 'no',
+			ammortization_table: '',
 			MortgageCalConfig: {},
 			settings: {},
 			all_mort_calc_table: {
@@ -72168,8 +72171,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 					if (response.data.table_config.settings) {
 						var amortization_table = response.data.table_config.settings;
-						_this.amort_res = amortization_table;
-						console.log("Fetching from DB : " + _this.amortization_table);
+						if (amortization_table == true) {
+							console.log('Yes it is true');
+							_this.amort_res = 'yes';
+						} else {
+							console.log('No it is not true');
+							_this.amort_res = 'no';
+						}
 					}
 				} else if (_this.calc_type == 'mortgage_refinance') {
 
@@ -72190,6 +72198,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 						_this.all_payment_calc_table_def_val = response.data.table_config.selectedDefault;
 					}
 				}
+				console.log(_this.amort_res);
 			}).fail(function (error) {
 				console.log(error);
 			});
@@ -72198,8 +72207,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			var _this2 = this;
 
 			this.bool = true;
-
-			console.log(this.all_mort_calc_table_def_val);
 
 			if (this.calc_type === 'mortgage_calculator') {
 				var selected_label = this.all_mort_calc_table;
@@ -72212,6 +72219,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 				var selected_label = this.all_payment_calc_table;
 				var selected_default = this.all_payment_calc_table_def_val;
 			}
+
+			console.log(amort_table);
 
 			console.log(selected_label);
 
@@ -72227,7 +72236,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 				action: 'ninja_mortgage_ajax_actions',
 				route: 'update_table_config',
 				table_id: this.table_id,
-				table_config: this.updatedData,
+				table_config: JSON.stringify(this.updatedData),
 				calculator_type: this.calc_type
 			}).then(function (response) {
 				_this2.$notify.success({
@@ -72248,7 +72257,15 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			});
 		},
 		updateAmort: function updateAmort(ammortization) {
-			this.ammortization_table = ammortization;
+			this.amort_res = ammortization;
+			console.log("Hello" + ammortization);
+			if (ammortization == 'yes') {
+				this.ammortization_table = true;
+				console.log(this.ammortization_table);
+			} else if (ammortization == 'no') {
+				this.ammortization_table = false;
+			}
+
 			console.log("child passing as emit " + this.ammortization_table);
 		},
 		clipboardRender: function clipboardRender() {
@@ -72787,40 +72804,28 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         return {
             activeName: 'first',
             mortgageTermMonth: 'Mortgage Term Month',
-            amortizationtable: this.amortTable,
             acceptedValue: '',
             acceptedMortgageTermValue: '',
-            acceptedAnnInt: ''
+            acceptedAnnInt: '',
+            passed: ''
         };
     },
 
     methods: {
-        handleClick: function handleClick(tab, event) {}
+        handleClick: function handleClick(tab, event) {},
+        updateAmort: function updateAmort(value) {
+            this.$emit('changedAmort', value);
+        }
     },
     created: function created() {
         console.log("Amort Table: " + this.amortTable);
         console.log("From child " + this.amortizationtable);
         console.log(_typeof(this.amortizationtable));
-        if (this.amortTable == 'true') {
-            this.amortizationtable = true;
-        } else if (this.amortTable == 'false') {
-            this.amortizationtable = false;
-        }
         this.acceptedValue = 10000000;
         this.acceptedMortgageTermValue = 40;
         this.acceptedAnnInt = 90;
     },
 
-    watch: {
-        amortizationtable: function amortizationtable() {
-            if (this.amortizationtable == true) {
-                this.amortizationtable = true;
-            } else {
-                this.amortizationtable = false;
-            }
-            this.$emit('changedAmort', this.amortizationtable);
-        }
-    },
     computed: {
         rules: function rules() {
             return 'max_value:' + this.acceptedValue;
@@ -72830,6 +72835,15 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         },
         annIntRules: function annIntRules() {
             return 'max_value:' + this.acceptedAnnInt;
+        },
+
+        amortizationtable: {
+            get: function get() {
+                return this.amortTable;
+            },
+            set: function set(newValue) {
+                this.updateAmort(newValue);
+            }
         }
     }
 });
@@ -74913,8 +74927,8 @@ var render = function() {
                             _vm._v(" "),
                             _c("el-switch", {
                               attrs: {
-                                "active-color": "#13ce66",
-                                "inactive-color": "#ff4949"
+                                "active-value": "yes",
+                                "inactive-value": "no"
                               },
                               model: {
                                 value: _vm.amortizationtable,
@@ -75015,21 +75029,22 @@ var render = function() {
                   ),
                   _vm._v(" "),
                   _c(
-                    "el-button",
-                    { staticClass: "common_btn", attrs: { type: "primary" } },
+                    "a",
+                    {
+                      staticStyle: { color: "#fff", "text-decoration": "none" },
+                      attrs: { href: _vm.demo_url, target: "_blank" }
+                    },
                     [
                       _c(
-                        "a",
+                        "el-button",
                         {
-                          staticStyle: {
-                            color: "#fff",
-                            "text-decoration": "none"
-                          },
-                          attrs: { href: _vm.demo_url, target: "_blank" }
+                          staticClass: "common_btn",
+                          attrs: { type: "primary" }
                         },
                         [_vm._v("Preview")]
                       )
-                    ]
+                    ],
+                    1
                   )
                 ],
                 1
@@ -76180,11 +76195,7 @@ var render = function() {
                   allPaymentCalcTableDefVal: _vm.all_payment_calc_table_def_val,
                   amortTable: _vm.amort_res
                 },
-                on: {
-                  changedAmort: function($event) {
-                    _vm.updateAmort($event)
-                  }
-                }
+                on: { changedAmort: _vm.updateAmort }
               })
             ],
             1

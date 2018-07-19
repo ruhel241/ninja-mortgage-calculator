@@ -57,6 +57,7 @@
                 this.mortgage_calculator_label = res.selectedLabel;
                 this.mortgage_calculator_default = res.selectedDefault;
                 this.amortization_table = res.settings;
+                console.log('Amort user table' + window.ninja_mortgage_cal_vars);
             }
 
             else if( this.calculator_type === 'mortgage_refinance' ) {

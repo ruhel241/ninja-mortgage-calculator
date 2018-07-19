@@ -397,8 +397,8 @@
                                 <label>Show Amortization Field</label>
                                 <el-switch
                                 v-model="amortizationtable"
-                                active-color="#13ce66"
-                                inactive-color="#ff4949">
+                                active-value="yes"
+                                inactive-value="no">
                                 </el-switch>
                             </el-col>
                         </el-row>
@@ -426,39 +426,25 @@ export default {
         return {
             activeName: 'first',
             mortgageTermMonth: 'Mortgage Term Month',
-            amortizationtable: this.amortTable,
             acceptedValue: '',
             acceptedMortgageTermValue: '',
-            acceptedAnnInt: ''
+            acceptedAnnInt: '',
+            passed: ''
         }
     },
     methods: {
-        handleClick(tab, event) {}
+        handleClick(tab, event) {},
+        updateAmort(value) {
+            this.$emit('changedAmort', value);
+        }
     },
     created() {
         console.log("Amort Table: " + this.amortTable);
         console.log("From child " + this.amortizationtable)
         console.log(typeof this.amortizationtable);
-        if(this.amortTable == 'true') {
-            this.amortizationtable = true;
-        }
-        else if( this.amortTable == 'false') {
-            this.amortizationtable = false;
-        }
         this.acceptedValue = 10000000;
         this.acceptedMortgageTermValue = 40;
         this.acceptedAnnInt = 90;
-    },
-    watch: {
-        amortizationtable() {
-            if(this.amortizationtable == true) {
-                this.amortizationtable = true;
-            }
-            else {
-                this.amortizationtable = false;
-            }
-            this.$emit('changedAmort', this.amortizationtable);
-        }
     },
     computed: {
         rules() {
@@ -469,6 +455,14 @@ export default {
         },
         annIntRules() {
             return `max_value:${this.acceptedAnnInt}`
+        },
+        amortizationtable: {
+            get() {
+                return this.amortTable;
+            },
+            set(newValue) {
+                this.updateAmort(newValue);
+            }
         }
     }
 }

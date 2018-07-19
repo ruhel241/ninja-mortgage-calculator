@@ -531,6 +531,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             this.mortgage_calculator_label = res.selectedLabel;
             this.mortgage_calculator_default = res.selectedDefault;
             this.amortization_table = res.settings;
+            console.log('Amort user table' + window.ninja_mortgage_cal_vars);
         } else if (this.calculator_type === 'mortgage_refinance') {
             this.mortgage_refinance_label = res.selectedLabel;
             this.mortgage_refinance_default = res.selectedDefault;
@@ -1456,7 +1457,7 @@ var render = function() {
       ])
     ]),
     _vm._v(" "),
-    _vm.amortizationTable == "true"
+    _vm.amortizationTable == true
       ? _c("div", { staticClass: "btns" }, [
           _vm.showAmortBtn
             ? _c(

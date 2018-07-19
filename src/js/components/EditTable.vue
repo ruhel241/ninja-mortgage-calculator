@@ -14,7 +14,9 @@
 			</el-col>
 			<el-col :span="4">
 				<el-button class="common_btn" @click="updateTableConfig()" type="success">Update</el-button>
-				<el-button class="common_btn" type="primary"><a :href="demo_url" target="_blank" style="color: #fff; text-decoration: none;">Preview</a></el-button>
+				<a :href="demo_url" target="_blank" style="color: #fff; text-decoration: none;">
+					<el-button class="common_btn" type="primary">Preview</el-button>
+				</a>
 			</el-col>
 		</el-col>
 	</el-row>
@@ -224,7 +226,7 @@
 					  :allRefinanceDefVal="all_refinance_calc_table_def_val"
 					  :allPaymentCalcTableDefVal="all_payment_calc_table_def_val"
 					  :amortTable="amort_res"
-					  @changedAmort="updateAmort($event)"></app-tabs>
+					  @changedAmort="updateAmort"></app-tabs>
 		</el-col>
 	</el-row>
 </div>
@@ -246,7 +248,8 @@ export default {
 				calc_type: '',
 				tableConfig:'',
 				activeName: '',
-				amort_res: '',
+				amort_res: 'no',
+				ammortization_table: '',
 				MortgageCalConfig: {},
 				settings: {},
 				all_mort_calc_table: {
@@ -368,8 +371,14 @@ export default {
 
 							if(response.data.table_config.settings) {
 								var amortization_table = response.data.table_config.settings;
-								this.amort_res = amortization_table;
-								console.log("Fetching from DB : " + this.amortization_table);
+								if( amortization_table == true ) {
+									console.log('Yes it is true');
+									this.amort_res = 'yes';
+								}
+								else {
+									console.log('No it is not true');
+									this.amort_res = 'no';
+								}
 							}
 
 						}
@@ -396,6 +405,7 @@ export default {
 							}
 
 						}
+						console.log(this.amort_res);
 					}
 				).fail(
 	                error => {
@@ -408,7 +418,7 @@ export default {
 
 				this.bool = true;
 
-				console.log(this.all_mort_calc_table_def_val)
+				
 
 				if( this.calc_type === 'mortgage_calculator' ) {
 					var selected_label = this.all_mort_calc_table;
@@ -424,7 +434,7 @@ export default {
 					var selected_default = this.all_payment_calc_table_def_val;
 				}
 
-
+				console.log(amort_table);
 
 				console.log(selected_label);
 
@@ -442,7 +452,7 @@ export default {
                     action: 'ninja_mortgage_ajax_actions',
                     route: 'update_table_config',
                     table_id: this.table_id,
-					table_config: this.updatedData,
+					table_config: JSON.stringify(this.updatedData),
 					calculator_type: this.calc_type
                 }).then(response => {
                     this.$notify.success({
@@ -465,7 +475,16 @@ export default {
                 })
 			},
 			updateAmort(ammortization) {
-				this.ammortization_table = ammortization;
+				this.amort_res = ammortization;
+				console.log("Hello" + ammortization);
+				if(ammortization == 'yes') {
+					this.ammortization_table = true;
+					console.log(this.ammortization_table);
+				}
+				else if(ammortization == 'no') {
+					this.ammortization_table = false;
+				}
+				
 				console.log("child passing as emit " + this.ammortization_table)
 			},
             clipboardRender(){
