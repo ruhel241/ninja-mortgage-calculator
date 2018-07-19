@@ -1,8 +1,7 @@
 <template>
 	<div class="mortgage_payment_calc">
-		<h1>{{ tableTitle }}</h1> 
 		<div class="loan-info">
-			<p><strong>Loan Information:</strong></p>
+			<h3>{{ tableTitle }}</h3> 
 			<div class="mortgage_amount">
 				<label>{{ mortgagePaymentLabel.mortgageAmount }}</label>
 				<input type="number" min=0 name="mortgage_amount"
@@ -34,12 +33,12 @@
 					   class="typeNumbersField" placeholder="Annual Property Taxes">
 			</div>
 			<div class="mortgage_payment_pi">
-				<label><strong>Monthly Payment(PI):</strong></label>
-                <p>${{ pi.toFixed(2) }}</p>
+				<h4><strong>Monthly Payment(PI):</strong></h4>
+                <h5>${{ pi.toFixed(2) }}</h5>
 			</div>
 			<div class="mortgage_payment_piti">
-				<label><strong>Monthly Payment(PITI):</strong></label>
-                 <p>${{ piti.toFixed(2) }}</p>
+				<h4><strong>Monthly Payment(PITI):</strong></h4>
+                 <h5>${{ piti.toFixed(2) }}</h5>
 			</div>
 		</div>
 	</div>
@@ -110,20 +109,3 @@ export default {
     }
 }
 </script>
-
-<style>
-	.loan-info {
-	    background-color: #E7EDF5;
-	    padding: 30px;
-	}
-
-	.typeNumbersField {
-		width: 100%;
-		padding: 12px 20px;
-	    margin: 8px 0;
-	    display: inline-block;
-	    border: 1px solid #ccc;
-	    border-radius: 4px;
-    	box-sizing: border-box;
-	}
-</style>

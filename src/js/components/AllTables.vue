@@ -133,7 +133,7 @@ export default {
             tableData: [],
             table_name: '',
             selectCalculator: '',
-            per_page: 3,
+            per_page: 10,
             page_number: 1,
             total: 0
         }

@@ -1,0 +1,301 @@
+// Declaring Variables
+$inputBorderColor: #ccc;
+$errorBorderColor: #f44336;
+$paymentBthBgColor: #4CAF50;
+$hidePaymentBtnBgColor: #f44336;
+$tableBgColor: #fff;
+$tableBorderColor: #42b983;
+$calcTableBgColor: #E7EDF5;
+
+
+// Styling Mortgage Calculator User View
+.mortgage_calculator {
+
+	width: 100%;
+
+	h3 {
+		text-align: center;
+		margin-bottom: 28px;
+	}
+
+	.mortgage_calc_fields {
+
+		background-color: $calcTableBgColor;
+		padding: 15px;
+
+		input[type=text] {
+		    width: 100%;
+		    padding: 12px 20px;
+		    margin: 8px 0;
+		    display: inline-block;
+		    border: 1px solid $inputBorderColor;
+		    border-radius: 4px;
+	    	box-sizing: border-box;
+		}
+		
+		.typeNumber {
+			width: 100%;
+			padding: 12px 20px;
+		    margin: 8px 0;
+		    display: inline-block;
+		    border: 1px solid $inputBorderColor;
+		    border-radius: 4px;
+	    	box-sizing: border-box;
+		}
+
+		.typeNumbers {
+			width: 100%;
+			padding: 12px 20px;
+		    margin: 8px 0;
+		    display: inline-block;
+		    border: 1px solid $inputBorderColor;
+		    border-radius: 4px;
+	    	box-sizing: border-box;
+		}
+
+		.downPament {
+			width: 50%;
+			float: left;
+			padding-right: 10px;
+		}
+
+		.downPamentPerc {
+			width: 50%;
+			float: left;
+			padding-left: 10px;
+		}
+
+		.mortgageTerm {
+			width: 50%;
+			float: left;
+			padding-right: 10px;
+		}
+
+		.mortgageTermMonth {
+			width: 50%;
+			float: left;
+			padding-left: 10px;
+		}
+
+		.error {
+		    border-color: $errorBorderColor;
+		    box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 5px rgba(232,68,68,.6);
+		}
+
+		.cost_section {
+		    margin: 0 auto;
+		    text-align: center;
+		}
+
+	}
+
+	.btns {
+
+		.paymentBtn {
+			background-color: $paymentBthBgColor;
+	        border: none;
+	        color: white;
+	        padding: 15px 32px;
+	        text-align: center;
+	        text-decoration: none;
+	        display: inline-block;
+	        font-size: 16px;
+	        margin: 4px 2px;
+	        cursor: pointer;
+		}
+
+		.hidePaymentBtn {
+	        background-color: $hidePaymentBtnBgColor;
+	        border: none;
+	        color: white;
+	        padding: 15px 32px;
+	        text-align: center;
+	        text-decoration: none;
+	        display: inline-block;
+	        font-size: 16px;
+	        margin: 4px 2px;
+	        cursor: pointer;
+	    }
+
+	}
+
+	.ammortization_section {
+
+		table {
+	      border: 2px solid $tableBorderColor;
+	      border-radius: 3px;
+	      background-color: $tableBgColor;
+	      width: 100%;
+	      margin-top: 30px;
+	    }
+
+	    th {
+	      background-color: #4CAF50;
+	      color: rgba(255,255,255,0.66);
+	      cursor: pointer;
+	      -webkit-user-select: none;
+	      -moz-user-select: none;
+	      -ms-user-select: none;
+	      user-select: none;
+	    }
+
+	    td {
+	      background-color: #f9f9f9;
+	    }
+
+	    th, td {
+	      padding: 10px 18px;
+	    }
+
+	    th.active {
+	      color: #fff;
+	    }
+
+	    th.active .arrow {
+	      opacity: 1;
+	    }
+
+	    tr {
+	        text-align: center;
+	    }
+
+	    .est_payoff {
+
+	    	.start_date {
+	    		float: left;
+	    	}
+
+		    .date_est {
+		        padding: 0;
+		        margin-top: -17px;
+		    }
+
+		    .est_payoff_date {
+		    	float: right;
+		    	
+		    	p {
+		    		position: relative;
+				    top: -9px;
+				    right: 15px;
+		    	}
+		    }
+
+	    }
+
+	}
+
+}
+
+// Mortgage Refinance Calculator User View
+.mortgage_finance_calc {
+
+	width: 100%;
+	background-color: $calcTableBgColor;
+	padding: 15px;
+
+	h3 {
+		text-align: center;
+		margin-bottom: 28px;
+	}
+
+	.typeNumber {
+		width: 100%;
+		padding: 12px 20px;
+	    margin: 8px 0;
+	    display: inline-block;
+	    border: 1px solid $inputBorderColor;
+	    border-radius: 4px;
+    	box-sizing: border-box;
+	}
+
+	.typeNumbers {
+		width: 100%;
+		padding: 12px 20px;
+	    margin: 8px 0;
+	    display: inline-block;
+	    border: 1px solid $inputBorderColor;
+	    border-radius: 4px;
+    	box-sizing: border-box;
+	}
+
+	.common {
+        width: 50%;
+        float: left;
+        padding-left: 7.5px;
+    	padding-right: 7.5px;
+	}
+
+	.fees_section_points {
+	    width: 100%;
+	    clear: both;
+	    display: inline-block;
+
+	    .points{
+		    width: 50%;
+		    float: left;
+		    padding: 10px;
+		}
+
+		.costPoint{  
+			width: 50%;
+		    float: left;
+		    padding: 10px;
+		}
+
+		.costPoint p{
+		    margin: 0;
+		    padding: 0;
+		    position: relative;
+		    top: 40px;
+		    left: 30px;
+		}
+	}
+
+	.feeSection {
+		width: 100%;
+	    display: inline-block;
+	}
+
+	.cost_text {
+		padding-left: 7.5px;
+	    padding-right: 7.5px;
+	}
+
+	.costs_section {
+		padding-left: 7.5px;
+	    padding-right: 7.5px;
+	    text-align: center;
+	}
+
+}
+
+
+// Mortgage Payment Calculator User View
+.mortgage_payment_calc {
+
+	width: 100%;
+	h3 {
+		text-align: center;
+		margin-bottom: 28px;
+	}
+	
+	.loan-info {
+	    background-color: $calcTableBgColor;
+	    padding: 30px;
+		.typeNumbersField {
+			width: 100%;
+			padding: 12px 20px;
+		    margin: 8px 0;
+		    display: inline-block;
+		    border: 1px solid #ccc;
+		    border-radius: 4px;
+	    	box-sizing: border-box;
+		}
+		.mortgage_payment_pi {
+			text-align: center !important;
+		}
+		.mortgage_payment_piti {
+			text-align: center;
+		}
+	}
+}

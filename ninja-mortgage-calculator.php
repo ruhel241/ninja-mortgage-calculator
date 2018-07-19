@@ -61,7 +61,7 @@ class NINJAMortgageCalculator
 
 	public function enqueueScripts()
 	{
-		
+		wp_enqueue_style('mortgage_userview_css', NINJA_MORTGAGE_PLUGIN_DIR_URL.'/public/css/styles.css');
 	}
 
 

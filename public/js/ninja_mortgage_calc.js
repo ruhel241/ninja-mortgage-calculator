@@ -59641,7 +59641,8 @@ module.exports = select;
 /* 78 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(79);
+__webpack_require__(79);
+module.exports = __webpack_require__(219);
 
 
 /***/ }),
@@ -70939,7 +70940,7 @@ exports = module.exports = __webpack_require__(0)(false);
 
 
 // module
-exports.push([module.i, "\n* {\n    margin: 0;\n    padding: 0;\n    box-sizing: border-box;\n}\nbody {\n    background: #F1F1F1;\n}\n\n/* .section_header {\n    float: left;\n} */\n.section_action {\n    float: right;\n    margin-top: -32px;\n}\n.select_calc_type {\n    margin-top: 10px;\n}\n.editor {\n    width: 100%;\n    float: right;\n}\nhr {\n    color: #DDDDDD;\n}\n.el-message--success {\n    z-index: 999999!important;\n    top: 5px;\n}\n", ""]);
+exports.push([module.i, "\n* {\n    margin: 0;\n    padding: 0;\n    -webkit-box-sizing: border-box;\n            box-sizing: border-box;\n}\nbody {\n    background: #F1F1F1;\n}\n\n/* .section_header {\n    float: left;\n} */\n.section_action {\n    float: right;\n    margin-top: -32px;\n}\n.select_calc_type {\n    margin-top: 10px;\n}\n.editor {\n    width: 100%;\n    float: right;\n}\nhr {\n    color: #DDDDDD;\n}\n.el-message--success {\n    z-index: 999999!important;\n    top: 5px;\n}\n", ""]);
 
 // exports
 
@@ -71085,7 +71086,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             tableData: [],
             table_name: '',
             selectCalculator: '',
-            per_page: 3,
+            per_page: 10,
             page_number: 1,
             total: 0
         };
@@ -72372,7 +72373,7 @@ exports = module.exports = __webpack_require__(0)(false);
 
 
 // module
-exports.push([module.i, "\n.error {\n    border-color: red;\n    padding: 0px;\n}\n.typeNumber {\n    width: 100%;\n    padding: 3px 0px;\n    border-radius: 4px;\n    box-sizing: border-box;\n}\n", ""]);
+exports.push([module.i, "\n.error {\n    border-color: red;\n    padding: 0px;\n}\n.typeNumber {\n    width: 100%;\n    padding: 3px 0px;\n    border-radius: 4px;\n    -webkit-box-sizing: border-box;\n            box-sizing: border-box;\n}\n", ""]);
 
 // exports
 
@@ -77268,6 +77269,12 @@ if (false) {
     require("vue-hot-reload-api")      .rerender("data-v-bf37c1a2", module.exports)
   }
 }
+
+/***/ }),
+/* 219 */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
 
 /***/ })
 /******/ ]);

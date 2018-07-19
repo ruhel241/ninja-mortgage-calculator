@@ -60,332 +60,20 @@
 /******/ 	__webpack_require__.p = "/";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 219);
+/******/ 	return __webpack_require__(__webpack_require__.s = 220);
 /******/ })
 /************************************************************************/
 /******/ ({
 
-/***/ 0:
-/***/ (function(module, exports) {
-
-/*
-	MIT License http://www.opensource.org/licenses/mit-license.php
-	Author Tobias Koppers @sokra
-*/
-// css base code, injected by the css-loader
-module.exports = function(useSourceMap) {
-	var list = [];
-
-	// return the list of modules as css string
-	list.toString = function toString() {
-		return this.map(function (item) {
-			var content = cssWithMappingToString(item, useSourceMap);
-			if(item[2]) {
-				return "@media " + item[2] + "{" + content + "}";
-			} else {
-				return content;
-			}
-		}).join("");
-	};
-
-	// import a list of modules into the list
-	list.i = function(modules, mediaQuery) {
-		if(typeof modules === "string")
-			modules = [[null, modules, ""]];
-		var alreadyImportedModules = {};
-		for(var i = 0; i < this.length; i++) {
-			var id = this[i][0];
-			if(typeof id === "number")
-				alreadyImportedModules[id] = true;
-		}
-		for(i = 0; i < modules.length; i++) {
-			var item = modules[i];
-			// skip already imported module
-			// this implementation is not 100% perfect for weird media query combinations
-			//  when a module is imported multiple times with different media queries.
-			//  I hope this will never occur (Hey this way we have smaller bundles)
-			if(typeof item[0] !== "number" || !alreadyImportedModules[item[0]]) {
-				if(mediaQuery && !item[2]) {
-					item[2] = mediaQuery;
-				} else if(mediaQuery) {
-					item[2] = "(" + item[2] + ") and (" + mediaQuery + ")";
-				}
-				list.push(item);
-			}
-		}
-	};
-	return list;
-};
-
-function cssWithMappingToString(item, useSourceMap) {
-	var content = item[1] || '';
-	var cssMapping = item[3];
-	if (!cssMapping) {
-		return content;
-	}
-
-	if (useSourceMap && typeof btoa === 'function') {
-		var sourceMapping = toComment(cssMapping);
-		var sourceURLs = cssMapping.sources.map(function (source) {
-			return '/*# sourceURL=' + cssMapping.sourceRoot + source + ' */'
-		});
-
-		return [content].concat(sourceURLs).concat([sourceMapping]).join('\n');
-	}
-
-	return [content].join('\n');
-}
-
-// Adapted from convert-source-map (MIT)
-function toComment(sourceMap) {
-	// eslint-disable-next-line no-undef
-	var base64 = btoa(unescape(encodeURIComponent(JSON.stringify(sourceMap))));
-	var data = 'sourceMappingURL=data:application/json;charset=utf-8;base64,' + base64;
-
-	return '/*# ' + data + ' */';
-}
-
-
-/***/ }),
-
-/***/ 11:
-/***/ (function(module, exports, __webpack_require__) {
-
-/*
-  MIT License http://www.opensource.org/licenses/mit-license.php
-  Author Tobias Koppers @sokra
-  Modified by Evan You @yyx990803
-*/
-
-var hasDocument = typeof document !== 'undefined'
-
-if (typeof DEBUG !== 'undefined' && DEBUG) {
-  if (!hasDocument) {
-    throw new Error(
-    'vue-style-loader cannot be used in a non-browser environment. ' +
-    "Use { target: 'node' } in your Webpack config to indicate a server-rendering environment."
-  ) }
-}
-
-var listToStyles = __webpack_require__(54)
-
-/*
-type StyleObject = {
-  id: number;
-  parts: Array<StyleObjectPart>
-}
-
-type StyleObjectPart = {
-  css: string;
-  media: string;
-  sourceMap: ?string
-}
-*/
-
-var stylesInDom = {/*
-  [id: number]: {
-    id: number,
-    refs: number,
-    parts: Array<(obj?: StyleObjectPart) => void>
-  }
-*/}
-
-var head = hasDocument && (document.head || document.getElementsByTagName('head')[0])
-var singletonElement = null
-var singletonCounter = 0
-var isProduction = false
-var noop = function () {}
-var options = null
-var ssrIdKey = 'data-vue-ssr-id'
-
-// Force single-tag solution on IE6-9, which has a hard limit on the # of <style>
-// tags it will allow on a page
-var isOldIE = typeof navigator !== 'undefined' && /msie [6-9]\b/.test(navigator.userAgent.toLowerCase())
-
-module.exports = function (parentId, list, _isProduction, _options) {
-  isProduction = _isProduction
-
-  options = _options || {}
-
-  var styles = listToStyles(parentId, list)
-  addStylesToDom(styles)
-
-  return function update (newList) {
-    var mayRemove = []
-    for (var i = 0; i < styles.length; i++) {
-      var item = styles[i]
-      var domStyle = stylesInDom[item.id]
-      domStyle.refs--
-      mayRemove.push(domStyle)
-    }
-    if (newList) {
-      styles = listToStyles(parentId, newList)
-      addStylesToDom(styles)
-    } else {
-      styles = []
-    }
-    for (var i = 0; i < mayRemove.length; i++) {
-      var domStyle = mayRemove[i]
-      if (domStyle.refs === 0) {
-        for (var j = 0; j < domStyle.parts.length; j++) {
-          domStyle.parts[j]()
-        }
-        delete stylesInDom[domStyle.id]
-      }
-    }
-  }
-}
-
-function addStylesToDom (styles /* Array<StyleObject> */) {
-  for (var i = 0; i < styles.length; i++) {
-    var item = styles[i]
-    var domStyle = stylesInDom[item.id]
-    if (domStyle) {
-      domStyle.refs++
-      for (var j = 0; j < domStyle.parts.length; j++) {
-        domStyle.parts[j](item.parts[j])
-      }
-      for (; j < item.parts.length; j++) {
-        domStyle.parts.push(addStyle(item.parts[j]))
-      }
-      if (domStyle.parts.length > item.parts.length) {
-        domStyle.parts.length = item.parts.length
-      }
-    } else {
-      var parts = []
-      for (var j = 0; j < item.parts.length; j++) {
-        parts.push(addStyle(item.parts[j]))
-      }
-      stylesInDom[item.id] = { id: item.id, refs: 1, parts: parts }
-    }
-  }
-}
-
-function createStyleElement () {
-  var styleElement = document.createElement('style')
-  styleElement.type = 'text/css'
-  head.appendChild(styleElement)
-  return styleElement
-}
-
-function addStyle (obj /* StyleObjectPart */) {
-  var update, remove
-  var styleElement = document.querySelector('style[' + ssrIdKey + '~="' + obj.id + '"]')
-
-  if (styleElement) {
-    if (isProduction) {
-      // has SSR styles and in production mode.
-      // simply do nothing.
-      return noop
-    } else {
-      // has SSR styles but in dev mode.
-      // for some reason Chrome can't handle source map in server-rendered
-      // style tags - source maps in <style> only works if the style tag is
-      // created and inserted dynamically. So we remove the server rendered
-      // styles and inject new ones.
-      styleElement.parentNode.removeChild(styleElement)
-    }
-  }
-
-  if (isOldIE) {
-    // use singleton mode for IE9.
-    var styleIndex = singletonCounter++
-    styleElement = singletonElement || (singletonElement = createStyleElement())
-    update = applyToSingletonTag.bind(null, styleElement, styleIndex, false)
-    remove = applyToSingletonTag.bind(null, styleElement, styleIndex, true)
-  } else {
-    // use multi-style-tag mode in all other cases
-    styleElement = createStyleElement()
-    update = applyToTag.bind(null, styleElement)
-    remove = function () {
-      styleElement.parentNode.removeChild(styleElement)
-    }
-  }
-
-  update(obj)
-
-  return function updateStyle (newObj /* StyleObjectPart */) {
-    if (newObj) {
-      if (newObj.css === obj.css &&
-          newObj.media === obj.media &&
-          newObj.sourceMap === obj.sourceMap) {
-        return
-      }
-      update(obj = newObj)
-    } else {
-      remove()
-    }
-  }
-}
-
-var replaceText = (function () {
-  var textStore = []
-
-  return function (index, replacement) {
-    textStore[index] = replacement
-    return textStore.filter(Boolean).join('\n')
-  }
-})()
-
-function applyToSingletonTag (styleElement, index, remove, obj) {
-  var css = remove ? '' : obj.css
-
-  if (styleElement.styleSheet) {
-    styleElement.styleSheet.cssText = replaceText(index, css)
-  } else {
-    var cssNode = document.createTextNode(css)
-    var childNodes = styleElement.childNodes
-    if (childNodes[index]) styleElement.removeChild(childNodes[index])
-    if (childNodes.length) {
-      styleElement.insertBefore(cssNode, childNodes[index])
-    } else {
-      styleElement.appendChild(cssNode)
-    }
-  }
-}
-
-function applyToTag (styleElement, obj) {
-  var css = obj.css
-  var media = obj.media
-  var sourceMap = obj.sourceMap
-
-  if (media) {
-    styleElement.setAttribute('media', media)
-  }
-  if (options.ssrId) {
-    styleElement.setAttribute(ssrIdKey, obj.id)
-  }
-
-  if (sourceMap) {
-    // https://developer.chrome.com/devtools/docs/javascript-debugging
-    // this makes source maps inside style tags work properly in Chrome
-    css += '\n/*# sourceURL=' + sourceMap.sources[0] + ' */'
-    // http://stackoverflow.com/a/26603875
-    css += '\n/*# sourceMappingURL=data:application/json;base64,' + btoa(unescape(encodeURIComponent(JSON.stringify(sourceMap)))) + ' */'
-  }
-
-  if (styleElement.styleSheet) {
-    styleElement.styleSheet.cssText = css
-  } else {
-    while (styleElement.firstChild) {
-      styleElement.removeChild(styleElement.firstChild)
-    }
-    styleElement.appendChild(document.createTextNode(css))
-  }
-}
-
-
-/***/ }),
-
-/***/ 219:
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports = __webpack_require__(220);
-
-
-/***/ }),
-
 /***/ 220:
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__(221);
+
+
+/***/ }),
+
+/***/ 221:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -394,7 +82,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_vue__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vue_router__ = __webpack_require__(32);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_vee_validate__ = __webpack_require__(53);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_UserCalculator_vue__ = __webpack_require__(221);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_UserCalculator_vue__ = __webpack_require__(222);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_UserCalculator_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__components_UserCalculator_vue__);
 
 
@@ -413,15 +101,15 @@ new __WEBPACK_IMPORTED_MODULE_0_vue___default.a({
 
 /***/ }),
 
-/***/ 221:
+/***/ 222:
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 var normalizeComponent = __webpack_require__(5)
 /* script */
-var __vue_script__ = __webpack_require__(222)
+var __vue_script__ = __webpack_require__(223)
 /* template */
-var __vue_template__ = __webpack_require__(238)
+var __vue_template__ = __webpack_require__(239)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -461,16 +149,16 @@ module.exports = Component.exports
 
 /***/ }),
 
-/***/ 222:
+/***/ 223:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__MortgageCalculator_vue__ = __webpack_require__(223);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__MortgageCalculator_vue__ = __webpack_require__(224);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__MortgageCalculator_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__MortgageCalculator_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__MortgageRefinance_vue__ = __webpack_require__(228);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__MortgageRefinance_vue__ = __webpack_require__(229);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__MortgageRefinance_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__MortgageRefinance_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__MortgagePayment_vue__ = __webpack_require__(233);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__MortgagePayment_vue__ = __webpack_require__(234);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__MortgagePayment_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__MortgagePayment_vue__);
 //
 //
@@ -593,25 +281,21 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 /***/ }),
 
-/***/ 223:
+/***/ 224:
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
-function injectStyle (ssrContext) {
-  if (disposed) return
-  __webpack_require__(224)
-}
 var normalizeComponent = __webpack_require__(5)
 /* script */
-var __vue_script__ = __webpack_require__(226)
+var __vue_script__ = __webpack_require__(227)
 /* template */
-var __vue_template__ = __webpack_require__(227)
+var __vue_template__ = __webpack_require__(241)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
-var __vue_styles__ = injectStyle
+var __vue_styles__ = null
 /* scopeId */
-var __vue_scopeId__ = "data-v-8d4d39fe"
+var __vue_scopeId__ = null
 /* moduleIdentifier (server only) */
 var __vue_module_identifier__ = null
 var Component = normalizeComponent(
@@ -645,53 +329,16 @@ module.exports = Component.exports
 
 /***/ }),
 
-/***/ 224:
-/***/ (function(module, exports, __webpack_require__) {
-
-// style-loader: Adds some css to the DOM by adding a <style> tag
-
-// load the styles
-var content = __webpack_require__(225);
-if(typeof content === 'string') content = [[module.i, content, '']];
-if(content.locals) module.exports = content.locals;
-// add the styles to the DOM
-var update = __webpack_require__(11)("cb847ab6", content, false, {});
-// Hot Module Replacement
-if(false) {
- // When the styles change, update the <style> tags
- if(!content.locals) {
-   module.hot.accept("!!../../../node_modules/css-loader/index.js!../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-8d4d39fe\",\"scoped\":true,\"hasInlineConfig\":true}!../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./_MortgageCalculator.vue", function() {
-     var newContent = require("!!../../../node_modules/css-loader/index.js!../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-8d4d39fe\",\"scoped\":true,\"hasInlineConfig\":true}!../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./_MortgageCalculator.vue");
-     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-     update(newContent);
-   });
- }
- // When the module is disposed, remove the <style> tags
- module.hot.dispose(function() { update(); });
-}
-
-/***/ }),
-
-/***/ 225:
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__(0)(false);
-// imports
-
-
-// module
-exports.push([module.i, "\ninput[type=text][data-v-8d4d39fe] {\n\t    width: 100%;\n\t    padding: 12px 20px;\n\t    margin: 8px 0;\n\t    display: inline-block;\n\t    border: 1px solid #ccc;\n\t    border-radius: 4px;\n    \tbox-sizing: border-box;\n}\n.typeNumber[data-v-8d4d39fe] {\n\t\twidth: 100%;\n\t\tpadding: 12px 20px;\n\t    margin: 8px 0;\n\t    display: inline-block;\n\t    border: 1px solid #ccc;\n\t    border-radius: 4px;\n    \tbox-sizing: border-box;\n}\n.typeNumbers[data-v-8d4d39fe] {\n\t\twidth: 100%;\n\t\tpadding: 12px 20px;\n\t    margin: 8px 0;\n\t    display: inline-block;\n\t    border: 1px solid #ccc;\n\t    border-radius: 4px;\n    \tbox-sizing: border-box;\n}\n.downPament[data-v-8d4d39fe] {\n\t\twidth: 50%;\n\t\tfloat: left;\n}\n.downPamentPerc[data-v-8d4d39fe] {\n\t\twidth: 50%;\n\t\tfloat: left;\n}\n.mortgageTerm[data-v-8d4d39fe] {\n\t\twidth: 50%;\n\t\tfloat: left;\n}\n.mortgageTermMonth[data-v-8d4d39fe] {\n\t\twidth: 50%;\n\t\tfloat: left;\n}\n.error[data-v-8d4d39fe] {\n\t    border-color: red;\n\t    box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 5px rgba(232,68,68,.6);\n}\n.paymentBtn[data-v-8d4d39fe] {\n        background-color: #4CAF50;\n        border: none;\n        color: white;\n        padding: 15px 32px;\n        text-align: center;\n        text-decoration: none;\n        display: inline-block;\n        font-size: 16px;\n        margin: 4px 2px;\n        cursor: pointer;\n}\n.hidePaymentBtn[data-v-8d4d39fe] {\n        background-color: #f44336;\n        border: none;\n        color: white;\n        padding: 15px 32px;\n        text-align: center;\n        text-decoration: none;\n        display: inline-block;\n        font-size: 16px;\n        margin: 4px 2px;\n        cursor: pointer;\n}\ntable[data-v-8d4d39fe] {\n      border: 2px solid #42b983;\n      border-radius: 3px;\n      background-color: #fff;\n      width: 100%;\n}\nth[data-v-8d4d39fe] {\n      background-color: #4CAF50;\n      color: rgba(255,255,255,0.66);\n      cursor: pointer;\n      -webkit-user-select: none;\n      -moz-user-select: none;\n      -ms-user-select: none;\n      user-select: none;\n}\ntd[data-v-8d4d39fe] {\n      background-color: #f9f9f9;\n}\nth[data-v-8d4d39fe], td[data-v-8d4d39fe] {\n      padding: 10px 18px;\n}\nth.active[data-v-8d4d39fe] {\n      color: #fff;\n}\nth.active .arrow[data-v-8d4d39fe] {\n      opacity: 1;\n}\ntr[data-v-8d4d39fe] {\n        text-align: center;\n}\n.date_est[data-v-8d4d39fe] {\n        padding: 0;\n        margin-top: -17px;\n}\n", ""]);
-
-// exports
-
-
-/***/ }),
-
-/***/ 226:
+/***/ 227:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
 //
 //
 //
@@ -1152,460 +799,19 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 /***/ }),
 
-/***/ 227:
-/***/ (function(module, exports, __webpack_require__) {
-
-var render = function() {
-  var _vm = this
-  var _h = _vm.$createElement
-  var _c = _vm._self._c || _h
-  return _c("div", { attrs: { id: "mortgage_calculator" } }, [
-    _c("div", [
-      _c("h3", [_vm._v(_vm._s(_vm.tableTitle))]),
-      _vm._v(" "),
-      _c("div", { staticClass: "loanAmountSection" }, [
-        _c("label", [_vm._v(_vm._s(_vm.mortgageCalcLabel.loanAmount))]),
-        _c("br"),
-        _vm._v(" "),
-        _c("input", {
-          directives: [
-            {
-              name: "model",
-              rawName: "v-model",
-              value: _vm.loanAmount,
-              expression: "loanAmount"
-            },
-            {
-              name: "validate",
-              rawName: "v-validate",
-              value: _vm.rules,
-              expression: "rules"
-            }
-          ],
-          staticClass: "typeNumber",
-          class: { error: _vm.errors.has("loanAmount") },
-          attrs: {
-            type: "number",
-            min: "0",
-            id: "loanAmount",
-            name: "loanAmount",
-            pattern: "/^-?\\d+\\.?\\d*$/",
-            onKeyPress: "if(this.value.length==8) return false;"
-          },
-          domProps: { value: _vm.loanAmount },
-          on: {
-            input: function($event) {
-              if ($event.target.composing) {
-                return
-              }
-              _vm.loanAmount = $event.target.value
-            }
-          }
-        }),
-        _vm._v(" "),
-        _vm.errors.has("loanAmount")
-          ? _c("span", { staticStyle: { color: "red" } }, [
-              _vm._v(
-                "\n                    " +
-                  _vm._s(_vm.errors.first("loanAmount")) +
-                  "\n                "
-              )
-            ])
-          : _vm._e()
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "downPamentSection" }, [
-        _c("div", { staticClass: "downPament" }, [
-          _c("label", [_vm._v(_vm._s(_vm.mortgageCalcLabel.downPament))]),
-          _c("br"),
-          _vm._v(" "),
-          _c("input", {
-            directives: [
-              {
-                name: "model",
-                rawName: "v-model",
-                value: _vm.downPament,
-                expression: "downPament"
-              }
-            ],
-            staticClass: "typeNumbers",
-            attrs: {
-              type: "number",
-              min: "0",
-              id: "downPament",
-              name: "downPament",
-              placeholder: "Down Pament"
-            },
-            domProps: { value: _vm.downPament },
-            on: {
-              input: function($event) {
-                if ($event.target.composing) {
-                  return
-                }
-                _vm.downPament = $event.target.value
-              }
-            }
-          })
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "downPamentPerc" }, [
-          _c("label", [
-            _vm._v(_vm._s(_vm.mortgageCalcLabel.downPament) + " Percentage")
-          ]),
-          _vm._v(" "),
-          _c("input", {
-            directives: [
-              {
-                name: "model",
-                rawName: "v-model",
-                value: _vm.downPamentPerc,
-                expression: "downPamentPerc"
-              }
-            ],
-            staticClass: "typeNumbers",
-            attrs: {
-              type: "number",
-              min: "0",
-              id: "downPamentPerc",
-              name: "downPamentPerc",
-              placeholder: "Down Pament Percentage"
-            },
-            domProps: { value: _vm.downPamentPerc },
-            on: {
-              input: function($event) {
-                if ($event.target.composing) {
-                  return
-                }
-                _vm.downPamentPerc = $event.target.value
-              }
-            }
-          })
-        ])
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "mortgageTermSection" }, [
-        _c("div", { staticClass: "mortgageTerm" }, [
-          _c("label", [_vm._v(_vm._s(_vm.mortgageCalcLabel.mortgageTerm))]),
-          _vm._v(" "),
-          _c("input", {
-            directives: [
-              {
-                name: "model",
-                rawName: "v-model",
-                value: _vm.mortgageTerm,
-                expression: "mortgageTerm"
-              },
-              {
-                name: "validate",
-                rawName: "v-validate",
-                value: _vm.term_rule,
-                expression: "term_rule"
-              }
-            ],
-            staticClass: "typeNumbers",
-            class: { error: _vm.errors.has("mortgageTerm") },
-            attrs: {
-              type: "number",
-              min: "0",
-              id: "mortgageTerm",
-              name: "mortgageTerm",
-              placeholder: "Mortgage Term",
-              pattern: "/^-?\\d+\\.?\\d*$/",
-              onKeyPress: "if(this.value.length==2) return false;"
-            },
-            domProps: { value: _vm.mortgageTerm },
-            on: {
-              input: function($event) {
-                if ($event.target.composing) {
-                  return
-                }
-                _vm.mortgageTerm = $event.target.value
-              }
-            }
-          }),
-          _vm._v(" "),
-          _vm.errors.has("mortgageTerm")
-            ? _c("span", { staticStyle: { color: "red" } }, [
-                _vm._v(
-                  "\n\t                    " +
-                    _vm._s(_vm.errors.first("mortgageTerm")) +
-                    "\n\t                "
-                )
-              ])
-            : _vm._e()
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "mortgageTermMonth" }, [
-          _c("label", [
-            _vm._v(_vm._s(_vm.mortgageCalcLabel.mortgageTerm) + " Month")
-          ]),
-          _vm._v(" "),
-          _c("input", {
-            directives: [
-              {
-                name: "model",
-                rawName: "v-model",
-                value: _vm.mortgageTermMonth,
-                expression: "mortgageTermMonth"
-              },
-              {
-                name: "validate",
-                rawName: "v-validate",
-                value: _vm.term_rule_month,
-                expression: "term_rule_month"
-              }
-            ],
-            staticClass: "typeNumbers",
-            class: { error: _vm.errors.has("mortgageTermMonth") },
-            attrs: {
-              type: "number",
-              min: "0",
-              id: "mortgageTermMonth",
-              name: "mortgageTermMonth",
-              placeholder: "Mortgage Term Month",
-              pattern: "/^-?\\d+\\.?\\d*$/",
-              onKeyPress: "if(this.value.length==3) return false;"
-            },
-            domProps: { value: _vm.mortgageTermMonth },
-            on: {
-              input: function($event) {
-                if ($event.target.composing) {
-                  return
-                }
-                _vm.mortgageTermMonth = $event.target.value
-              }
-            }
-          }),
-          _vm._v(" "),
-          _vm.errors.has("mortgageTermMonth")
-            ? _c("span", { staticStyle: { color: "red" } }, [
-                _vm._v(
-                  "\n\t                    " +
-                    _vm._s(_vm.errors.first("mortgageTermMonth")) +
-                    "\n\t                "
-                )
-              ])
-            : _vm._e()
-        ])
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "annualIntRateSection" }, [
-        _c("label", [_vm._v(_vm._s(_vm.mortgageCalcLabel.annualInterestRate))]),
-        _c("br"),
-        _vm._v(" "),
-        _c("input", {
-          directives: [
-            {
-              name: "model",
-              rawName: "v-model",
-              value: _vm.annualInterestRate,
-              expression: "annualInterestRate"
-            },
-            {
-              name: "validate",
-              rawName: "v-validate",
-              value: _vm.annual_int_rate_term,
-              expression: "annual_int_rate_term"
-            }
-          ],
-          staticClass: "typeNumber",
-          class: { error: _vm.errors.has("annualInterestRate") },
-          attrs: {
-            type: "number",
-            min: "0",
-            id: "annualInterestRate",
-            name: "annualInterestRate",
-            placeholder: "Annual Interest Rate",
-            pattern: "/^-?\\d+\\.?\\d*$/",
-            onKeyPress: "if(this.value.length==2) return false;"
-          },
-          domProps: { value: _vm.annualInterestRate },
-          on: {
-            input: function($event) {
-              if ($event.target.composing) {
-                return
-              }
-              _vm.annualInterestRate = $event.target.value
-            }
-          }
-        }),
-        _vm._v(" "),
-        _vm.errors.has("annualInterestRate")
-          ? _c("span", { staticStyle: { color: "red" } }, [
-              _vm._v(
-                "\n                    " +
-                  _vm._s(_vm.errors.first("annualInterestRate")) +
-                  "\n                "
-              )
-            ])
-          : _vm._e()
-      ])
-    ]),
-    _vm._v(" "),
-    _c("div", { staticStyle: { "margin-top": "10px", "margin-left": "0" } }, [
-      _c("p", [_vm._v("Your estimated monthly payment:")]),
-      _vm._v(" "),
-      _c("h1", [
-        _c("span", [_vm._v("$")]),
-        _vm._v(" " + _vm._s(_vm.monthlyPayment.toFixed(2)))
-      ]),
-      _vm._v(" "),
-      _c("p", [_vm._v("Total principal paid: $" + _vm._s(_vm.principalPaid))]),
-      _vm._v(" "),
-      _c("p", [
-        _vm._v("Total interest paid: $" + _vm._s(_vm.total_interest.toFixed(2)))
-      ])
-    ]),
-    _vm._v(" "),
-    _vm.amortizationTable == true
-      ? _c("div", { staticClass: "btns" }, [
-          _vm.showAmortBtn
-            ? _c(
-                "button",
-                {
-                  staticClass: "paymentBtn",
-                  on: {
-                    click: function($event) {
-                      _vm.paymentSchedule()
-                    }
-                  }
-                },
-                [_vm._v("Payment Schedule")]
-              )
-            : _vm._e(),
-          _vm._v(" "),
-          !_vm.showAmortBtn
-            ? _c(
-                "button",
-                {
-                  staticClass: "hidePaymentBtn",
-                  on: {
-                    click: function($event) {
-                      _vm.hidePaymentSchedule()
-                    }
-                  }
-                },
-                [_vm._v("Hide Payment Schedule")]
-              )
-            : _vm._e()
-        ])
-      : _vm._e(),
-    _vm._v(" "),
-    _vm.showTable
-      ? _c("div", { staticClass: "ammortization_section" }, [
-          _vm._m(0),
-          _vm._v(" "),
-          _c("div", { staticClass: "est_payoff" }, [
-            _c("label", [_vm._v("Start Date")]),
-            _vm._v(" "),
-            _c("input", {
-              directives: [
-                {
-                  name: "model",
-                  rawName: "v-model",
-                  value: _vm.date,
-                  expression: "date"
-                }
-              ],
-              attrs: { type: "text", name: "date" },
-              domProps: { value: _vm.date },
-              on: {
-                blur: function($event) {
-                  _vm.myBlurFun()
-                },
-                input: function($event) {
-                  if ($event.target.composing) {
-                    return
-                  }
-                  _vm.date = $event.target.value
-                }
-              }
-            }),
-            _vm._v(" "),
-            _c("p", [_vm._v("Estimated Payoff Date")]),
-            _vm._v(" "),
-            _c("h4", { staticClass: "date_est" }, [
-              _vm._v(
-                _vm._s(_vm.date_selected) + " " + _vm._s(_vm.estPayOffDate)
-              )
-            ])
-          ]),
-          _vm._v(" "),
-          _c("table", [
-            _c("thead", [
-              _c(
-                "tr",
-                _vm._l(_vm.gridColumns, function(key) {
-                  return _c("th", { key: key }, [
-                    _vm._v(
-                      "\n                            \n                            " +
-                        _vm._s(_vm._f("capitalize")(key)) +
-                        "\n\n                        "
-                    )
-                  ])
-                })
-              )
-            ]),
-            _vm._v(" "),
-            _c(
-              "tbody",
-              _vm._l(_vm.gridData, function(entry, i) {
-                return _c(
-                  "tr",
-                  { key: i },
-                  _vm._l(_vm.gridColumns, function(key, j) {
-                    return _c("td", { key: j }, [
-                      _vm._v(
-                        "\n\n                            " +
-                          _vm._s(entry[key]) +
-                          "\n\n                        "
-                      )
-                    ])
-                  })
-                )
-              })
-            )
-          ])
-        ])
-      : _vm._e()
-  ])
-}
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("p", [_c("strong", [_vm._v("Amortization Schedule")])])
-  }
-]
-render._withStripped = true
-module.exports = { render: render, staticRenderFns: staticRenderFns }
-if (false) {
-  module.hot.accept()
-  if (module.hot.data) {
-    require("vue-hot-reload-api")      .rerender("data-v-8d4d39fe", module.exports)
-  }
-}
-
-/***/ }),
-
-/***/ 228:
+/***/ 229:
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
-function injectStyle (ssrContext) {
-  if (disposed) return
-  __webpack_require__(229)
-}
 var normalizeComponent = __webpack_require__(5)
 /* script */
-var __vue_script__ = __webpack_require__(231)
+var __vue_script__ = __webpack_require__(232)
 /* template */
-var __vue_template__ = __webpack_require__(232)
+var __vue_template__ = __webpack_require__(233)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
-var __vue_styles__ = injectStyle
+var __vue_styles__ = null
 /* scopeId */
 var __vue_scopeId__ = null
 /* moduleIdentifier (server only) */
@@ -1641,49 +847,7 @@ module.exports = Component.exports
 
 /***/ }),
 
-/***/ 229:
-/***/ (function(module, exports, __webpack_require__) {
-
-// style-loader: Adds some css to the DOM by adding a <style> tag
-
-// load the styles
-var content = __webpack_require__(230);
-if(typeof content === 'string') content = [[module.i, content, '']];
-if(content.locals) module.exports = content.locals;
-// add the styles to the DOM
-var update = __webpack_require__(11)("db106932", content, false, {});
-// Hot Module Replacement
-if(false) {
- // When the styles change, update the <style> tags
- if(!content.locals) {
-   module.hot.accept("!!../../../node_modules/css-loader/index.js!../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-052a2a18\",\"scoped\":false,\"hasInlineConfig\":true}!../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./_MortgageRefinance.vue", function() {
-     var newContent = require("!!../../../node_modules/css-loader/index.js!../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-052a2a18\",\"scoped\":false,\"hasInlineConfig\":true}!../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./_MortgageRefinance.vue");
-     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-     update(newContent);
-   });
- }
- // When the module is disposed, remove the <style> tags
- module.hot.dispose(function() { update(); });
-}
-
-/***/ }),
-
-/***/ 230:
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__(0)(false);
-// imports
-
-
-// module
-exports.push([module.i, "\n.typeNumber {\n        width: 100%;\n        padding: 12px 20px;\n        margin: 8px 0;\n        display: inline-block;\n        border: 1px solid #ccc;\n        border-radius: 4px;\n        box-sizing: border-box;\n}\n.typeNumbers {\n        width: 100%;\n        padding: 12px 20px;\n        margin: 8px 0;\n        display: inline-block;\n        border: 1px solid #ccc;\n        border-radius: 4px;\n        box-sizing: border-box;\n}\n.common {\n        width: 50%;\n        float: left;\n}\n.fees_section_points {\n        width: 100%;\n    clear: both;\n    display: inline-block;\n}\n.Points{\n\n        width: 50%;\n    float: left;\n}\n.costPoint{  width: 50%;\n    float: left;\n}\n.costPoint p{\n        margin: 0;\n    padding: 0;\n    position: relative;\n    top: 40px;\n    left: 30px;\n}\n.feeSection {\nwidth: 100%;\n    display: inline-block;\n}\n\n\n\n", ""]);
-
-// exports
-
-
-/***/ }),
-
-/***/ 231:
+/***/ 232:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -2071,7 +1235,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 /***/ }),
 
-/***/ 232:
+/***/ 233:
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -2110,7 +1274,7 @@ var render = function() {
             min: "0",
             id: "current_monthly_payment",
             name: "current_monthly_payment",
-            placeholder: "Mortgage Term"
+            placeholder: _vm.mortgageRefinanceLabel.current_monthly_payment
           },
           domProps: { value: _vm.current_monthly_payment },
           on: {
@@ -2384,7 +1548,7 @@ var render = function() {
     _vm._m(0),
     _vm._v(" "),
     _c("div", { staticClass: "fees_section_points" }, [
-      _c("div", { staticClass: "Points" }, [
+      _c("div", { staticClass: "points" }, [
         _c("label", [_vm._v("Points")]),
         _vm._v(" "),
         _c("input", {
@@ -2792,7 +1956,7 @@ var render = function() {
     ]),
     _vm._v(" "),
     _c("div", { staticClass: "costs_section" }, [
-      _c("p", [_vm._v("New Monthly Pament")]),
+      _vm._m(1),
       _vm._v(" "),
       _c("h1", [
         _c("span", [_vm._v("$")]),
@@ -2800,21 +1964,23 @@ var render = function() {
       ]),
       _vm._v(" "),
       _c("p", [
-        _vm._v("Monthly Savings: $" + _vm._s(_vm.monthly_savings.toFixed(2)))
+        _c("b", [_vm._v("Monthly Savings")]),
+        _vm._v(": $" + _vm._s(_vm.monthly_savings.toFixed(2)))
       ]),
       _vm._v(" "),
       _c("p", [
-        _vm._v(
-          "Difference in Interest: $" + _vm._s(_vm.diff_in_interest.toFixed(2))
-        )
+        _c("b", [_vm._v("Difference in Interest")]),
+        _vm._v(": $" + _vm._s(_vm.diff_in_interest.toFixed(2)))
       ]),
       _vm._v(" "),
-      _c("p", [_vm._v("Total cost: $" + _vm._s(_vm.total_cost.toFixed(2)))]),
+      _c("p", [
+        _c("b", [_vm._v("Total cost")]),
+        _vm._v(": $" + _vm._s(_vm.total_cost.toFixed(2)))
+      ]),
       _vm._v(" "),
       _c("p", [
-        _vm._v(
-          "Months to recoup costs: $" + _vm._s(_vm.months_rec_costs.toFixed(2))
-        )
+        _c("b", [_vm._v("Months to recoup costs")]),
+        _vm._v(": $" + _vm._s(_vm.months_rec_costs.toFixed(2)))
       ])
     ])
   ])
@@ -2825,8 +1991,16 @@ var staticRenderFns = [
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
     return _c("div", [
-      _c("p", [_c("strong", [_vm._v("How much will it cost you?")])])
+      _c("p", { staticClass: "cost_text" }, [
+        _c("strong", [_vm._v("How much will it cost you?")])
+      ])
     ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("p", [_c("b", [_vm._v("New Monthly Pament")])])
   }
 ]
 render._withStripped = true
@@ -2840,23 +2014,19 @@ if (false) {
 
 /***/ }),
 
-/***/ 233:
+/***/ 234:
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
-function injectStyle (ssrContext) {
-  if (disposed) return
-  __webpack_require__(234)
-}
 var normalizeComponent = __webpack_require__(5)
 /* script */
-var __vue_script__ = __webpack_require__(236)
+var __vue_script__ = __webpack_require__(237)
 /* template */
-var __vue_template__ = __webpack_require__(237)
+var __vue_template__ = __webpack_require__(238)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
-var __vue_styles__ = injectStyle
+var __vue_styles__ = null
 /* scopeId */
 var __vue_scopeId__ = null
 /* moduleIdentifier (server only) */
@@ -2892,54 +2062,11 @@ module.exports = Component.exports
 
 /***/ }),
 
-/***/ 234:
-/***/ (function(module, exports, __webpack_require__) {
-
-// style-loader: Adds some css to the DOM by adding a <style> tag
-
-// load the styles
-var content = __webpack_require__(235);
-if(typeof content === 'string') content = [[module.i, content, '']];
-if(content.locals) module.exports = content.locals;
-// add the styles to the DOM
-var update = __webpack_require__(11)("10b04e87", content, false, {});
-// Hot Module Replacement
-if(false) {
- // When the styles change, update the <style> tags
- if(!content.locals) {
-   module.hot.accept("!!../../../node_modules/css-loader/index.js!../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-5a88cc97\",\"scoped\":false,\"hasInlineConfig\":true}!../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./_MortgagePayment.vue", function() {
-     var newContent = require("!!../../../node_modules/css-loader/index.js!../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-5a88cc97\",\"scoped\":false,\"hasInlineConfig\":true}!../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./_MortgagePayment.vue");
-     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-     update(newContent);
-   });
- }
- // When the module is disposed, remove the <style> tags
- module.hot.dispose(function() { update(); });
-}
-
-/***/ }),
-
-/***/ 235:
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__(0)(false);
-// imports
-
-
-// module
-exports.push([module.i, "\n.loan-info {\n\t    background-color: #E7EDF5;\n\t    padding: 30px;\n}\n.typeNumbersField {\n\t\twidth: 100%;\n\t\tpadding: 12px 20px;\n\t    margin: 8px 0;\n\t    display: inline-block;\n\t    border: 1px solid #ccc;\n\t    border-radius: 4px;\n    \tbox-sizing: border-box;\n}\n", ""]);
-
-// exports
-
-
-/***/ }),
-
-/***/ 236:
+/***/ 237:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-//
 //
 //
 //
@@ -3049,7 +2176,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 /***/ }),
 
-/***/ 237:
+/***/ 238:
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -3057,10 +2184,8 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "mortgage_payment_calc" }, [
-    _c("h1", [_vm._v(_vm._s(_vm.tableTitle))]),
-    _vm._v(" "),
     _c("div", { staticClass: "loan-info" }, [
-      _vm._m(0),
+      _c("h3", [_vm._v(_vm._s(_vm.tableTitle))]),
       _vm._v(" "),
       _c("div", { staticClass: "mortgage_amount" }, [
         _c("label", [_vm._v(_vm._s(_vm.mortgagePaymentLabel.mortgageAmount))]),
@@ -3224,15 +2349,15 @@ var render = function() {
       ]),
       _vm._v(" "),
       _c("div", { staticClass: "mortgage_payment_pi" }, [
-        _vm._m(1),
+        _vm._m(0),
         _vm._v(" "),
-        _c("p", [_vm._v("$" + _vm._s(_vm.pi.toFixed(2)))])
+        _c("h5", [_vm._v("$" + _vm._s(_vm.pi.toFixed(2)))])
       ]),
       _vm._v(" "),
       _c("div", { staticClass: "mortgage_payment_piti" }, [
-        _vm._m(2),
+        _vm._m(1),
         _vm._v(" "),
-        _c("p", [_vm._v("$" + _vm._s(_vm.piti.toFixed(2)))])
+        _c("h5", [_vm._v("$" + _vm._s(_vm.piti.toFixed(2)))])
       ])
     ])
   ])
@@ -3242,19 +2367,13 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("p", [_c("strong", [_vm._v("Loan Information:")])])
+    return _c("h4", [_c("strong", [_vm._v("Monthly Payment(PI):")])])
   },
   function() {
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("label", [_c("strong", [_vm._v("Monthly Payment(PI):")])])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("label", [_c("strong", [_vm._v("Monthly Payment(PITI):")])])
+    return _c("h4", [_c("strong", [_vm._v("Monthly Payment(PITI):")])])
   }
 ]
 render._withStripped = true
@@ -3268,7 +2387,7 @@ if (false) {
 
 /***/ }),
 
-/***/ 238:
+/***/ 239:
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -3333,6 +2452,460 @@ if (false) {
   module.hot.accept()
   if (module.hot.data) {
     require("vue-hot-reload-api")      .rerender("data-v-0c5cfb0e", module.exports)
+  }
+}
+
+/***/ }),
+
+/***/ 241:
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", { staticClass: "mortgage_calculator" }, [
+    _c("div", { staticClass: "mortgage_calc_fields" }, [
+      _c("h3", [_vm._v(_vm._s(_vm.tableTitle))]),
+      _vm._v(" "),
+      _c("div", { staticClass: "loanAmountSection" }, [
+        _c("label", [_vm._v(_vm._s(_vm.mortgageCalcLabel.loanAmount))]),
+        _c("br"),
+        _vm._v(" "),
+        _c("input", {
+          directives: [
+            {
+              name: "model",
+              rawName: "v-model",
+              value: _vm.loanAmount,
+              expression: "loanAmount"
+            },
+            {
+              name: "validate",
+              rawName: "v-validate",
+              value: _vm.rules,
+              expression: "rules"
+            }
+          ],
+          staticClass: "typeNumber",
+          class: { error: _vm.errors.has("loanAmount") },
+          attrs: {
+            type: "number",
+            min: "0",
+            id: "loanAmount",
+            name: "loanAmount",
+            pattern: "/^-?\\d+\\.?\\d*$/",
+            onKeyPress: "if(this.value.length==8) return false;"
+          },
+          domProps: { value: _vm.loanAmount },
+          on: {
+            input: function($event) {
+              if ($event.target.composing) {
+                return
+              }
+              _vm.loanAmount = $event.target.value
+            }
+          }
+        }),
+        _vm._v(" "),
+        _vm.errors.has("loanAmount")
+          ? _c("span", { staticStyle: { color: "red" } }, [
+              _vm._v(
+                "\n                    " +
+                  _vm._s(_vm.errors.first("loanAmount")) +
+                  "\n                "
+              )
+            ])
+          : _vm._e()
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "downPamentSection" }, [
+        _c("div", { staticClass: "downPament" }, [
+          _c("label", [_vm._v(_vm._s(_vm.mortgageCalcLabel.downPament))]),
+          _c("br"),
+          _vm._v(" "),
+          _c("input", {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model",
+                value: _vm.downPament,
+                expression: "downPament"
+              }
+            ],
+            staticClass: "typeNumbers",
+            attrs: {
+              type: "number",
+              min: "0",
+              id: "downPament",
+              name: "downPament",
+              placeholder: "Down Pament"
+            },
+            domProps: { value: _vm.downPament },
+            on: {
+              input: function($event) {
+                if ($event.target.composing) {
+                  return
+                }
+                _vm.downPament = $event.target.value
+              }
+            }
+          })
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "downPamentPerc" }, [
+          _c("label", [
+            _vm._v(_vm._s(_vm.mortgageCalcLabel.downPament) + " Percentage")
+          ]),
+          _vm._v(" "),
+          _c("input", {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model",
+                value: _vm.downPamentPerc,
+                expression: "downPamentPerc"
+              }
+            ],
+            staticClass: "typeNumbers",
+            attrs: {
+              type: "number",
+              min: "0",
+              id: "downPamentPerc",
+              name: "downPamentPerc",
+              placeholder: "Down Pament Percentage"
+            },
+            domProps: { value: _vm.downPamentPerc },
+            on: {
+              input: function($event) {
+                if ($event.target.composing) {
+                  return
+                }
+                _vm.downPamentPerc = $event.target.value
+              }
+            }
+          })
+        ])
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "mortgageTermSection" }, [
+        _c("div", { staticClass: "mortgageTerm" }, [
+          _c("label", [_vm._v(_vm._s(_vm.mortgageCalcLabel.mortgageTerm))]),
+          _vm._v(" "),
+          _c("input", {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model",
+                value: _vm.mortgageTerm,
+                expression: "mortgageTerm"
+              },
+              {
+                name: "validate",
+                rawName: "v-validate",
+                value: _vm.term_rule,
+                expression: "term_rule"
+              }
+            ],
+            staticClass: "typeNumbers",
+            class: { error: _vm.errors.has("mortgageTerm") },
+            attrs: {
+              type: "number",
+              min: "0",
+              id: "mortgageTerm",
+              name: "mortgageTerm",
+              placeholder: "Mortgage Term",
+              pattern: "/^-?\\d+\\.?\\d*$/",
+              onKeyPress: "if(this.value.length==2) return false;"
+            },
+            domProps: { value: _vm.mortgageTerm },
+            on: {
+              input: function($event) {
+                if ($event.target.composing) {
+                  return
+                }
+                _vm.mortgageTerm = $event.target.value
+              }
+            }
+          }),
+          _vm._v(" "),
+          _vm.errors.has("mortgageTerm")
+            ? _c("span", { staticStyle: { color: "red" } }, [
+                _vm._v(
+                  "\n\t                    " +
+                    _vm._s(_vm.errors.first("mortgageTerm")) +
+                    "\n\t                "
+                )
+              ])
+            : _vm._e()
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "mortgageTermMonth" }, [
+          _c("label", [
+            _vm._v(_vm._s(_vm.mortgageCalcLabel.mortgageTerm) + " Month")
+          ]),
+          _vm._v(" "),
+          _c("input", {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model",
+                value: _vm.mortgageTermMonth,
+                expression: "mortgageTermMonth"
+              },
+              {
+                name: "validate",
+                rawName: "v-validate",
+                value: _vm.term_rule_month,
+                expression: "term_rule_month"
+              }
+            ],
+            staticClass: "typeNumbers",
+            class: { error: _vm.errors.has("mortgageTermMonth") },
+            attrs: {
+              type: "number",
+              min: "0",
+              id: "mortgageTermMonth",
+              name: "mortgageTermMonth",
+              placeholder: "Mortgage Term Month",
+              pattern: "/^-?\\d+\\.?\\d*$/",
+              onKeyPress: "if(this.value.length==3) return false;"
+            },
+            domProps: { value: _vm.mortgageTermMonth },
+            on: {
+              input: function($event) {
+                if ($event.target.composing) {
+                  return
+                }
+                _vm.mortgageTermMonth = $event.target.value
+              }
+            }
+          }),
+          _vm._v(" "),
+          _vm.errors.has("mortgageTermMonth")
+            ? _c("span", { staticStyle: { color: "red" } }, [
+                _vm._v(
+                  "\n\t                    " +
+                    _vm._s(_vm.errors.first("mortgageTermMonth")) +
+                    "\n\t                "
+                )
+              ])
+            : _vm._e()
+        ])
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "annualIntRateSection" }, [
+        _c("label", [_vm._v(_vm._s(_vm.mortgageCalcLabel.annualInterestRate))]),
+        _c("br"),
+        _vm._v(" "),
+        _c("input", {
+          directives: [
+            {
+              name: "model",
+              rawName: "v-model",
+              value: _vm.annualInterestRate,
+              expression: "annualInterestRate"
+            },
+            {
+              name: "validate",
+              rawName: "v-validate",
+              value: _vm.annual_int_rate_term,
+              expression: "annual_int_rate_term"
+            }
+          ],
+          staticClass: "typeNumber",
+          class: { error: _vm.errors.has("annualInterestRate") },
+          attrs: {
+            type: "number",
+            min: "0",
+            id: "annualInterestRate",
+            name: "annualInterestRate",
+            placeholder: "Annual Interest Rate",
+            pattern: "/^-?\\d+\\.?\\d*$/",
+            onKeyPress: "if(this.value.length==2) return false;"
+          },
+          domProps: { value: _vm.annualInterestRate },
+          on: {
+            input: function($event) {
+              if ($event.target.composing) {
+                return
+              }
+              _vm.annualInterestRate = $event.target.value
+            }
+          }
+        }),
+        _vm._v(" "),
+        _vm.errors.has("annualInterestRate")
+          ? _c("span", { staticStyle: { color: "red" } }, [
+              _vm._v(
+                "\n                    " +
+                  _vm._s(_vm.errors.first("annualInterestRate")) +
+                  "\n                "
+              )
+            ])
+          : _vm._e()
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "cost_section" }, [
+        _vm._m(0),
+        _vm._v(" "),
+        _c("h1", [
+          _c("span", [_vm._v("$")]),
+          _vm._v(" " + _vm._s(_vm.monthlyPayment.toFixed(2)))
+        ]),
+        _vm._v(" "),
+        _c("p", [
+          _c("b", [_vm._v("Total principal paid")]),
+          _vm._v(": $" + _vm._s(_vm.principalPaid))
+        ]),
+        _vm._v(" "),
+        _c("p", [
+          _c("b", [_vm._v("Total interest paid")]),
+          _vm._v(": $" + _vm._s(_vm.total_interest.toFixed(2)))
+        ])
+      ])
+    ]),
+    _vm._v(" "),
+    _vm.amortizationTable == true
+      ? _c("div", { staticClass: "btns" }, [
+          _vm.showAmortBtn
+            ? _c(
+                "button",
+                {
+                  staticClass: "paymentBtn",
+                  on: {
+                    click: function($event) {
+                      _vm.paymentSchedule()
+                    }
+                  }
+                },
+                [_vm._v("Payment Schedule")]
+              )
+            : _vm._e(),
+          _vm._v(" "),
+          !_vm.showAmortBtn
+            ? _c(
+                "button",
+                {
+                  staticClass: "hidePaymentBtn",
+                  on: {
+                    click: function($event) {
+                      _vm.hidePaymentSchedule()
+                    }
+                  }
+                },
+                [_vm._v("Hide Payment Schedule")]
+              )
+            : _vm._e()
+        ])
+      : _vm._e(),
+    _vm._v(" "),
+    _vm.showTable
+      ? _c("div", { staticClass: "ammortization_section" }, [
+          _vm._m(1),
+          _vm._v(" "),
+          _c("div", { staticClass: "est_payoff" }, [
+            _c("div", { staticClass: "start_date" }, [
+              _c("label", [_vm._v("Start Date")]),
+              _vm._v(" "),
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.date,
+                    expression: "date"
+                  }
+                ],
+                attrs: { type: "text", name: "date" },
+                domProps: { value: _vm.date },
+                on: {
+                  blur: function($event) {
+                    _vm.myBlurFun()
+                  },
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.date = $event.target.value
+                  }
+                }
+              })
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "est_payoff_date" }, [
+              _c("p", [_vm._v("Estimated Payoff Date")]),
+              _vm._v(" "),
+              _c("h4", { staticClass: "date_est" }, [
+                _vm._v(
+                  _vm._s(_vm.date_selected) + " " + _vm._s(_vm.estPayOffDate)
+                )
+              ])
+            ])
+          ]),
+          _vm._v(" "),
+          _c("table", [
+            _c("thead", [
+              _c(
+                "tr",
+                _vm._l(_vm.gridColumns, function(key) {
+                  return _c("th", { key: key }, [
+                    _vm._v(
+                      "\n                            \n                            " +
+                        _vm._s(_vm._f("capitalize")(key)) +
+                        "\n\n                        "
+                    )
+                  ])
+                })
+              )
+            ]),
+            _vm._v(" "),
+            _c(
+              "tbody",
+              _vm._l(_vm.gridData, function(entry, i) {
+                return _c(
+                  "tr",
+                  { key: i },
+                  _vm._l(_vm.gridColumns, function(key, j) {
+                    return _c("td", { key: j }, [
+                      _vm._v(
+                        "\n\n                            " +
+                          _vm._s(entry[key]) +
+                          "\n\n                        "
+                      )
+                    ])
+                  })
+                )
+              })
+            )
+          ])
+        ])
+      : _vm._e()
+  ])
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("p", [
+      _c("b", [_vm._v("Your estimated monthly payment")]),
+      _vm._v(":")
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("h4", [_c("strong", [_vm._v("Amortization Schedule")])])
+  }
+]
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-8d4d39fe", module.exports)
   }
 }
 
@@ -25252,40 +24825,6 @@ var index_esm = {
 
 /* harmony default export */ __webpack_exports__["a"] = (index_esm);
 
-
-
-/***/ }),
-
-/***/ 54:
-/***/ (function(module, exports) {
-
-/**
- * Translates the list format produced by css-loader into something
- * easier to manipulate.
- */
-module.exports = function listToStyles (parentId, list) {
-  var styles = []
-  var newStyles = {}
-  for (var i = 0; i < list.length; i++) {
-    var item = list[i]
-    var id = item[0]
-    var css = item[1]
-    var media = item[2]
-    var sourceMap = item[3]
-    var part = {
-      id: parentId + ':' + i,
-      css: css,
-      media: media,
-      sourceMap: sourceMap
-    }
-    if (!newStyles[id]) {
-      styles.push(newStyles[id] = { id: id, parts: [part] })
-    } else {
-      newStyles[id].parts.push(part)
-    }
-  }
-  return styles
-}
 
 
 /***/ }),

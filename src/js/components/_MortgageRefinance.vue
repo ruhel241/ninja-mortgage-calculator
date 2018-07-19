@@ -9,7 +9,7 @@
                 <input type="number" min=0 id="current_monthly_payment" 
                                    class="typeNumbers"
                                    name="current_monthly_payment" 
-                                   placeholder="Mortgage Term"
+                                   :placeholder="mortgageRefinanceLabel.current_monthly_payment"
                                    v-model="current_monthly_payment"
                                    v-validate="'required'"
                                 :class="{'error': errors.has('current_monthly_payment') }">
@@ -92,11 +92,11 @@
         </div>
 
         <div> 
-            <p><strong>How much will it cost you?</strong></p>
+            <p class="cost_text"><strong>How much will it cost you?</strong></p>
         </div>
 
         <div class="fees_section_points">
-            <div class="Points">
+            <div class="points">
                 <label>Points</label>
                 <input type="number" min=0 name="points"
                        id="points" v-model="points" placeholder="Points"
@@ -186,12 +186,12 @@
 
         <!-- All Cost Section -->
         <div class="costs_section">
-            <p>New Monthly Pament</p>
+            <p><b>New Monthly Pament</b></p>
             <h1><span>$</span>{{ monthly_payment.toFixed(2) }}</h1>
-            <p>Monthly Savings: ${{ monthly_savings.toFixed(2) }}</p>
-            <p>Difference in Interest: ${{ diff_in_interest.toFixed(2) }}</p>
-            <p>Total cost: ${{ total_cost.toFixed(2) }}</p>
-            <p>Months to recoup costs: ${{ months_rec_costs.toFixed(2) }}</p>
+            <p><b>Monthly Savings</b>: ${{ monthly_savings.toFixed(2) }}</p>
+            <p><b>Difference in Interest</b>: ${{ diff_in_interest.toFixed(2) }}</p>
+            <p><b>Total cost</b>: ${{ total_cost.toFixed(2) }}</p>
+            <p><b>Months to recoup costs</b>: ${{ months_rec_costs.toFixed(2) }}</p>
         </div>
         <!-- End Cost Section -->
     </div>
@@ -400,68 +400,3 @@ export default {
     }
 }
 </script>
-
-
-<style>
-
-    .typeNumber {
-        width: 100%;
-        padding: 12px 20px;
-        margin: 8px 0;
-        display: inline-block;
-        border: 1px solid #ccc;
-        border-radius: 4px;
-        box-sizing: border-box;
-    }
-
-    .typeNumbers {
-        width: 100%;
-        padding: 12px 20px;
-        margin: 8px 0;
-        display: inline-block;
-        border: 1px solid #ccc;
-        border-radius: 4px;
-        box-sizing: border-box;
-    }
-
-    .common {
-        width: 50%;
-        float: left;
-    }
-
-    .fees_section_points {
-        width: 100%;
-    clear: both;
-    display: inline-block;
-    }
-
-.Points{
-
-        width: 50%;
-    float: left;
-}
-
-  .costPoint{  width: 50%;
-    float: left;
-}
-
-.costPoint p{
-        margin: 0;
-    padding: 0;
-    position: relative;
-    top: 40px;
-    left: 30px;
-}
-
-
-
-
-.feeSection {
-width: 100%;
-    display: inline-block;
-
-}
-
-
-
-</style>

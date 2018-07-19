@@ -1,8 +1,8 @@
 <template>
-	<div id="mortgage_calculator">
+	<div class="mortgage_calculator">
 
 		<!-- Field Section -->
-		<div>
+		<div class="mortgage_calc_fields">
             <h3>{{ tableTitle }}</h3>
 			<div class="loanAmountSection">
 				<label>{{ mortgageCalcLabel.loanAmount }}</label><br />
@@ -80,20 +80,22 @@
                     {{ errors.first('annualInterestRate') }}
                 </span>  
 			</div>
+
+            <!-- All Cost Section -->
+            <div class="cost_section">
+                <p><b>Your estimated monthly payment</b>:</p>
+                <h1><span>$</span> {{ (monthlyPayment).toFixed(2) }}</h1>
+                <p><b>Total principal paid</b>: ${{ principalPaid }}</p>
+                <p><b>Total interest paid</b>: ${{ (total_interest).toFixed(2) }}</p>      
+            </div>
+
 		</div>
 		<!-- End Field Section -->
 
-		<!-- All Cost Section -->
+		
 
 
-        <div style="margin-top: 10px; margin-left: 0;">
-
-            <p>Your estimated monthly payment:</p>
-            <h1><span>$</span> {{ (monthlyPayment).toFixed(2) }}</h1>
-            <p>Total principal paid: ${{ principalPaid }}</p>
-            <p>Total interest paid: ${{ (total_interest).toFixed(2) }}</p>
         
-        </div>
 
         <div class="btns" v-if="amortizationTable==true">
             <button @click="paymentSchedule()" v-if="showAmortBtn" class="paymentBtn">Payment Schedule</button>
@@ -102,16 +104,19 @@
 
         <div class="ammortization_section" v-if="showTable">
 
-            <p>
+            <h4>
                 <strong>Amortization Schedule</strong>
-            </p>
+            </h4>
 
             <div class="est_payoff">
-                    
-                    <label>Start Date</label>
-                    <input type="text" v-model="date" name="date" v-on:blur="myBlurFun()">
-                    <p>Estimated Payoff Date</p>
-                    <h4 class="date_est">{{ date_selected }} {{ estPayOffDate }}</h4>
+                    <div class="start_date">
+                        <label>Start Date</label>
+                        <input type="text" v-model="date" name="date" v-on:blur="myBlurFun()">
+                    </div>
+                    <div class="est_payoff_date">
+                        <p>Estimated Payoff Date</p>
+                        <h4 class="date_est">{{ date_selected }} {{ estPayOffDate }}</h4>
+                    </div>
 
             </div>
 
@@ -497,128 +502,3 @@
     }
 }
 </script>
-
-<style scoped>
-	input[type=text] {
-	    width: 100%;
-	    padding: 12px 20px;
-	    margin: 8px 0;
-	    display: inline-block;
-	    border: 1px solid #ccc;
-	    border-radius: 4px;
-    	box-sizing: border-box;
-	}
-	
-	.typeNumber {
-		width: 100%;
-		padding: 12px 20px;
-	    margin: 8px 0;
-	    display: inline-block;
-	    border: 1px solid #ccc;
-	    border-radius: 4px;
-    	box-sizing: border-box;
-	}
-
-	.typeNumbers {
-		width: 100%;
-		padding: 12px 20px;
-	    margin: 8px 0;
-	    display: inline-block;
-	    border: 1px solid #ccc;
-	    border-radius: 4px;
-    	box-sizing: border-box;
-	}
-
-	.downPament {
-		width: 50%;
-		float: left;
-	}
-
-	.downPamentPerc {
-		width: 50%;
-		float: left;
-	}
-
-	.mortgageTerm {
-		width: 50%;
-		float: left;
-	}
-
-	.mortgageTermMonth {
-		width: 50%;
-		float: left;
-	}
-
-	.error {
-	    border-color: red;
-	    box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 5px rgba(232,68,68,.6);
-	}
-
-    .paymentBtn {
-        background-color: #4CAF50;
-        border: none;
-        color: white;
-        padding: 15px 32px;
-        text-align: center;
-        text-decoration: none;
-        display: inline-block;
-        font-size: 16px;
-        margin: 4px 2px;
-        cursor: pointer;
-    }
-
-    .hidePaymentBtn {
-        background-color: #f44336;
-        border: none;
-        color: white;
-        padding: 15px 32px;
-        text-align: center;
-        text-decoration: none;
-        display: inline-block;
-        font-size: 16px;
-        margin: 4px 2px;
-        cursor: pointer;
-    }
-
-    table {
-      border: 2px solid #42b983;
-      border-radius: 3px;
-      background-color: #fff;
-      width: 100%;
-    }
-
-    th {
-      background-color: #4CAF50;
-      color: rgba(255,255,255,0.66);
-      cursor: pointer;
-      -webkit-user-select: none;
-      -moz-user-select: none;
-      -ms-user-select: none;
-      user-select: none;
-    }
-
-    td {
-      background-color: #f9f9f9;
-    }
-
-    th, td {
-      padding: 10px 18px;
-    }
-
-    th.active {
-      color: #fff;
-    }
-
-    th.active .arrow {
-      opacity: 1;
-    }
-
-    tr {
-        text-align: center;
-    }
-
-    .date_est {
-        padding: 0;
-        margin-top: -17px;
-    }
-</style>
