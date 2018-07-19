@@ -78,6 +78,16 @@
 .mortgage_calculator .mortgage_calc_fields .cost_section {
   margin: 0 auto;
   text-align: center;
+  margin-top: 10px;
+}
+
+.mortgage_calculator .mortgage_calc_fields .cost_section p {
+  padding: 0;
+  margin: 0 !important;
+}
+
+.mortgage_calculator .mortgage_calc_fields .cost_section h1 {
+  margin: 0;
 }
 
 .mortgage_calculator .btns .paymentBtn {
