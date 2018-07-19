@@ -107,9 +107,7 @@ class MortgageCalculatorHandler
 			'post_status' => 'publish',
 		);
 
-		self::$selectedCalc = $calculatorType;
-
-
+		self::$selectedCalc = $calculatorType; //post_content(mortgage calculator select)
 
 
 		$tableId = wp_insert_post($tableData);

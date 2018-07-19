@@ -13,8 +13,8 @@
 				</h1>
 			</el-col>
 			<el-col :span="4">
-				<el-button class="common_btn" @click="updateTableConfig()">Update</el-button>
-				<el-button class="common_btn">Preview</el-button>
+				<el-button class="common_btn" @click="updateTableConfig()" type="success">Update</el-button>
+				<el-button class="common_btn" type="primary"><a :href="demo_url" target="_blank" style="color: #fff; text-decoration: none;">Preview</a></el-button>
 			</el-col>
 		</el-col>
 	</el-row>
@@ -330,7 +330,8 @@ export default {
                 }
             ],
 			updatedData: {},
-			bool: false
+			bool: false,
+			demo_url: ''
 			}
 		},
 		methods: {
@@ -352,6 +353,7 @@ export default {
 						}
 						
 						this.post_title = response.data.table.post_title;
+						this.demo_url = response.data.demo_url;
 
 						if(this.calc_type == 'mortgage_calculator' ) {
 							

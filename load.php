@@ -6,3 +6,4 @@ include "Classes/MortgageCalculatorHandler.php";
 include "Classes/CalculatorRenderer.php";
 include "Classes/View.php";
 include "Classes/global_functions.php";
+include "Classes/ProcessDemoPage.php";

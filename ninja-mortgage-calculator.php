@@ -35,8 +35,12 @@ class NINJAMortgageCalculator
 	{
 		add_action('init', array('NinjaMortgage\Classes\CPT', 'register')); 
 		add_action('wp_enqueue_scripts', array($this, 'enqueueScripts') );
-
 		add_shortcode('ninja_mortgage_cal', array('NinjaMortgage\Classes\MortgageCalculatorHandler','handleShortCode') );
+
+		add_action('init', function () {
+            \NinjaMortgage\Classes\ProcessDemoPage::demoPages();
+        });
+
 	}
 	
 	public function adminHooks()
