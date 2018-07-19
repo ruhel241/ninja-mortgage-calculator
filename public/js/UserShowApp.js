@@ -512,6 +512,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             date: "",
             showAmortBtn: true,
             showTable: true,
+            date_us: '01/05/2017',
             gridColumns: ['PaymentDate', 'payment', 'principal', 'interest', 'totalInterest', 'balance'],
             gridData: [],
             months: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June', 'July', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
@@ -545,9 +546,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         if (mm < 10) {
             mm = '0' + mm;
         }
-        today = dd + '/' + mm + "/" + year;
+        today = mm + "/" + dd + "/" + year;
         console.log(today);
-        this.date = today;
+        this.date_us = today;
         // Generating Amortization Schedule
         var ann_int_rate = this.annualInterestRate / 12;
         ann_int_rate /= 100;
@@ -644,6 +645,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             if (this.annualInterestRateUpd != 0 && this.mortgageTermMonth != 0 && this.loanAmount != 0 && this.principalPaid != 0) {
                 this.monthlyPayment = parseFloat(this.principalPaid * this.annualInterestRateUpd / (1 - 1 / Math.pow(1 + this.annualInterestRateUpd, this.mortgageTermMonth)));
             }
+
+            this.downPamentPerc = (this.downPament / this.loanAmount * 100).toFixed(2);
         },
         mortgageTerm: function mortgageTerm() {
             this.showTable = false;
@@ -785,10 +788,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             this.showAmortBtn = true;
             this.gridData.length = 0;
         },
-        myBlurFun: function myBlurFun() {
-            var str = this.date;
-            var month = str.substring(3, 5);
-            var date = str.substring(0, 2);
+        dateChangeFun: function dateChangeFun() {
+            var str = this.date_us;
+            console.log(this.date_us);
+            var month = str.substring(5, 7);
+            var date = str.substring(8, 10);
+            console.log(month);
+            console.log(date);
             this.date_selected = date;
             this.month = parseInt(month);
             this.gridData = [];
@@ -2813,21 +2819,21 @@ var render = function() {
                   {
                     name: "model",
                     rawName: "v-model",
-                    value: _vm.date,
-                    expression: "date"
+                    value: _vm.date_us,
+                    expression: "date_us"
                   }
                 ],
-                attrs: { type: "text", name: "date" },
-                domProps: { value: _vm.date },
+                attrs: { type: "date" },
+                domProps: { value: _vm.date_us },
                 on: {
-                  blur: function($event) {
-                    _vm.myBlurFun()
+                  change: function($event) {
+                    _vm.dateChangeFun()
                   },
                   input: function($event) {
                     if ($event.target.composing) {
                       return
                     }
-                    _vm.date = $event.target.value
+                    _vm.date_us = $event.target.value
                   }
                 }
               })

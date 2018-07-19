@@ -111,7 +111,7 @@
             <div class="est_payoff">
                     <div class="start_date">
                         <label>Start Date</label>
-                        <input type="text" v-model="date" name="date" v-on:blur="myBlurFun()">
+                        <input type="date" v-model="date_us" @change="dateChangeFun()">
                     </div>
                     <div class="est_payoff_date">
                         <p>Estimated Payoff Date</p>
@@ -181,6 +181,7 @@
             date: "",
             showAmortBtn: true,
             showTable: true,
+            date_us: '01/05/2017',
             gridColumns: [
                 'PaymentDate', 'payment', 'principal', 'interest', 'totalInterest', 'balance'
             ],
@@ -218,9 +219,9 @@
         if( mm < 10 ) {
             mm = '0' + mm;
         }
-        today = dd + '/' + mm + "/" + year;
+        today = mm + "/" + dd + "/" + year;
         console.log(today)
-        this.date = today;
+        this.date_us = today;
         // Generating Amortization Schedule
         var ann_int_rate = ( this.annualInterestRate / 12);
         ann_int_rate /= 100;
@@ -326,6 +327,8 @@
                 this.monthlyPayment =  parseFloat( ( ( this.principalPaid * this.annualInterestRateUpd ) / ( 1 - ( 1 / Math.pow( ( 1 + this.annualInterestRateUpd ), this.mortgageTermMonth ) ) ) ) );
             
             }
+
+            this.downPamentPerc = ( (this.downPament / this.loanAmount ) * 100 ).toFixed(2);
         },
         mortgageTerm() {
             this.showTable = false;
@@ -490,10 +493,13 @@
             this.showAmortBtn = true;
             this.gridData.length = 0;
         },
-        myBlurFun() {
-            var str = this.date;
-            var month = str.substring(3, 5);
-            var date = str.substring(0, 2);
+        dateChangeFun() {
+            var str = this.date_us;
+            console.log(this.date_us);
+            var month = str.substring(5, 7);
+            var date = str.substring(8, 10);
+            console.log(month);
+            console.log(date);
             this.date_selected = date;
             this.month = parseInt(month);
             this.gridData = [];
