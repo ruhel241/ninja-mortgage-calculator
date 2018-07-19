@@ -10,8 +10,15 @@ $calcTableBgColor: #E7EDF5;
 
 // Styling Mortgage Calculator User View
 .mortgage_calculator {
-
 	width: 100%;
+	p {
+		margin:0 !important;
+		padding:0 !important;
+	}
+	h1{
+		margin:0 !important;
+		padding:0 !important;
+	}
 
 	h3 {
 		text-align: center;
@@ -86,13 +93,8 @@ $calcTableBgColor: #E7EDF5;
 		    margin: 0 auto;
 		    text-align: center;
 		    margin-top: 10px;
-		    p{
-				padding: 0;
-	   			margin: 0 !important;
-			}
-			h1{
-			  margin: 0;
-			}
+		    padding: 15px;
+		   
 		}
 		
 		
@@ -198,10 +200,17 @@ $calcTableBgColor: #E7EDF5;
 
 // Mortgage Refinance Calculator User View
 .mortgage_finance_calc {
-
 	width: 100%;
 	background-color: $calcTableBgColor;
 	padding: 15px;
+	p {
+		margin:0 !important;
+		padding:0 !important;
+	}
+	h1 {
+		margin:0 !important;
+		padding:0 !important;
+	}
 
 	h3 {
 		text-align: center;
@@ -275,6 +284,7 @@ $calcTableBgColor: #E7EDF5;
 		padding-left: 7.5px;
 	    padding-right: 7.5px;
 	    text-align: center;
+	    margin: 15px;
 	}
 
 }
@@ -282,8 +292,12 @@ $calcTableBgColor: #E7EDF5;
 
 // Mortgage Payment Calculator User View
 .mortgage_payment_calc {
-
 	width: 100%;
+	h4, h5 {
+		margin: 7px 0px 0px 0px !important;
+    	padding: 0;
+	}
+	
 	h3 {
 		text-align: center;
 		margin-bottom: 28px;
@@ -300,6 +314,9 @@ $calcTableBgColor: #E7EDF5;
 		    border: 1px solid #ccc;
 		    border-radius: 4px;
 	    	box-sizing: border-box;
+		}
+		.annual_property_insurance {
+			margin-bottom: 20px;
 		}
 		.mortgage_payment_pi {
 			text-align: center !important;

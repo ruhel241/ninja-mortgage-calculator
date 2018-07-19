@@ -2,6 +2,16 @@
   width: 100%;
 }
 
+.mortgage_calculator p {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.mortgage_calculator h1 {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
 .mortgage_calculator h3 {
   text-align: center;
   margin-bottom: 28px;
@@ -79,15 +89,7 @@
   margin: 0 auto;
   text-align: center;
   margin-top: 10px;
-}
-
-.mortgage_calculator .mortgage_calc_fields .cost_section p {
-  padding: 0;
-  margin: 0 !important;
-}
-
-.mortgage_calculator .mortgage_calc_fields .cost_section h1 {
-  margin: 0;
+  padding: 15px;
 }
 
 .mortgage_calculator .btns .paymentBtn {
@@ -180,6 +182,16 @@
   padding: 15px;
 }
 
+.mortgage_finance_calc p {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.mortgage_finance_calc h1 {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
 .mortgage_finance_calc h3 {
   text-align: center;
   margin-bottom: 28px;
@@ -254,10 +266,17 @@
   padding-left: 7.5px;
   padding-right: 7.5px;
   text-align: center;
+  margin: 15px;
 }
 
 .mortgage_payment_calc {
   width: 100%;
+}
+
+.mortgage_payment_calc h4,
+.mortgage_payment_calc h5 {
+  margin: 7px 0px 0px 0px !important;
+  padding: 0;
 }
 
 .mortgage_payment_calc h3 {
@@ -279,6 +298,10 @@
   border-radius: 4px;
   -webkit-box-sizing: border-box;
           box-sizing: border-box;
+}
+
+.mortgage_payment_calc .loan-info .annual_property_insurance {
+  margin-bottom: 20px;
 }
 
 .mortgage_payment_calc .loan-info .mortgage_payment_pi {
