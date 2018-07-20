@@ -98,8 +98,8 @@
         
 
         <div class="btns" v-if="amortizationTable==true">
-            <button @click="paymentSchedule()" v-if="showAmortBtn" class="paymentBtn">Payment Schedule</button>
-            <button @click="hidePaymentSchedule()" v-if="!showAmortBtn" class="hidePaymentBtn">Hide Payment Schedule</button>
+            <button @click="paymentSchedule()" v-if="showAmortBtn" class="paymentBtn" :disabled="errors.any()">Payment Schedule</button>
+            <button @click="hidePaymentSchedule()" v-if="!showAmortBtn" class="hidePaymentBtn" :disabled="errors.any()">Hide Payment Schedule</button>
         </div>
 
         <div class="ammortization_section" v-if="showTable">
@@ -126,10 +126,39 @@
 
                     <tr>
 
-                        <th v-for="key in gridColumns"
-                               :key="key">
+                        <th>
                             
-                            {{ key | capitalize }}
+                            Payment Date
+
+                        </th>
+
+                        <th>
+                            
+                            Payment
+
+                        </th>
+
+                        <th>
+                            
+                            Principal
+
+                        </th>
+
+                        <th>
+                            
+                            Interest
+
+                        </th>
+
+                        <th>
+                            
+                            Total Interest
+
+                        </th>
+
+                        <th>
+                            
+                            Balance
 
                         </th>
 
@@ -302,13 +331,16 @@
             if( this.loanAmount == 0 || this.loanAmount == '') {
                 this.monthlyPayment = 0;
                 this.principalPaid = 0;
+
+                this.showAmortBtn = true;
             }
         },
         downPament() {
             this.showTable = false;
-            if( this.principalPaid == 0 ) {
+            if( this.principalPaid == 0 || this.loanAmount == '' ) {
                 
                 this.principalPaid = this.loanAmount;
+                this.showAmortBtn = true;
             
             }
             if( this.loanAmount != 0 ) {
@@ -355,6 +387,8 @@
             if( this.mortgageTerm == 0 || this.mortgageTerm == '' ) {
                 this.monthlyPayment = 0;
                 this.principalPaid = 0;
+
+                this.showAmortBtn = true;
             }
             
             else {
@@ -367,8 +401,10 @@
             if( this.mortgageTermMonth != 0 ) {
                 this.mortgageTerm = this.mortgageTermMonth / 12;
             }
-            if( this.mortgageTermMonth == '' ) {
+            if( this.mortgageTermMonth == 0 || this.mortgageTermMonth == '' ) {
                 this.mortgageTerm = 0;
+
+                this.showAmortBtn = true;
             }
         },
         annualInterestRate() {
@@ -386,6 +422,8 @@
             if( this.annualInterestRate == 0 || this.annualInterestRate == '' ) {
                 this.monthlyPayment = 0;
                 this.principalPaid = 0;
+
+                this.showAmortBtn = true;
             }       
             if( this.loanAmount != 0 && this.annualInterestRateUpd != 0 && this.mortgageTerm != 0 && this.principalPaid != 0) {
                 this.monthlyPayment = parseFloat( ( this.principalPaid * this.annualInterestRateUpd ) / ( 1 - ( 1 / Math.pow( ( 1 + this.annualInterestRateUpd ), this.mortgageTermMonth ) ) ) ); 
@@ -394,23 +432,16 @@
         },
         // downPamentPerc() {
         //     if( this.loanAmount != 0 ) {
-        //         if(this.downPamentPerc == '' ) {
-        //             this.downPamentPerc = 0;
-        //         }
+
         //         let res = ( this.loanAmount / 100 );
-        //         this.newValue = res * this.downPamentPerc;
-        //         console.log(this.newValue);
-        //         this.downPament = this.newValue;
+        //         var newValue = res * this.downPamentPerc;
+        //         this.downPament = newValue;
                 
         //     }
+        //     else if( this.downPamentPerc == 0 ) {
+        //         this.downPament = 0;
+        //     }
         // }
-    },
-    filters: {
-        capitalize: function (str) {
-            
-            return str.charAt(0).toUpperCase() + str.slice(1)
-        
-        }
     },
     methods: {
         paymentSchedule() {

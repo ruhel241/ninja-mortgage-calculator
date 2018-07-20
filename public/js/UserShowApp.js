@@ -126,7 +126,7 @@ var Component = normalizeComponent(
   __vue_scopeId__,
   __vue_module_identifier__
 )
-Component.options.__file = "src\\js\\components\\UserCalculator.vue"
+Component.options.__file = "src/js/components/UserCalculator.vue"
 
 /* hot reload */
 if (false) {(function () {
@@ -135,9 +135,9 @@ if (false) {(function () {
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-5e0ae886", Component.options)
+    hotAPI.createRecord("data-v-0c5cfb0e", Component.options)
   } else {
-    hotAPI.reload("data-v-5e0ae886", Component.options)
+    hotAPI.reload("data-v-0c5cfb0e", Component.options)
   }
   module.hot.dispose(function (data) {
     disposed = true
@@ -306,7 +306,7 @@ var Component = normalizeComponent(
   __vue_scopeId__,
   __vue_module_identifier__
 )
-Component.options.__file = "src\\js\\components\\_MortgageCalculator.vue"
+Component.options.__file = "src/js/components/_MortgageCalculator.vue"
 
 /* hot reload */
 if (false) {(function () {
@@ -315,9 +315,9 @@ if (false) {(function () {
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-353ebd14", Component.options)
+    hotAPI.createRecord("data-v-8d4d39fe", Component.options)
   } else {
-    hotAPI.reload("data-v-353ebd14", Component.options)
+    hotAPI.reload("data-v-8d4d39fe", Component.options)
   }
   module.hot.dispose(function (data) {
     disposed = true
@@ -334,6 +334,35 @@ module.exports = Component.exports
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -625,13 +654,16 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             if (this.loanAmount == 0 || this.loanAmount == '') {
                 this.monthlyPayment = 0;
                 this.principalPaid = 0;
+
+                this.showAmortBtn = true;
             }
         },
         downPament: function downPament() {
             this.showTable = false;
-            if (this.principalPaid == 0) {
+            if (this.principalPaid == 0 || this.loanAmount == '') {
 
                 this.principalPaid = this.loanAmount;
+                this.showAmortBtn = true;
             }
             if (this.loanAmount != 0) {
                 this.principalPaid = parseFloat(this.loanAmount - this.downPament);
@@ -669,6 +701,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             if (this.mortgageTerm == 0 || this.mortgageTerm == '') {
                 this.monthlyPayment = 0;
                 this.principalPaid = 0;
+
+                this.showAmortBtn = true;
             } else {
                 this.monthlyPayment = parseFloat(this.principalPaid * this.annualInterestRateUpd / (1 - 1 / Math.pow(1 + this.annualInterestRateUpd, this.mortgageTermMonth)));
             }
@@ -678,8 +712,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             if (this.mortgageTermMonth != 0) {
                 this.mortgageTerm = this.mortgageTermMonth / 12;
             }
-            if (this.mortgageTermMonth == '') {
+            if (this.mortgageTermMonth == 0 || this.mortgageTermMonth == '') {
                 this.mortgageTerm = 0;
+
+                this.showAmortBtn = true;
             }
         },
         annualInterestRate: function annualInterestRate() {
@@ -697,16 +733,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             if (this.annualInterestRate == 0 || this.annualInterestRate == '') {
                 this.monthlyPayment = 0;
                 this.principalPaid = 0;
+
+                this.showAmortBtn = true;
             }
             if (this.loanAmount != 0 && this.annualInterestRateUpd != 0 && this.mortgageTerm != 0 && this.principalPaid != 0) {
                 this.monthlyPayment = parseFloat(this.principalPaid * this.annualInterestRateUpd / (1 - 1 / Math.pow(1 + this.annualInterestRateUpd, this.mortgageTermMonth)));
             }
-        }
-    },
-    filters: {
-        capitalize: function capitalize(str) {
-
-            return str.charAt(0).toUpperCase() + str.slice(1);
         }
     },
     methods: {
@@ -1121,6 +1153,7 @@ var render = function() {
                 "button",
                 {
                   staticClass: "paymentBtn",
+                  attrs: { disabled: _vm.errors.any() },
                   on: {
                     click: function($event) {
                       _vm.paymentSchedule()
@@ -1136,6 +1169,7 @@ var render = function() {
                 "button",
                 {
                   staticClass: "hidePaymentBtn",
+                  attrs: { disabled: _vm.errors.any() },
                   on: {
                     click: function($event) {
                       _vm.hidePaymentSchedule()
@@ -1193,20 +1227,7 @@ var render = function() {
           ]),
           _vm._v(" "),
           _c("table", [
-            _c("thead", [
-              _c(
-                "tr",
-                _vm._l(_vm.gridColumns, function(key) {
-                  return _c("th", { key: key }, [
-                    _vm._v(
-                      "\n                            \n                            " +
-                        _vm._s(_vm._f("capitalize")(key)) +
-                        "\n\n                        "
-                    )
-                  ])
-                })
-              )
-            ]),
+            _vm._m(2),
             _vm._v(" "),
             _c(
               "tbody",
@@ -1246,6 +1267,50 @@ var staticRenderFns = [
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
     return _c("h4", [_c("strong", [_vm._v("Amortization Schedule")])])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("thead", [
+      _c("tr", [
+        _c("th", [
+          _vm._v(
+            "\n                            \n                            Payment Date\n\n                        "
+          )
+        ]),
+        _vm._v(" "),
+        _c("th", [
+          _vm._v(
+            "\n                            \n                            Payment\n\n                        "
+          )
+        ]),
+        _vm._v(" "),
+        _c("th", [
+          _vm._v(
+            "\n                            \n                            Principal\n\n                        "
+          )
+        ]),
+        _vm._v(" "),
+        _c("th", [
+          _vm._v(
+            "\n                            \n                            Interest\n\n                        "
+          )
+        ]),
+        _vm._v(" "),
+        _c("th", [
+          _vm._v(
+            "\n                            \n                            Total Interest\n\n                        "
+          )
+        ]),
+        _vm._v(" "),
+        _c("th", [
+          _vm._v(
+            "\n                            \n                            Balance\n\n                        "
+          )
+        ])
+      ])
+    ])
   }
 ]
 render._withStripped = true
@@ -1253,7 +1318,7 @@ module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {
   module.hot.accept()
   if (module.hot.data) {
-    require("vue-hot-reload-api")      .rerender("data-v-353ebd14", module.exports)
+    require("vue-hot-reload-api")      .rerender("data-v-8d4d39fe", module.exports)
   }
 }
 
@@ -1284,7 +1349,7 @@ var Component = normalizeComponent(
   __vue_scopeId__,
   __vue_module_identifier__
 )
-Component.options.__file = "src\\js\\components\\_MortgageRefinance.vue"
+Component.options.__file = "src/js/components/_MortgageRefinance.vue"
 
 /* hot reload */
 if (false) {(function () {
@@ -1293,9 +1358,9 @@ if (false) {(function () {
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-42f7c1a5", Component.options)
+    hotAPI.createRecord("data-v-052a2a18", Component.options)
   } else {
-    hotAPI.reload("data-v-42f7c1a5", Component.options)
+    hotAPI.reload("data-v-052a2a18", Component.options)
   }
   module.hot.dispose(function (data) {
     disposed = true
@@ -2468,7 +2533,7 @@ module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {
   module.hot.accept()
   if (module.hot.data) {
-    require("vue-hot-reload-api")      .rerender("data-v-42f7c1a5", module.exports)
+    require("vue-hot-reload-api")      .rerender("data-v-052a2a18", module.exports)
   }
 }
 
@@ -2499,7 +2564,7 @@ var Component = normalizeComponent(
   __vue_scopeId__,
   __vue_module_identifier__
 )
-Component.options.__file = "src\\js\\components\\_MortgagePayment.vue"
+Component.options.__file = "src/js/components/_MortgagePayment.vue"
 
 /* hot reload */
 if (false) {(function () {
@@ -2508,9 +2573,9 @@ if (false) {(function () {
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-d3fe3938", Component.options)
+    hotAPI.createRecord("data-v-5a88cc97", Component.options)
   } else {
-    hotAPI.reload("data-v-d3fe3938", Component.options)
+    hotAPI.reload("data-v-5a88cc97", Component.options)
   }
   module.hot.dispose(function (data) {
     disposed = true
@@ -2841,7 +2906,7 @@ module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {
   module.hot.accept()
   if (module.hot.data) {
-    require("vue-hot-reload-api")      .rerender("data-v-d3fe3938", module.exports)
+    require("vue-hot-reload-api")      .rerender("data-v-5a88cc97", module.exports)
   }
 }
 
@@ -2911,7 +2976,7 @@ module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {
   module.hot.accept()
   if (module.hot.data) {
-    require("vue-hot-reload-api")      .rerender("data-v-5e0ae886", module.exports)
+    require("vue-hot-reload-api")      .rerender("data-v-0c5cfb0e", module.exports)
   }
 }
 

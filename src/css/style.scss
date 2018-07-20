@@ -11,10 +11,12 @@ $calcTableBgColor: #E7EDF5;
 // Styling Mortgage Calculator User View
 .mortgage_calculator {
 	width: 100%;
+
 	p {
 		margin:0 !important;
 		padding:0 !important;
 	}
+
 	h1{
 		margin:0 !important;
 		padding:0 !important;
@@ -29,6 +31,7 @@ $calcTableBgColor: #E7EDF5;
 
 		background-color: $calcTableBgColor;
 		padding: 15px;
+		margin-bottom: 15px;
 
 		input[type=text] {
 		    width: 100%;
@@ -133,12 +136,37 @@ $calcTableBgColor: #E7EDF5;
 
 	.ammortization_section {
 
+		.est_payoff {
+
+			margin-bottom: 65px;
+
+	    	.start_date {
+	    		float: left;
+	    	}
+
+		    .date_est {
+		        padding: 0;
+		        margin-top: -10px;
+		    }
+
+		    .est_payoff_date {
+		    	float: right;
+		    	
+		    	p {
+		    		position: relative;
+				    top: -9px;
+				    right: 15px;
+		    	}
+		    }
+
+	    }
+
 		table {
 	      border: 2px solid $tableBorderColor;
 	      border-radius: 3px;
 	      background-color: $tableBgColor;
 	      width: 100%;
-	      margin-top: 30px;
+	      
 	    }
 
 	    th {
@@ -169,29 +197,6 @@ $calcTableBgColor: #E7EDF5;
 
 	    tr {
 	        text-align: center;
-	    }
-
-	    .est_payoff {
-
-	    	.start_date {
-	    		float: left;
-	    	}
-
-		    .date_est {
-		        padding: 0;
-		        margin-top: -17px;
-		    }
-
-		    .est_payoff_date {
-		    	float: right;
-		    	
-		    	p {
-		    		position: relative;
-				    top: -9px;
-				    right: 15px;
-		    	}
-		    }
-
 	    }
 
 	}
