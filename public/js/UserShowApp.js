@@ -219,7 +219,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             this.mortgage_calculator_label = res.selectedLabel;
             this.mortgage_calculator_default = res.selectedDefault;
             this.amortization_table = res.settings;
-            console.log('Amort user table' + window.ninja_mortgage_cal_vars);
         } else if (this.calculator_type === 'mortgage_refinance') {
             this.mortgage_refinance_label = res.selectedLabel;
             this.mortgage_refinance_default = res.selectedDefault;
@@ -227,55 +226,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             this.mortgage_payment_label = res.selectedLabel;
             this.mortgage_payment_default = res.selectedDefault;
         }
-
-        // this.calculator_type = res.post_content;
-        // this.table_id = res.ID;
-        // var res = window.ninja_mortgage_cal_vars.post;
-        // this.table_title = res.post_title;
-        // this.calculator_type = res.post_content;
-        // this.table_id = res.ID;
-        // var content = window.ninja_mortgage_cal_vars.settings;
-        // console.log(content);
-
-        // if( this.calculator_type === 'mortgage_calculator' ) {
-        //     console.log("All Mortgage Calculator" + content.all_mort_calc_table)
-        //     this.mortgage_calculator_label = content.all_mort_calc_table;
-        //     this.mortgage_calculator_default = content.all_mort_calc_table_def_val;
-        //     this.amortization_table = content.all_mort_calc_table.amortizationTable;
-        //     console.log("Amortization Table is " + this.amortization_table);
-        // }
-        // else if( this.calculator_type === 'mortgage_refinance' ) {
-        //     alert("Mortgage Refinance")
-        // }
-        /*
-        var res = window.ninja_mortgage_cal_vars.post;
-        console.log(res);
-        this.calculator_type = res.post_content;
-        this.table_id = res.ID;
-        this.table_title = res.post_title;
-         jQuery.get(ajaxurl, {
-                action: 'ninja_mortgage_ajax_actions',
-                route: 'get_table',
-                table_id: this.table_id
-            }).then(
-                (response) => {
-                    console.log(response)
-        })
-         
-        if( this.calculator_type === 'mortgage_calculator' ) {
-            this.mortgage_calculator_label = window.ninja_mortgage_cal_vars.settings.selectedLabel;
-            this.mortgage_calculator_default = window.ninja_mortgage_cal_vars.settings.selectedDefault;
-            this.amortization_table = window.ninja_mortgage_cal_vars.settings.settings;
-        }
-        else if( this.calculator_type === 'mortgage_refinance' ) {
-            this.mortgage_refinance_label = window.ninja_mortgage_cal_vars.settings.selectedLabel;
-            this.mortgage_refinance_default = window.ninja_mortgage_cal_vars.settings.selectedDefault;
-            
-        }
-        else if( this.calculator_type === 'mortgage_payment' ) {
-            this.mortgage_payment_label = window.ninja_mortgage_cal_vars.settings.selectedLabel;
-            this.mortgage_payment_default = window.ninja_mortgage_cal_vars.settings.selectedDefault;
-        }*/
     }
 });
 
@@ -473,56 +423,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     props: ['tableTitle', 'mortgageCalcLabel', 'mortgageCalcDef', 'amortizationTable'],
@@ -556,8 +456,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         };
     },
     created: function created() {
-        console.log("My Component " + this.mortgageCalcLabel);
-        //this.showAmort = this.amortizationTable;
         this.loanAmount = this.mortgageCalcDef.loanAmountDefVal;
         this.downPament = this.mortgageCalcDef.downPamentDefVal;
         this.mortgageTerm = this.mortgageCalcDef.mortgageTermDefVal;
@@ -576,7 +474,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             mm = '0' + mm;
         }
         today = mm + "/" + dd + "/" + year;
-        console.log(today);
         this.date_us = today;
         // Generating Amortization Schedule
         var ann_int_rate = this.annualInterestRate / 12;
@@ -594,9 +491,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     computed: {
         total_interest: function total_interest() {
             if (this.monthlyPayment != 0 && this.mortgageTermMonth != 0 && this.principalPaid != 0) {
-                console.log("Monthly Payment " + this.monthlyPayment);
-                console.log(" Mortgage Term Month " + this.mortgageTermMonth);
-                console.log(" Principal Paid " + this.principalPaid);
                 var total_interest = parseFloat(this.monthlyPayment * this.mortgageTermMonth - this.principalPaid);
                 return total_interest;
             } else {
@@ -744,7 +638,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             if (this.loanAmount != 0) {
 
                 var downPamentPerc = this.downPamentPerc * this.loanAmount / 100;
-                // this.downPament = downPamentPerc;
             }
         }
     },
@@ -829,11 +722,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         },
         dateChangeFun: function dateChangeFun() {
             var str = this.date_us;
-            console.log(this.date_us);
             var month = str.substring(5, 7);
             var date = str.substring(8, 10);
-            console.log(month);
-            console.log(date);
             this.date_selected = date;
             this.month = parseInt(month);
             this.gridData = [];
@@ -1233,27 +1123,29 @@ var render = function() {
             ])
           ]),
           _vm._v(" "),
-          _c("table", [
-            _vm._m(2),
-            _vm._v(" "),
-            _c(
-              "tbody",
-              _vm._l(_vm.gridData, function(entry, i) {
-                return _c(
-                  "tr",
-                  { key: i },
-                  _vm._l(_vm.gridColumns, function(key, j) {
-                    return _c("td", { key: j }, [
-                      _vm._v(
-                        "\n\n                            " +
-                          _vm._s(entry[key]) +
-                          "\n\n                        "
-                      )
-                    ])
-                  })
-                )
-              })
-            )
+          _c("div", { staticStyle: { "overflow-x": "auto" } }, [
+            _c("table", [
+              _vm._m(2),
+              _vm._v(" "),
+              _c(
+                "tbody",
+                _vm._l(_vm.gridData, function(entry, i) {
+                  return _c(
+                    "tr",
+                    { key: i },
+                    _vm._l(_vm.gridColumns, function(key, j) {
+                      return _c("td", { key: j }, [
+                        _vm._v(
+                          "\n                                " +
+                            _vm._s(entry[key]) +
+                            "\n                            "
+                        )
+                      ])
+                    })
+                  )
+                })
+              )
+            ])
           ])
         ])
       : _vm._e()
@@ -1281,41 +1173,17 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c("thead", [
       _c("tr", [
-        _c("th", [
-          _vm._v(
-            "\n                            \n                            Payment Date\n\n                        "
-          )
-        ]),
+        _c("th", [_vm._v("Payment Date")]),
         _vm._v(" "),
-        _c("th", [
-          _vm._v(
-            "\n                            \n                            Payment\n\n                        "
-          )
-        ]),
+        _c("th", [_vm._v("Payment")]),
         _vm._v(" "),
-        _c("th", [
-          _vm._v(
-            "\n                            \n                            Principal\n\n                        "
-          )
-        ]),
+        _c("th", [_vm._v("Principal")]),
         _vm._v(" "),
-        _c("th", [
-          _vm._v(
-            "\n                            \n                            Interest\n\n                        "
-          )
-        ]),
+        _c("th", [_vm._v("Interest")]),
         _vm._v(" "),
-        _c("th", [
-          _vm._v(
-            "\n                            \n                            Total Interest\n\n                        "
-          )
-        ]),
+        _c("th", [_vm._v("Total Interest")]),
         _vm._v(" "),
-        _c("th", [
-          _vm._v(
-            "\n                            \n                            Balance\n\n                        "
-          )
-        ])
+        _c("th", [_vm._v("Balance")])
       ])
     ])
   }
@@ -1615,7 +1483,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         };
     },
     created: function created() {
-        console.log(this.mortgageRefinanceDef);
 
         this.current_monthly_payment = this.mortgageRefinanceDef.currentlyMonthlyPaymentDefVal;
         this.current_loan_interest_rate = this.mortgageRefinanceDef.loanIntRateDefVal;
@@ -1657,11 +1524,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             }
             if (this.monthly_payment != 0 && this.current_monthly_payment != 0) {
                 this.monthly_savings = parseFloat(this.current_monthly_payment - this.monthly_payment);
-                // var monthly_savings = parseFloat( this.current_monthly_payment - this.monthly_payment );
-                console.log(this.monthly_savings);
-                // var result = monthly_savings.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-                // console.log(result);
-                // Vue.nextTick( () => this.monthly_savings = result );
             }
             if (this.current_monthly_payment == 0 || this.current_monthly_payment == '') {
                 this.monthly_savings = 0;
@@ -1739,12 +1601,16 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         }
     },
     computed: {
-        total_cost: function total_cost() {
-            if (this.pointsResult) {
-                return this.pointsResult + parseFloat(this.application_fee) + parseFloat(this.credit_check) + parseFloat(this.attorney_fee_yours) + parseFloat(this.attorney_fee_lenders) + parseFloat(this.title_search) + parseFloat(this.title_insurance) + parseFloat(this.appraisal_fee) + parseFloat(this.inspections) + parseFloat(this.local_fees) + parseFloat(this.document_preparation) + parseFloat(this.other);
-            } else {
-                return 0;
-            }
+        total_cost: {
+            get: function get() {
+
+                if (this.pointsResult) {
+                    return this.pointsResult + parseFloat(this.application_fee) + parseFloat(this.credit_check) + parseFloat(this.attorney_fee_yours) + parseFloat(this.attorney_fee_lenders) + parseFloat(this.title_search) + parseFloat(this.title_insurance) + parseFloat(this.appraisal_fee) + parseFloat(this.inspections) + parseFloat(this.local_fees) + parseFloat(this.document_preparation) + parseFloat(this.other);
+                } else {
+                    return 0;
+                }
+            },
+            set: function set(newValue) {}
         },
         months_rec_costs: function months_rec_costs() {
             if (this.balance != 0 && this.monthly_savings != 0 && this.points != 0) {
@@ -2665,7 +2531,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         };
     },
     created: function created() {
-        console.log(this.mortgagePaymentLabel);
         this.mortgage_amount = this.mortgagePaymentLabel.mortgageAmount;
         this.mortgage_amount_def_val = this.mortgagePaymentDefault.mortgageAmountDefVal;
         this.term_in_years = this.mortgagePaymentLabel.termInYears;

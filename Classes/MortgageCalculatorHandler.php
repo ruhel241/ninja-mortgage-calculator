@@ -304,7 +304,6 @@ class MortgageCalculatorHandler
 					'annualHomeInsurance' => 'Annual Home Insurance'
 				),
 
-
 				'selectedDefault' => array(
 					'mortgageAmountDefVal'	   => 2500,
 					'termInYearsDefVal'		   => 5,
@@ -317,80 +316,7 @@ class MortgageCalculatorHandler
 
     	}
     	
-
-  //   	return array(
-			
-		// 	'all_mort_calc_table' => array(
-  //               'loanAmountLabel' 	     => 'Loan Amount',
-  //               'downPamentLabel'	     => 'Down Pament',
-  //               'mortgageTermLabel'	     => 'Mortgage Term',
-  //               'annualInterestRateLabel' => 'Annual Interest Rate',
-  //           ),
-
-		// 	'all_mort_calc_table_def_val' => array(
-		// 		'loanAmountDefVal' 		  => 120000,
-		// 		'downPamentDefVal'		  => 20000,
-		// 		'mortgageTermDefVal'	  => 30,
-		// 		'annualInterestRateDefVal'=> 12
-		// 	),
-				
-		// 	'settings' => true,
-
-		// 	'all_refinance_calc_table' => array(
-		// 		'currentlyMonthlyPayment' => 'Currently Monthly Payment',
-		// 		'loanIntRate' 			  => 'Current Loan interest rate',
-		// 		'balanceMortgage'		  => 'Balance left on mortgage',
-		// 		'newIntRate' 			  => 'New Interest Rate',
-		// 		'remainingLoanTerm'		  => 'Remaining Loan Term',
-		// 		'newLoanTerm' 			  => 'New Loan Term'
-		// 	),
-			
-		// 	'all_refinance_calc_table_def_val' => array(
-		// 		'currentlyMonthlyPaymentDefVal'=> 1200,
-		// 		'loanIntRateDefVal'			   => 25,
-		// 		'balanceMortgageDefVal'		   => 25000,
-		// 		'newIntRateDefVal'			   => 15,
-		// 		'remainingLoanTermDefVal'	   => 20,
-		// 		'newLoanTermDefVal'			   => 26
-		// 	),
-		
-		// 	'all_payment_calc_table' => array(
-		// 		'mortgageAmount' 	  => 'Mortgage Amount',
-		// 		'termInYears' 		  => 'Term in years',
-		// 		'interestRate' 		  => 'Interest Rate',
-		// 		'annualPropertyTaxes' => 'Annual Property Taxes',
-		// 		'annualHomeInsurance' => 'Annual Home Insurance'
-		// 	),
-
-
-		// 	'all_payment_calc_table_def_val' => array(
-		// 		'mortgageAmountDefVal'	   => 2500,
-		// 		'termInYearsDefVal'		   => 5,
-		// 		'interestRateDefVal'	   => 25,
-		// 		'annualHomeInsuranceDefVal'=> 3500,
-		// 		'annualPropertyTaxesDefVal'=> 1500
-		// 	),
-
-
-		// 	'component_settings' => array(
-  //               array('key' => 'all_mort_calc_table'),
-  //               array('key' => 'all_mort_calc_table_def_val'),
-		// 		array('key' => 'all_refinance_calc_table'),
-  //               array('key' => 'all_refinance_calc_table_def_val'),
-  //               array('key' => 'all_payment_calc_table'),
-  //               array('key' => 'all_payment_calc_table_def_val'),
-  //           ),
-
-		// );
-    }
-
-
-
-
-
-
-
-
+	}
 
 
 }

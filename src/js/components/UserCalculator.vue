@@ -57,7 +57,6 @@
                 this.mortgage_calculator_label = res.selectedLabel;
                 this.mortgage_calculator_default = res.selectedDefault;
                 this.amortization_table = res.settings;
-                console.log('Amort user table' + window.ninja_mortgage_cal_vars);
             }
 
             else if( this.calculator_type === 'mortgage_refinance' ) {
@@ -69,57 +68,6 @@
                 this.mortgage_payment_label = res.selectedLabel;
                 this.mortgage_payment_default = res.selectedDefault;
             }
-
-            // this.calculator_type = res.post_content;
-            // this.table_id = res.ID;
-            // var res = window.ninja_mortgage_cal_vars.post;
-            // this.table_title = res.post_title;
-            // this.calculator_type = res.post_content;
-            // this.table_id = res.ID;
-            // var content = window.ninja_mortgage_cal_vars.settings;
-            // console.log(content);
-
-            // if( this.calculator_type === 'mortgage_calculator' ) {
-            //     console.log("All Mortgage Calculator" + content.all_mort_calc_table)
-            //     this.mortgage_calculator_label = content.all_mort_calc_table;
-            //     this.mortgage_calculator_default = content.all_mort_calc_table_def_val;
-            //     this.amortization_table = content.all_mort_calc_table.amortizationTable;
-            //     console.log("Amortization Table is " + this.amortization_table);
-            // }
-            // else if( this.calculator_type === 'mortgage_refinance' ) {
-            //     alert("Mortgage Refinance")
-            // }
-            /*
-            var res = window.ninja_mortgage_cal_vars.post;
-            console.log(res);
-            this.calculator_type = res.post_content;
-            this.table_id = res.ID;
-            this.table_title = res.post_title;
-
-            jQuery.get(ajaxurl, {
-                    action: 'ninja_mortgage_ajax_actions',
-                    route: 'get_table',
-                    table_id: this.table_id
-                }).then(
-                    (response) => {
-                        console.log(response)
-            })
-
-            
-            if( this.calculator_type === 'mortgage_calculator' ) {
-                this.mortgage_calculator_label = window.ninja_mortgage_cal_vars.settings.selectedLabel;
-                this.mortgage_calculator_default = window.ninja_mortgage_cal_vars.settings.selectedDefault;
-                this.amortization_table = window.ninja_mortgage_cal_vars.settings.settings;
-            }
-            else if( this.calculator_type === 'mortgage_refinance' ) {
-                this.mortgage_refinance_label = window.ninja_mortgage_cal_vars.settings.selectedLabel;
-                this.mortgage_refinance_default = window.ninja_mortgage_cal_vars.settings.selectedDefault;
-                
-            }
-            else if( this.calculator_type === 'mortgage_payment' ) {
-                this.mortgage_payment_label = window.ninja_mortgage_cal_vars.settings.selectedLabel;
-                this.mortgage_payment_default = window.ninja_mortgage_cal_vars.settings.selectedDefault;
-            }*/
         }   
     }
 </script>

@@ -188,7 +188,6 @@ export default {
                 .then(response => {
                     this.tableData = response.data.tables;
                     this.total = response.data.total;
-                    console.log(response)
                 })
                 .fail(error => {
                      console.log(error);
@@ -220,7 +219,6 @@ export default {
                     } 
                    else  if( (this.total % 2 != 0) && (this.total % this.per_page) == 0 ) {
                         var res = parseInt(this.total / 2);
-                        console.log(res)
                         if( this.total - ((res * 2) + 1) == 0 && this.total != this.per_page) {
                             this.page_number = this.page_number - 1;
                         }    

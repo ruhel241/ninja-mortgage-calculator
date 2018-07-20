@@ -346,9 +346,7 @@ export default {
 
 				}).then(
 					(response) => {
-						console.log(response)
 						
-
 						if(response.data.table_config.CalCulatorType) {
 							this.calc_type = response.data.table_config.CalCulatorType;
 						} else {
@@ -360,7 +358,6 @@ export default {
 
 						if(this.calc_type == 'mortgage_calculator' ) {
 							
-							console.log("Amortization table " + response.data.table_config.settings)
 							if(response.data.table_config.selectedLabel) {
 								this.all_mort_calc_table = response.data.table_config.selectedLabel;
 							}
@@ -372,11 +369,9 @@ export default {
 							if(response.data.table_config.settings) {
 								var amortization_table = response.data.table_config.settings;
 								if( amortization_table == true ) {
-									console.log('Yes it is true');
 									this.amort_res = 'yes';
 								}
 								else {
-									console.log('No it is not true');
 									this.amort_res = 'no';
 								}
 							}
@@ -405,7 +400,6 @@ export default {
 							}
 
 						}
-						console.log(this.amort_res);
 					}
 				).fail(
 	                error => {
@@ -417,8 +411,6 @@ export default {
 			updateTableConfig() {
 
 				this.bool = true;
-
-				
 
 				if( this.calc_type === 'mortgage_calculator' ) {
 					var selected_label = this.all_mort_calc_table;
@@ -434,19 +426,11 @@ export default {
 					var selected_default = this.all_payment_calc_table_def_val;
 				}
 
-				console.log(amort_table);
-
-				console.log(selected_label);
-
-
-
 				this.updatedData = {
 					selectedLabel: selected_label ,
 					selectedDefault: selected_default,
 					settings: amort_table
 				}
-
-				console.log(this.updatedData)
 
 				jQuery.post(ajaxurl, {
                     action: 'ninja_mortgage_ajax_actions',
@@ -459,7 +443,6 @@ export default {
                         title: 'Updated',
                         message: response.data.message
 					});
-					console.log(response)
 					if( this.calc_type == 'mortgage_calculator' ) {
 						this.all_mort_calc_table = response.data.updatedData.selectedLabel;
 						this.all_mort_calc_table_def_val = response.data.updatedData.selectedDefault;
@@ -476,16 +459,13 @@ export default {
 			},
 			updateAmort(ammortization) {
 				this.amort_res = ammortization;
-				console.log("Hello" + ammortization);
 				if(ammortization == 'yes') {
 					this.ammortization_table = true;
-					console.log(this.ammortization_table);
 				}
 				else if(ammortization == 'no') {
 					this.ammortization_table = false;
 				}
 				
-				console.log("child passing as emit " + this.ammortization_table)
 			},
             clipboardRender(){
                 var clipboard = new Clipboard('.copy_shortcode');

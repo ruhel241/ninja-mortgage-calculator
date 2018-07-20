@@ -2,6 +2,11 @@
   width: 100%;
 }
 
+.mortgage_calculator .mortgageTermSection {
+  width: 100%;
+  display: inline-block;
+}
+
 .mortgage_calculator p {
   margin: 0 !important;
   padding: 0 !important;
@@ -147,6 +152,8 @@
   border-radius: 3px;
   background-color: #fff;
   width: 100%;
+  border-collapse: collapse;
+  border-spacing: 0;
 }
 
 .mortgage_calculator .ammortization_section th {
@@ -184,6 +191,13 @@
   width: 100%;
   background-color: #E7EDF5;
   padding: 15px;
+}
+
+.mortgage_finance_calc .currentlyMonthlyPaymentSection,
+.mortgage_finance_calc .balanceleftonMortgageSection,
+.mortgage_finance_calc .remainingLoanTermSection {
+  width: 100%;
+  display: inline-block;
 }
 
 .mortgage_finance_calc p {

@@ -59731,8 +59731,6 @@ new __WEBPACK_IMPORTED_MODULE_0_vue___default.a({
     }
 });
 
-console.log("JS rendered successfully");
-
 /***/ }),
 /* 79 */
 /***/ (function(module, exports, __webpack_require__) {
@@ -71135,7 +71133,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             }).then(function (response) {
                 _this2.tableData = response.data.tables;
                 _this2.total = response.data.total;
-                console.log(response);
             }).fail(function (error) {
                 console.log(error);
             }).always(function () {
@@ -71163,7 +71160,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                     _this3.page_number = 1;
                 } else if (_this3.total % 2 != 0 && _this3.total % _this3.per_page == 0) {
                     var res = parseInt(_this3.total / 2);
-                    console.log(res);
                     if (_this3.total - (res * 2 + 1) == 0 && _this3.total != _this3.per_page) {
                         _this3.page_number = _this3.page_number - 1;
                     }
@@ -72148,7 +72144,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 				table_id: this.table_id
 
 			}).then(function (response) {
-				console.log(response);
 
 				if (response.data.table_config.CalCulatorType) {
 					_this.calc_type = response.data.table_config.CalCulatorType;
@@ -72161,7 +72156,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 				if (_this.calc_type == 'mortgage_calculator') {
 
-					console.log("Amortization table " + response.data.table_config.settings);
 					if (response.data.table_config.selectedLabel) {
 						_this.all_mort_calc_table = response.data.table_config.selectedLabel;
 					}
@@ -72173,10 +72167,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 					if (response.data.table_config.settings) {
 						var amortization_table = response.data.table_config.settings;
 						if (amortization_table == true) {
-							console.log('Yes it is true');
 							_this.amort_res = 'yes';
 						} else {
-							console.log('No it is not true');
 							_this.amort_res = 'no';
 						}
 					}
@@ -72199,7 +72191,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 						_this.all_payment_calc_table_def_val = response.data.table_config.selectedDefault;
 					}
 				}
-				console.log(_this.amort_res);
 			}).fail(function (error) {
 				console.log(error);
 			});
@@ -72221,17 +72212,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 				var selected_default = this.all_payment_calc_table_def_val;
 			}
 
-			console.log(amort_table);
-
-			console.log(selected_label);
-
 			this.updatedData = {
 				selectedLabel: selected_label,
 				selectedDefault: selected_default,
 				settings: amort_table
 			};
-
-			console.log(this.updatedData);
 
 			jQuery.post(ajaxurl, {
 				action: 'ninja_mortgage_ajax_actions',
@@ -72244,7 +72229,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 					title: 'Updated',
 					message: response.data.message
 				});
-				console.log(response);
 				if (_this2.calc_type == 'mortgage_calculator') {
 					_this2.all_mort_calc_table = response.data.updatedData.selectedLabel;
 					_this2.all_mort_calc_table_def_val = response.data.updatedData.selectedDefault;
@@ -72259,15 +72243,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 		},
 		updateAmort: function updateAmort(ammortization) {
 			this.amort_res = ammortization;
-			console.log("Hello" + ammortization);
 			if (ammortization == 'yes') {
 				this.ammortization_table = true;
-				console.log(this.ammortization_table);
 			} else if (ammortization == 'no') {
 				this.ammortization_table = false;
 			}
-
-			console.log("child passing as emit " + this.ammortization_table);
 		},
 		clipboardRender: function clipboardRender() {
 			var _this3 = this;
@@ -72384,8 +72364,6 @@ exports.push([module.i, "\n.error {\n    border-color: red;\n    padding: 0px;\n
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-
 //
 //
 //
@@ -72819,9 +72797,6 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         }
     },
     created: function created() {
-        console.log("Amort Table: " + this.amortTable);
-        console.log("From child " + this.amortizationtable);
-        console.log(_typeof(this.amortizationtable));
         this.acceptedValue = 10000000;
         this.acceptedMortgageTermValue = 40;
         this.acceptedAnnInt = 90;

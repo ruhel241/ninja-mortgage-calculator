@@ -64,5 +64,3 @@ new Vue({
     router,
     render: h => h(App)
 });
-
-console.log("JS rendered successfully");

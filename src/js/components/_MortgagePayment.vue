@@ -66,7 +66,6 @@ export default {
         }
     },
     created() {
-    	console.log(this.mortgagePaymentLabel);
     	this.mortgage_amount = this.mortgagePaymentLabel.mortgageAmount;
     	this.mortgage_amount_def_val = this.mortgagePaymentDefault.mortgageAmountDefVal;
     	this.term_in_years = this.mortgagePaymentLabel.termInYears;

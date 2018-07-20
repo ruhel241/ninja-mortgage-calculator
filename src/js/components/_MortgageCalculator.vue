@@ -91,23 +91,16 @@
 
 		</div>
 		<!-- End Field Section -->
-
-		
-
-
-        
-
+      
         <div class="btns" v-if="amortizationTable==true">
             <button @click="paymentSchedule()" v-if="showAmortBtn" class="paymentBtn" :disabled="errors.any()">Payment Schedule</button>
             <button @click="hidePaymentSchedule()" v-if="!showAmortBtn" class="hidePaymentBtn" :disabled="errors.any()">Hide Payment Schedule</button>
         </div>
 
         <div class="ammortization_section" v-if="showTable">
-
             <h4>
                 <strong>Amortization Schedule</strong>
             </h4>
-
             <div class="est_payoff">
                     <div class="start_date">
                         <label>Start Date</label>
@@ -117,73 +110,30 @@
                         <p>Estimated Payoff Date</p>
                         <h4 class="date_est">{{ date_selected }} {{ estPayOffDate }}</h4>
                     </div>
-
             </div>
 
-            <table>
-
-                <thead>
-
-                    <tr>
-
-                        <th>
-                            
-                            Payment Date
-
-                        </th>
-
-                        <th>
-                            
-                            Payment
-
-                        </th>
-
-                        <th>
-                            
-                            Principal
-
-                        </th>
-
-                        <th>
-                            
-                            Interest
-
-                        </th>
-
-                        <th>
-                            
-                            Total Interest
-
-                        </th>
-
-                        <th>
-                            
-                            Balance
-
-                        </th>
-
-                    </tr>
-
-                </thead>
-                <tbody>
-                    
-                    <tr v-for="(entry, i) in gridData" :key="i">
-
-                        <td v-for="(key, j) in gridColumns" :key="j">
-
-                            {{ entry[key] }}
-
-                        </td>
-
-                    </tr>
-
-                </tbody>
-
-            </table>
-
-
+            <div style="overflow-x:auto;">
+                <table>
+                    <thead>
+                        <tr>
+                          <th>Payment Date</th>
+                          <th>Payment</th>
+                          <th>Principal</th>
+                          <th>Interest</th>
+                          <th>Total Interest</th>
+                          <th>Balance</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="(entry, i) in gridData" :key="i">
+                            <td v-for="(key, j) in gridColumns" :key="j">
+                                {{ entry[key] }}
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
-
 	</div>
 </template>
 
@@ -229,8 +179,6 @@
         }
     },
     created() {
-        console.log("My Component " + this.mortgageCalcLabel);
-        //this.showAmort = this.amortizationTable;
         this.loanAmount = this.mortgageCalcDef.loanAmountDefVal;
         this.downPament = this.mortgageCalcDef.downPamentDefVal;
         this.mortgageTerm = this.mortgageCalcDef.mortgageTermDefVal;
@@ -249,7 +197,6 @@
             mm = '0' + mm;
         }
         today = mm + "/" + dd + "/" + year;
-        console.log(today)
         this.date_us = today;
         // Generating Amortization Schedule
         var ann_int_rate = ( this.annualInterestRate / 12);
@@ -266,9 +213,6 @@
     computed: {
         total_interest() {
             if( this.monthlyPayment != 0 && this.mortgageTermMonth != 0 && this.principalPaid != 0 ) {
-                console.log( "Monthly Payment " + this.monthlyPayment );
-                console.log( " Mortgage Term Month " + this.mortgageTermMonth );
-                console.log( " Principal Paid " + this.principalPaid );
                 var total_interest = parseFloat( ( this.monthlyPayment * this.mortgageTermMonth ) - this.principalPaid );
                 return total_interest;
             } else {
@@ -434,7 +378,6 @@
             if( this.loanAmount != 0 ) {
 
                 let downPamentPerc = (this.downPamentPerc * this.loanAmount) / 100;
-                // this.downPament = downPamentPerc;
             }
         }
     },
@@ -521,11 +464,8 @@
         },
         dateChangeFun() {
             var str = this.date_us;
-            console.log(this.date_us);
             var month = str.substring(5, 7);
             var date = str.substring(8, 10);
-            console.log(month);
-            console.log(date);
             this.date_selected = date;
             this.month = parseInt(month);
             this.gridData = [];

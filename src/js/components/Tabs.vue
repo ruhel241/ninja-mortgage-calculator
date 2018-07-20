@@ -439,9 +439,6 @@ export default {
         }
     },
     created() {
-        console.log("Amort Table: " + this.amortTable);
-        console.log("From child " + this.amortizationtable)
-        console.log(typeof this.amortizationtable);
         this.acceptedValue = 10000000;
         this.acceptedMortgageTermValue = 40;
         this.acceptedAnnInt = 90;

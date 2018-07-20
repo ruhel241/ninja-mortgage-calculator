@@ -233,7 +233,6 @@ export default {
         }
     },
     created() {
-        console.log(this.mortgageRefinanceDef);
 
         this.current_monthly_payment = this.mortgageRefinanceDef.currentlyMonthlyPaymentDefVal;
         this.current_loan_interest_rate = this.mortgageRefinanceDef.loanIntRateDefVal;
@@ -276,11 +275,6 @@ export default {
             }
             if( this.monthly_payment != 0 && this.current_monthly_payment != 0 ) {
                 this.monthly_savings = parseFloat( this.current_monthly_payment - this.monthly_payment );
-                // var monthly_savings = parseFloat( this.current_monthly_payment - this.monthly_payment );
-                console.log(this.monthly_savings);
-                // var result = monthly_savings.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-                // console.log(result);
-                // Vue.nextTick( () => this.monthly_savings = result );
             
             }
             if( this.current_monthly_payment == 0 || this.current_monthly_payment == '' ) {
@@ -360,7 +354,9 @@ export default {
         }
     },
     computed: {
-        total_cost() {
+        total_cost: {
+            get() {
+
                 if( this.pointsResult ) {
                     return this.pointsResult + 
                             parseFloat( this.application_fee ) + 
@@ -379,6 +375,11 @@ export default {
                     return 0;
                 
                 }
+
+            },
+
+            set(newValue) {}
+                
         },
         months_rec_costs() {
             if( this.balance != 0 && this.monthly_savings != 0 && this.points != 0 ) {
