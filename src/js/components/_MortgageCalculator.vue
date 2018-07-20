@@ -430,18 +430,13 @@
             
             }
         },
-        // downPamentPerc() {
-        //     if( this.loanAmount != 0 ) {
+        downPamentPerc() {
+            if( this.loanAmount != 0 ) {
 
-        //         let res = ( this.loanAmount / 100 );
-        //         var newValue = res * this.downPamentPerc;
-        //         this.downPament = newValue;
-                
-        //     }
-        //     else if( this.downPamentPerc == 0 ) {
-        //         this.downPament = 0;
-        //     }
-        // }
+                let downPamentPerc = (this.downPamentPerc * this.loanAmount) / 100;
+                // this.downPament = downPamentPerc;
+            }
+        }
     },
     methods: {
         paymentSchedule() {

@@ -739,6 +739,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             if (this.loanAmount != 0 && this.annualInterestRateUpd != 0 && this.mortgageTerm != 0 && this.principalPaid != 0) {
                 this.monthlyPayment = parseFloat(this.principalPaid * this.annualInterestRateUpd / (1 - 1 / Math.pow(1 + this.annualInterestRateUpd, this.mortgageTermMonth)));
             }
+        },
+        downPamentPerc: function downPamentPerc() {
+            if (this.loanAmount != 0) {
+
+                var downPamentPerc = this.downPamentPerc * this.loanAmount / 100;
+                // this.downPament = downPamentPerc;
+            }
         }
     },
     methods: {
