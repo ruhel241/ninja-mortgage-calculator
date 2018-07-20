@@ -262,8 +262,8 @@
 }
 
 .mortgage_finance_calc .cost_text {
-  padding-left: 7.5px;
-  padding-right: 7.5px;
+  padding: 30px 0px 20px 9.5px;
+  margin: 0;
 }
 
 .mortgage_finance_calc .costs_section {
@@ -314,5 +314,66 @@
 
 .mortgage_payment_calc .loan-info .mortgage_payment_piti {
   text-align: center;
+}
+
+@media (max-width: 481px) {
+  .mortgage_calculator .mortgage_calc_fields .downPament,
+  .mortgage_calculator .mortgage_calc_fields .downPamentPerc,
+  .mortgage_calculator .mortgage_calc_fields .mortgageTerm,
+  .mortgage_calculator .mortgage_calc_fields .mortgageTermMonth {
+    width: 100%;
+    padding: 0;
+    float: none;
+  }
+
+  .mortgage_calculator .ammortization_section .est_payoff {
+    margin: 0;
+  }
+
+  .mortgage_calculator .ammortization_section .est_payoff .start_date {
+    float: none;
+  }
+
+  .mortgage_calculator .ammortization_section .est_payoff .start_date label {
+    margin-bottom: 5px;
+    font-weight: 700;
+    width: 20%;
+    display: inline;
+  }
+
+  .mortgage_calculator .ammortization_section .est_payoff .start_date input {
+    width: 70%;
+    margin-left: 10px;
+  }
+
+  .mortgage_calculator .ammortization_section .est_payoff .est_payoff_date {
+    margin-top: 10px;
+    float: none;
+  }
+
+  .mortgage_calculator .ammortization_section .est_payoff .est_payoff_date p {
+    position: relative;
+    top: -2px;
+    right: 0;
+    padding: 0;
+    display: inline-block;
+  }
+
+  .mortgage_calculator .ammortization_section .est_payoff .est_payoff_date .date_est {
+    display: inline-block;
+  }
+
+  .mortgage_finance_calc .cost_text {
+    padding: 20px 0px 0px 0px !important;
+    margin: 10px !important;
+  }
+
+  .mortgage_finance_calc .common {
+    width: 100%;
+  }
+
+  .mortgage_finance_calc .fees_section_points .costPoint p {
+    left: 0;
+  }
 }
 

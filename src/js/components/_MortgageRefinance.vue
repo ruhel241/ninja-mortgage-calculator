@@ -92,7 +92,7 @@
         </div>
 
         <div> 
-            <p class="cost_text"><strong>How much will it cost you?</strong></p>
+            <h4 class="cost_text"><strong>How much will it cost you?</strong></h4>
         </div>
 
         <div class="fees_section_points">
