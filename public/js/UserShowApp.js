@@ -2119,7 +2119,9 @@ var render = function() {
       ]),
       _vm._v(" "),
       _c("div", { staticClass: "costPoint" }, [
-        _c("p", [_vm._v("Costs of points: " + _vm._s(_vm.pointsResult))])
+        _c("p", [
+          _c("b", [_vm._v("Costs of points: " + _vm._s(_vm.pointsResult))])
+        ])
       ])
     ]),
     _vm._v(" "),

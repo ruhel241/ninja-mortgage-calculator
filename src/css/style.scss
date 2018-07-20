@@ -331,9 +331,9 @@ $calcTableBgColor: #E7EDF5;
 }
 
 
+// media query
 
-
-	@media(max-width:481px){
+@media(max-width:481px){
 		.mortgage_calculator {
 			.mortgage_calc_fields {
 				.downPament, .downPamentPerc, .mortgageTerm, .mortgageTermMonth 
@@ -383,29 +383,23 @@ $calcTableBgColor: #E7EDF5;
  
 		.mortgage_finance_calc {
 			.cost_text {
-				
-				 padding: 20px 0px 0px 0px !important;
-   				 margin: 10px !important;
+				padding: 20px 0px 0px 0px !important;
+   				margin: 10px !important;
 			}
 			.common {
 				width:100%;
 			}
-
 			.fees_section_points {
 				.costPoint {
+					padding:0px;
+					margin-top: 15px;
 				p {
 					left:0;
 				  }
 				}
 			}
-
 		}
-
-
-
-
-
-	}
+}
 
 
 

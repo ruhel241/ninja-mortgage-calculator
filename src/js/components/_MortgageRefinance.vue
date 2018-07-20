@@ -103,7 +103,7 @@
                        v-validate="'required'" class="typeNumbers">
             </div>
             <div class="costPoint">
-                <p>Costs of points: {{ pointsResult }}</p>
+                <p> <b>Costs of points: {{ pointsResult }}</b> </p>
             </div>
         </div> 
 
