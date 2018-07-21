@@ -1,5 +1,5 @@
 <template>
-<div>
+<div class="ninja_mortgage_cal">
 
 	<el-row class="header">
 		<el-col :span="24">
@@ -485,60 +485,63 @@ export default {
 </script>
 
 
-<style>
-.header {
-	font-size: 20px;
-    padding-bottom: 10px;
-    background: #fff;
-    margin-top: -20px;
-    padding-top: 22px;
-    margin-right: -20px;
-    margin-left: -20px;
-    padding-left: 24px;
-}
+<style lang="scss">
 
-.inputFields {
-	width: 100%;
-	margin: 0 auto;
-}
+.ninja_mortgage_cal {
 
-.title {
-	float: left;
-}
+	.header {
+		font-size: 20px;
+	    padding-bottom: 10px;
+	    background: #fff;
+	    margin-top: -20px;
+	    padding-top: 22px;
+	    margin-right: -20px;
+	    margin-left: -20px;
+	    padding-left: 24px;
+	}
 
-.change_type {
-	float: right;
-    /* margin-right: 436px; */
-	margin-top: -36px;
-}
+	.inputFields {
+		width: 100%;
+		margin: 0 auto;
+	}
 
-.tabs_col {
-	background: #fff;
-    margin-top: 15px;
-    padding-right: 12px;
-	padding-left: 10px;
-	padding-bottom: 10px;
-}
+	.title {
+		float: left;
+	}
 
-.common_btn {
-	margin: 0 !important;
-}
+	.change_type {
+		float: right;
+	  	margin-top: -36px;
+	}
 
-.fields {
-	background: #fff;
-	margin-top: 15px;
-	margin-right: 20px;
-	padding: 20px;
-}
+	.tabs_col {
+		background: #fff;
+	    margin-top: 15px;
+	    padding-right: 12px;
+		padding-left: 10px;
+		padding-bottom: 10px;
+	}
 
-.fields h2{
-	margin-top: 0;
-}
+	.common_btn {
+		margin: 0 !important;
+	}
 
-.el-message--success {
+	.fields {
+		background: #fff;
+		margin-top: 15px;
+		margin-right: 20px;
+		padding: 20px;
+	}
+
+	.fields h2{
+		margin-top: 0;
+	}
+
+	.el-message--success {
         z-index: 999999!important;
         top: 5px;
     }
 
+}
 
 </style>

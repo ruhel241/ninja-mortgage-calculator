@@ -1,5 +1,5 @@
 <template> 
-    <div class="editor">
+    <div class="ninja_mortgage_editor">
         <div class="editor_header">
             <div class="section_header">
                 <h1>All Mortgage Tables</h1>
@@ -259,7 +259,7 @@ export default {
 </script>
 
 
-<style>
+<style lang="scss">
     * {
         margin: 0;
         padding: 0;
@@ -270,30 +270,28 @@ export default {
         background: #F1F1F1;
     }
 
-    /* .section_header {
-        float: left;
-    } */
+    .ninja_mortgage_editor {
+        .section_action {
+            float: right;
+            margin-top: -32px;
+        }
 
-    .section_action {
-        float: right;
-        margin-top: -32px;
-    }
+        .select_calc_type {
+            margin-top: 10px;
+        }
 
-    .select_calc_type {
-        margin-top: 10px;
-    }
+        .editor {
+            width: 100%;
+            float: right;
+        }
 
-    .editor {
-        width: 100%;
-        float: right;
-    }
+        hr {
+            color: #DDDDDD;
+        }
 
-    hr {
-        color: #DDDDDD;
-    }
-
-    .el-message--success {
-        z-index: 999999!important;
-        top: 5px;
-    }
+        .el-message--success {
+            z-index: 999999!important;
+            top: 5px;
+        }
+    }    
 </style>

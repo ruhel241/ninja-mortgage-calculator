@@ -1672,7 +1672,7 @@ var render = function() {
             min: "0",
             id: "current_monthly_payment",
             name: "current_monthly_payment",
-            placeholder: _vm.mortgageRefinanceLabel.current_monthly_payment
+            placeholder: _vm.mortgageRefinanceLabel.currentlyMonthlyPayment
           },
           domProps: { value: _vm.current_monthly_payment },
           on: {
@@ -1720,7 +1720,7 @@ var render = function() {
             min: "0",
             id: "current_loan_interest_rate",
             name: "current_loan_interest_rate",
-            placeholder: "Current loan interest rate"
+            placeholder: _vm.mortgageRefinanceLabel.loanIntRate
           },
           domProps: { value: _vm.current_loan_interest_rate },
           on: {
@@ -1772,7 +1772,7 @@ var render = function() {
             min: "0",
             id: "balance",
             name: "balance",
-            placeholder: "Balance left on mortgage"
+            placeholder: _vm.mortgageRefinanceLabel.balanceMortgage
           },
           domProps: { value: _vm.balance },
           on: {
@@ -1820,7 +1820,7 @@ var render = function() {
             min: "0",
             id: "new_interest_rate",
             name: "new_interest_rate",
-            placeholder: "New interest rate"
+            placeholder: _vm.mortgageRefinanceLabel.newIntRate
           },
           domProps: { value: _vm.new_interest_rate },
           on: {
@@ -1872,7 +1872,7 @@ var render = function() {
             min: "0",
             id: "remaining_loan_term",
             name: "remaining_loan_term",
-            placeholder: "Remaining loan term"
+            placeholder: _vm.mortgageRefinanceLabel.remainingLoanTerm
           },
           domProps: { value: _vm.remaining_loan_term },
           on: {
@@ -1920,7 +1920,7 @@ var render = function() {
             min: "0",
             id: "new_loan_term",
             name: "new_loan_term",
-            placeholder: "New Loan Term"
+            placeholder: _vm.mortgageRefinanceLabel.newLoanTerm
           },
           domProps: { value: _vm.new_loan_term },
           on: {
@@ -1947,7 +1947,7 @@ var render = function() {
     _vm._v(" "),
     _c("div", { staticClass: "fees_section_points" }, [
       _c("div", { staticClass: "points" }, [
-        _c("label", [_vm._v("Points")]),
+        _c("label", [_vm._v(_vm._s(_vm.mortgageRefinanceLabel.points))]),
         _vm._v(" "),
         _c("input", {
           directives: [
@@ -1970,7 +1970,7 @@ var render = function() {
             min: "0",
             name: "points",
             id: "points",
-            placeholder: "Points"
+            placeholder: _vm.mortgageRefinanceLabel.points
           },
           domProps: { value: _vm.points },
           on: {
@@ -1993,7 +1993,9 @@ var render = function() {
     _vm._v(" "),
     _c("div", { staticClass: "feeSection" }, [
       _c("div", { staticClass: "common" }, [
-        _c("label", [_vm._v("Application Fee")]),
+        _c("label", [
+          _vm._v(_vm._s(_vm.mortgageRefinanceLabel.applicationFee))
+        ]),
         _vm._v(" "),
         _c("input", {
           directives: [
@@ -2010,7 +2012,7 @@ var render = function() {
             min: "0",
             name: "application_fee",
             id: "application_fee",
-            placeholder: "Application Fee"
+            placeholder: _vm.mortgageRefinanceLabel.applicationFee
           },
           domProps: { value: _vm.application_fee },
           on: {
@@ -2025,7 +2027,7 @@ var render = function() {
       ]),
       _vm._v(" "),
       _c("div", { staticClass: "common" }, [
-        _c("label", [_vm._v("Credit check")]),
+        _c("label", [_vm._v(_vm._s(_vm.mortgageRefinanceLabel.creditCheck))]),
         _vm._v(" "),
         _c("input", {
           directives: [
@@ -2039,7 +2041,7 @@ var render = function() {
           staticClass: "typeNumbers",
           attrs: {
             type: "number",
-            placeholder: "Credit check",
+            placeholder: _vm.mortgageRefinanceLabel.creditCheck,
             min: "0",
             id: "credit_check",
             name: "credit_check"
@@ -2059,7 +2061,9 @@ var render = function() {
     _vm._v(" "),
     _c("div", { staticClass: "feeSection" }, [
       _c("div", { staticClass: "common" }, [
-        _c("label", [_vm._v("Attorney's fee (yours)")]),
+        _c("label", [
+          _vm._v(_vm._s(_vm.mortgageRefinanceLabel.attorneyFeeYours))
+        ]),
         _vm._v(" "),
         _c("input", {
           directives: [
@@ -2076,7 +2080,7 @@ var render = function() {
             min: "0",
             name: "attorney_fee_yours",
             id: "attorney_fee_yours",
-            placeholder: "Attorney's fee (yours)"
+            placeholder: _vm.mortgageRefinanceLabel.attorneyFeeYours
           },
           domProps: { value: _vm.attorney_fee_yours },
           on: {
@@ -2091,7 +2095,9 @@ var render = function() {
       ]),
       _vm._v(" "),
       _c("div", { staticClass: "common" }, [
-        _c("label", [_vm._v("Attorney's fee (lenders)")]),
+        _c("label", [
+          _vm._v(_vm._s(_vm.mortgageRefinanceLabel.attorneyFeeLenders))
+        ]),
         _vm._v(" "),
         _c("input", {
           directives: [
@@ -2105,7 +2111,7 @@ var render = function() {
           staticClass: "typeNumbers",
           attrs: {
             type: "number",
-            placeholder: "Attorney's fee (lenders)",
+            placeholder: _vm.mortgageRefinanceLabel.attorneyFeeLenders,
             min: "0",
             id: "attorney_fee_lenders",
             name: "attorney_fee_lenders"
@@ -2125,7 +2131,7 @@ var render = function() {
     _vm._v(" "),
     _c("div", { staticClass: "feeSection" }, [
       _c("div", { staticClass: "common" }, [
-        _c("label", [_vm._v("Title Search")]),
+        _c("label", [_vm._v(_vm._s(_vm.mortgageRefinanceLabel.titleSearch))]),
         _vm._v(" "),
         _c("input", {
           directives: [
@@ -2142,7 +2148,7 @@ var render = function() {
             min: "0",
             name: "title_search",
             id: "title_search",
-            placeholder: "Title Search"
+            placeholder: _vm.mortgageRefinanceLabel.titleSearch
           },
           domProps: { value: _vm.title_search },
           on: {
@@ -2157,7 +2163,9 @@ var render = function() {
       ]),
       _vm._v(" "),
       _c("div", { staticClass: "common" }, [
-        _c("label", [_vm._v("Title insurance")]),
+        _c("label", [
+          _vm._v(_vm._s(_vm.mortgageRefinanceLabel.titleInsurance))
+        ]),
         _vm._v(" "),
         _c("input", {
           directives: [
@@ -2171,7 +2179,7 @@ var render = function() {
           staticClass: "typeNumbers",
           attrs: {
             type: "number",
-            placeholder: "Title insurance",
+            placeholder: _vm.mortgageRefinanceLabel.titleInsurance,
             min: "0",
             id: "title_insurance",
             name: "title_insurance"
@@ -2191,7 +2199,7 @@ var render = function() {
     _vm._v(" "),
     _c("div", { staticClass: "feeSection" }, [
       _c("div", { staticClass: "common" }, [
-        _c("label", [_vm._v("Appraisal fee")]),
+        _c("label", [_vm._v(_vm._s(_vm.mortgageRefinanceLabel.appraisalFee))]),
         _vm._v(" "),
         _c("input", {
           directives: [
@@ -2208,7 +2216,7 @@ var render = function() {
             min: "0",
             name: "appraisal_fee",
             id: "appraisal_fee",
-            placeholder: "Appraisal fee"
+            placeholder: _vm.mortgageRefinanceLabel.appraisalFee
           },
           domProps: { value: _vm.appraisal_fee },
           on: {
@@ -2223,7 +2231,7 @@ var render = function() {
       ]),
       _vm._v(" "),
       _c("div", { staticClass: "common" }, [
-        _c("label", [_vm._v("Inspections")]),
+        _c("label", [_vm._v(_vm._s(_vm.mortgageRefinanceLabel.inspections))]),
         _vm._v(" "),
         _c("input", {
           directives: [
@@ -2237,7 +2245,7 @@ var render = function() {
           staticClass: "typeNumbers",
           attrs: {
             type: "number",
-            placeholder: "Inspections",
+            placeholder: _vm.mortgageRefinanceLabel.inspections,
             min: "0",
             id: "inspections",
             name: "inspections"
@@ -2257,7 +2265,7 @@ var render = function() {
     _vm._v(" "),
     _c("div", { staticClass: "feeSection" }, [
       _c("div", { staticClass: "common" }, [
-        _c("label", [_vm._v("Local fees (taxes, transfers)")]),
+        _c("label", [_vm._v(_vm._s(_vm.mortgageRefinanceLabel.localFees))]),
         _vm._v(" "),
         _c("input", {
           directives: [
@@ -2274,7 +2282,7 @@ var render = function() {
             min: "0",
             name: "local_fees",
             id: "local_fees",
-            placeholder: "Local fees (taxes, transfers)"
+            placeholder: _vm.mortgageRefinanceLabel.localFees
           },
           domProps: { value: _vm.local_fees },
           on: {
@@ -2289,7 +2297,9 @@ var render = function() {
       ]),
       _vm._v(" "),
       _c("div", { staticClass: "common" }, [
-        _c("label", [_vm._v("Document preparation")]),
+        _c("label", [
+          _vm._v(_vm._s(_vm.mortgageRefinanceLabel.documentPreparation))
+        ]),
         _vm._v(" "),
         _c("input", {
           directives: [
@@ -2303,7 +2313,7 @@ var render = function() {
           staticClass: "typeNumbers",
           attrs: {
             type: "number",
-            placeholder: "Document preparation",
+            placeholder: _vm.mortgageRefinanceLabel.documentPreparation,
             min: "0",
             id: "document_preparation",
             name: "document_preparation"
@@ -2323,7 +2333,7 @@ var render = function() {
     _vm._v(" "),
     _c("div", { staticClass: "feeSection" }, [
       _c("div", { staticClass: "common" }, [
-        _c("label", [_vm._v("Other")]),
+        _c("label", [_vm._v(_vm._s(_vm.mortgageRefinanceLabel.other))]),
         _vm._v(" "),
         _c("input", {
           directives: [
@@ -2340,7 +2350,7 @@ var render = function() {
             min: "0",
             name: "other",
             id: "other",
-            placeholder: "Other"
+            placeholder: _vm.mortgageRefinanceLabel.other
           },
           domProps: { value: _vm.other },
           on: {

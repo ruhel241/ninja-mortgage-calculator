@@ -9,7 +9,7 @@
                 <input type="number" min=0 id="current_monthly_payment" 
                                    class="typeNumbers"
                                    name="current_monthly_payment" 
-                                   :placeholder="mortgageRefinanceLabel.current_monthly_payment"
+                                   :placeholder="mortgageRefinanceLabel.currentlyMonthlyPayment"
                                    v-model="current_monthly_payment"
                                    v-validate="'required'"
                                 :class="{'error': errors.has('current_monthly_payment') }">
@@ -22,7 +22,7 @@
                 <input type="number" min=0 id="current_loan_interest_rate"
                                    class="typeNumbers" 
                                    name="current_loan_interest_rate" 
-                                   placeholder="Current loan interest rate"
+                                   :placeholder="mortgageRefinanceLabel.loanIntRate"
                                    v-model="current_loan_interest_rate"
                                    v-validate="'required'"
                                    :class="{'error': errors.has('current_loan_interest_rate') }">
@@ -38,7 +38,7 @@
                 <input type="number" min=0 id="balance" 
                                      name="balance" 
                                      class="typeNumbers" 
-                                     placeholder="Balance left on mortgage"
+                                     :placeholder="mortgageRefinanceLabel.balanceMortgage"
                                      v-model="balance"
                                      v-validate="'required'"
                                      :class="{'error': errors.has('balance') }">
@@ -51,7 +51,7 @@
                 <input type="number" min=0 id="new_interest_rate"
                                     class="typeNumbers" 
                                     name="new_interest_rate" 
-                                    placeholder="New interest rate"
+                                    :placeholder="mortgageRefinanceLabel.newIntRate"
                                     v-model="new_interest_rate"
                                     v-validate="'required'"
                                     :class="{'error': errors.has('new_interest_rate') }">
@@ -68,7 +68,7 @@
                 <input type="number" min=0 id="remaining_loan_term" 
                                      name="remaining_loan_term" 
                                      class="typeNumbers" 
-                                     placeholder="Remaining loan term"
+                                     :placeholder="mortgageRefinanceLabel.remainingLoanTerm"
                                      v-model="remaining_loan_term"
                                      v-validate="'required'"
                                      :class="{'error': errors.has('remaining_loan_term') }">
@@ -81,7 +81,7 @@
                 <input type="number" min=0 id="new_loan_term"
                                     class="typeNumbers" 
                                     name="new_loan_term" 
-                                    placeholder="New Loan Term"
+                                    :placeholder="mortgageRefinanceLabel.newLoanTerm"
                                     v-model="new_loan_term"
                                     v-validate="'required'"
                                     :class="{'error': errors.has('new_loan_term') }">
@@ -97,9 +97,9 @@
 
         <div class="fees_section_points">
             <div class="points">
-                <label>Points</label>
+                <label>{{ mortgageRefinanceLabel.points }}</label>
                 <input type="number" min=0 name="points"
-                       id="points" v-model="points" placeholder="Points"
+                       id="points" v-model="points" :placeholder="mortgageRefinanceLabel.points"
                        v-validate="'required'" class="typeNumbers">
             </div>
             <div class="costPoint">
@@ -109,74 +109,74 @@
 
         <div class="feeSection">
             <div class="common">
-                <label>Application Fee</label>
+                <label>{{ mortgageRefinanceLabel.applicationFee }}</label>
                 <input type="number" min=0 name="application_fee"
-                       id="application_fee" v-model="application_fee" placeholder="Application Fee" class="typeNumbers">
+                       id="application_fee" v-model="application_fee" :placeholder="mortgageRefinanceLabel.applicationFee" class="typeNumbers">
             </div>
             <div class="common">
-                <label>Credit check</label>
-                <input type="number" placeholder="Credit check" v-model="credit_check" 
+                <label>{{ mortgageRefinanceLabel.creditCheck }}</label>
+                <input type="number" :placeholder="mortgageRefinanceLabel.creditCheck" v-model="credit_check" 
                        min=0 id="credit_check" name="credit_check" class="typeNumbers"></el-input>
             </div>
         </div>
 
         <div class="feeSection">
             <div class="common">
-                <label>Attorney's fee (yours)</label>
+                <label>{{ mortgageRefinanceLabel.attorneyFeeYours }}</label>
                 <input type="number" min=0 name="attorney_fee_yours"
-                       id="attorney_fee_yours" v-model="attorney_fee_yours" placeholder="Attorney's fee (yours)" class="typeNumbers">
+                       id="attorney_fee_yours" v-model="attorney_fee_yours" :placeholder="mortgageRefinanceLabel.attorneyFeeYours" class="typeNumbers">
             </div>
             <div class="common">
-                <label>Attorney's fee (lenders)</label>
-                <input type="number" placeholder="Attorney's fee (lenders)" v-model="attorney_fee_lenders" 
+                <label>{{ mortgageRefinanceLabel.attorneyFeeLenders }}</label>
+                <input type="number" :placeholder="mortgageRefinanceLabel.attorneyFeeLenders" v-model="attorney_fee_lenders" 
                        min=0 id="attorney_fee_lenders" name="attorney_fee_lenders" class="typeNumbers"></el-input>
             </div>
         </div>
 
         <div class="feeSection">
             <div class="common">
-                <label>Title Search</label>
+                <label>{{ mortgageRefinanceLabel.titleSearch }}</label>
                 <input type="number" min=0 name="title_search"
-                       id="title_search" v-model="title_search" placeholder="Title Search" class="typeNumbers">
+                       id="title_search" v-model="title_search" :placeholder="mortgageRefinanceLabel.titleSearch" class="typeNumbers">
             </div>
             <div class="common">
-                <label>Title insurance</label>
-                <input type="number" placeholder="Title insurance" v-model="title_insurance" 
+                <label>{{ mortgageRefinanceLabel.titleInsurance }}</label>
+                <input type="number" :placeholder="mortgageRefinanceLabel.titleInsurance" v-model="title_insurance" 
                        min=0 id="title_insurance" name="title_insurance" class="typeNumbers"></el-input>
             </div>
         </div>
 
         <div class="feeSection">
             <div class="common">
-                <label>Appraisal fee</label>
+                <label>{{ mortgageRefinanceLabel.appraisalFee }}</label>
                 <input type="number" min=0 name="appraisal_fee"
-                       id="appraisal_fee" v-model="appraisal_fee" placeholder="Appraisal fee" class="typeNumbers">
+                       id="appraisal_fee" v-model="appraisal_fee" :placeholder="mortgageRefinanceLabel.appraisalFee" class="typeNumbers">
             </div>
             <div class="common">
-                <label>Inspections</label>
-                <input type="number" placeholder="Inspections" v-model="inspections" 
+                <label>{{ mortgageRefinanceLabel.inspections }}</label>
+                <input type="number" :placeholder="mortgageRefinanceLabel.inspections" v-model="inspections" 
                        min=0 id="inspections" name="inspections" class="typeNumbers"></el-input>
             </div>
         </div>
 
         <div class="feeSection">
             <div class="common">
-                <label>Local fees (taxes, transfers)</label>
+                <label>{{ mortgageRefinanceLabel.localFees }}</label>
                 <input type="number" min=0 name="local_fees"
-                       id="local_fees" v-model="local_fees" placeholder="Local fees (taxes, transfers)" class="typeNumbers">
+                       id="local_fees" v-model="local_fees" :placeholder="mortgageRefinanceLabel.localFees" class="typeNumbers">
             </div>
             <div class="common">
-                <label>Document preparation</label>
-                <input type="number" placeholder="Document preparation" v-model="document_preparation" 
+                <label>{{ mortgageRefinanceLabel.documentPreparation }}</label>
+                <input type="number" :placeholder="mortgageRefinanceLabel.documentPreparation" v-model="document_preparation" 
                        min=0 id="document_preparation" name="document_preparation" class="typeNumbers"></el-input>
             </div>
         </div>
 
         <div class="feeSection">
             <div class="common">
-                <label>Other</label>
+                <label>{{ mortgageRefinanceLabel.other }}</label>
                 <input type="number" min=0 name="other"
-                       id="other" v-model="other" placeholder="Other" class="typeNumbers">
+                       id="other" v-model="other" :placeholder="mortgageRefinanceLabel.other" class="typeNumbers">
             </div>
         </div>
 

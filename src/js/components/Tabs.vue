@@ -1,5 +1,5 @@
 <template>
-    <div class="tabs">
+    <div class="ninja_mortgage_tabs">
             <el-tabs v-model="activeName" @tab-click="handleClick">
                 <el-tab-pane label="Label" name="first">
                     <div v-if="calcType=='mortgage_calculator'">
@@ -465,16 +465,18 @@ export default {
 }
 </script>
 
-<style>
-    .error {
-        border-color: red;
-        padding: 0px;
-    }
+<style lang="scss">
+    .ninja_mortgage_tabs {
+        .error {
+            border-color: red;
+            padding: 0px;
+        }
 
-    .typeNumber {
-        width: 100%;
-        padding: 3px 0px;
-        border-radius: 4px;
-        box-sizing: border-box;
+        .typeNumber {
+            width: 100%;
+            padding: 3px 0px;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
     }
 </style>
