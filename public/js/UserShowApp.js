@@ -598,8 +598,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             if (this.mortgageTerm == 0 || this.mortgageTerm == '') {
                 this.monthlyPayment = 0;
                 this.principalPaid = 0;
-                this.mortgageTermMonth = 0;
                 this.showAmortBtn = true;
+
+                this.mortgageTermMonth = 0;
             } else {
                 this.monthlyPayment = parseFloat(this.principalPaid * this.annualInterestRateUpd / (1 - 1 / Math.pow(1 + this.annualInterestRateUpd, this.mortgageTermMonth)));
             }
@@ -607,6 +608,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         mortgageTermMonth: function mortgageTermMonth() {
             this.showTable = false;
             this.showAmortBtn = true;
+            if (this.mortgageTermMonth == '') {
+                this.mortgageTerm = 0;
+            }
             if (this.mortgageTermMonth != 0) {
                 this.mortgageTerm = this.mortgageTermMonth / 12;
             }
@@ -1685,6 +1689,116 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             }
         }
     },
+    methods: {
+        getCurrentlyPayment: function getCurrentlyPayment(str) {
+            if (str == '') {
+                return 'Currently Monthly Payment';
+            }
+            return str;
+        },
+        getCurrentLoanRate: function getCurrentLoanRate(str) {
+            if (str == '') {
+                return 'Current Loan Interest Rate';
+            }
+            return str;
+        },
+        getBalanceMortgage: function getBalanceMortgage(str) {
+            if (str == '') {
+                return 'Balance Left on Mortgage';
+            }
+            return str;
+        },
+        getNewIntRate: function getNewIntRate(str) {
+            if (str == '') {
+                return 'New Interest Rate';
+            }
+            return str;
+        },
+        getRemainingLoan: function getRemainingLoan(str) {
+            if (str == '') {
+                return 'Remaining Loan Term';
+            }
+            return str;
+        },
+        getNewLoanTerm: function getNewLoanTerm(str) {
+            if (str == '') {
+                return 'New Loan Term';
+            }
+            return str;
+        },
+        getPoints: function getPoints(str) {
+            if (str == '') {
+                return 'Points';
+            }
+            return str;
+        },
+        getApplicationFee: function getApplicationFee(str) {
+            if (str == '') {
+                return 'Application Fee';
+            }
+            return str;
+        },
+        getCreditCheck: function getCreditCheck(str) {
+            if (str == '') {
+                return 'Credit Check';
+            }
+            return str;
+        },
+        getAnthonyYours: function getAnthonyYours(str) {
+            if (str == '') {
+                return "Attorney's Fee(yours)";
+            }
+            return str;
+        },
+        getAnthonyLenders: function getAnthonyLenders(str) {
+            if (str == '') {
+                return "Attorney's Fee(lenders)";
+            }
+            return str;
+        },
+        getTitleSearch: function getTitleSearch(str) {
+            if (str == '') {
+                return 'Title Search';
+            }
+            return str;
+        },
+        getTitleInsurance: function getTitleInsurance(str) {
+            if (str == '') {
+                return 'Title Insurance';
+            }
+            return str;
+        },
+        getAppraisalFee: function getAppraisalFee(str) {
+            if (str == '') {
+                return 'Appraisal Fee';
+            }
+            return str;
+        },
+        getInspections: function getInspections(str) {
+            if (str == '') {
+                return 'Inspections';
+            }
+            return str;
+        },
+        getLocalFees: function getLocalFees(str) {
+            if (str == '') {
+                return 'Local Fees (Taxes, Transfers)';
+            }
+            return str;
+        },
+        getDocumentPreparation: function getDocumentPreparation(str) {
+            if (str == '') {
+                return 'Document Preparation';
+            }
+            return str;
+        },
+        getOther: function getOther(str) {
+            if (str == '') {
+                return 'Other';
+            }
+            return str;
+        }
+    },
     computed: {
         total_cost: {
             get: function get() {
@@ -1763,7 +1877,9 @@ var render = function() {
             min: "0",
             id: "current_monthly_payment",
             name: "current_monthly_payment",
-            placeholder: _vm.mortgageRefinanceLabel.currentlyMonthlyPayment
+            placeholder: _vm.getCurrentlyPayment(
+              _vm.mortgageRefinanceLabel.currentlyMonthlyPayment
+            )
           },
           domProps: { value: _vm.current_monthly_payment },
           on: {
@@ -1819,7 +1935,9 @@ var render = function() {
             min: "0",
             id: "current_loan_interest_rate",
             name: "current_loan_interest_rate",
-            placeholder: _vm.mortgageRefinanceLabel.loanIntRate
+            placeholder: _vm.getCurrentLoanRate(
+              _vm.mortgageRefinanceLabel.loanIntRate
+            )
           },
           domProps: { value: _vm.current_loan_interest_rate },
           on: {
@@ -1877,7 +1995,9 @@ var render = function() {
             min: "0",
             id: "balance",
             name: "balance",
-            placeholder: _vm.mortgageRefinanceLabel.balanceMortgage
+            placeholder: _vm.getBalanceMortgage(
+              _vm.mortgageRefinanceLabel.balanceMortgage
+            )
           },
           domProps: { value: _vm.balance },
           on: {
@@ -1933,7 +2053,9 @@ var render = function() {
             min: "0",
             id: "new_interest_rate",
             name: "new_interest_rate",
-            placeholder: _vm.mortgageRefinanceLabel.newIntRate
+            placeholder: _vm.getNewIntRate(
+              _vm.mortgageRefinanceLabel.newIntRate
+            )
           },
           domProps: { value: _vm.new_interest_rate },
           on: {
@@ -1991,7 +2113,9 @@ var render = function() {
             min: "0",
             id: "remaining_loan_term",
             name: "remaining_loan_term",
-            placeholder: _vm.mortgageRefinanceLabel.remainingLoanTerm
+            placeholder: _vm.getRemainingLoan(
+              _vm.mortgageRefinanceLabel.remainingLoanTerm
+            )
           },
           domProps: { value: _vm.remaining_loan_term },
           on: {
@@ -2047,7 +2171,9 @@ var render = function() {
             min: "0",
             id: "new_loan_term",
             name: "new_loan_term",
-            placeholder: _vm.mortgageRefinanceLabel.newLoanTerm
+            placeholder: _vm.getNewLoanTerm(
+              _vm.mortgageRefinanceLabel.newLoanTerm
+            )
           },
           domProps: { value: _vm.new_loan_term },
           on: {
@@ -2105,7 +2231,7 @@ var render = function() {
             min: "0",
             name: "points",
             id: "points",
-            placeholder: _vm.mortgageRefinanceLabel.points
+            placeholder: _vm.getPoints(_vm.mortgageRefinanceLabel.points)
           },
           domProps: { value: _vm.points },
           on: {
@@ -2153,7 +2279,9 @@ var render = function() {
             min: "0",
             name: "application_fee",
             id: "application_fee",
-            placeholder: _vm.mortgageRefinanceLabel.applicationFee
+            placeholder: _vm.getApplicationFee(
+              _vm.mortgageRefinanceLabel.applicationFee
+            )
           },
           domProps: { value: _vm.application_fee },
           on: {
@@ -2182,7 +2310,9 @@ var render = function() {
           staticClass: "typeNumbers",
           attrs: {
             type: "number",
-            placeholder: _vm.mortgageRefinanceLabel.creditCheck,
+            placeholder: _vm.getCreditCheck(
+              _vm.mortgageRefinanceLabel.creditCheck
+            ),
             min: "0",
             id: "credit_check",
             name: "credit_check"
@@ -2227,7 +2357,9 @@ var render = function() {
             min: "0",
             name: "attorney_fee_yours",
             id: "attorney_fee_yours",
-            placeholder: _vm.mortgageRefinanceLabel.attorneyFeeYours
+            placeholder: _vm.getAnthonyYours(
+              _vm.mortgageRefinanceLabel.attorneyFeeYours
+            )
           },
           domProps: { value: _vm.attorney_fee_yours },
           on: {
@@ -2264,7 +2396,9 @@ var render = function() {
           staticClass: "typeNumbers",
           attrs: {
             type: "number",
-            placeholder: _vm.mortgageRefinanceLabel.attorneyFeeLenders,
+            placeholder: _vm.getAnthonyLenders(
+              _vm.mortgageRefinanceLabel.attorneyFeeLenders
+            ),
             min: "0",
             id: "attorney_fee_lenders",
             name: "attorney_fee_lenders"
@@ -2309,7 +2443,9 @@ var render = function() {
             min: "0",
             name: "title_search",
             id: "title_search",
-            placeholder: _vm.mortgageRefinanceLabel.titleSearch
+            placeholder: _vm.getTitleSearch(
+              _vm.mortgageRefinanceLabel.titleSearch
+            )
           },
           domProps: { value: _vm.title_search },
           on: {
@@ -2346,7 +2482,9 @@ var render = function() {
           staticClass: "typeNumbers",
           attrs: {
             type: "number",
-            placeholder: _vm.mortgageRefinanceLabel.titleInsurance,
+            placeholder: _vm.getTitleInsurance(
+              _vm.mortgageRefinanceLabel.titleInsurance
+            ),
             min: "0",
             id: "title_insurance",
             name: "title_insurance"
@@ -2391,7 +2529,9 @@ var render = function() {
             min: "0",
             name: "appraisal_fee",
             id: "appraisal_fee",
-            placeholder: _vm.mortgageRefinanceLabel.appraisalFee
+            placeholder: _vm.getAppraisalFee(
+              _vm.mortgageRefinanceLabel.appraisalFee
+            )
           },
           domProps: { value: _vm.appraisal_fee },
           on: {
@@ -2428,7 +2568,9 @@ var render = function() {
           staticClass: "typeNumbers",
           attrs: {
             type: "number",
-            placeholder: _vm.mortgageRefinanceLabel.inspections,
+            placeholder: _vm.getInspections(
+              _vm.mortgageRefinanceLabel.inspections
+            ),
             min: "0",
             id: "inspections",
             name: "inspections"
@@ -2473,7 +2615,7 @@ var render = function() {
             min: "0",
             name: "local_fees",
             id: "local_fees",
-            placeholder: _vm.mortgageRefinanceLabel.localFees
+            placeholder: _vm.getLocalFees(_vm.mortgageRefinanceLabel.localFees)
           },
           domProps: { value: _vm.local_fees },
           on: {
@@ -2510,7 +2652,9 @@ var render = function() {
           staticClass: "typeNumbers",
           attrs: {
             type: "number",
-            placeholder: _vm.mortgageRefinanceLabel.documentPreparation,
+            placeholder: _vm.getDocumentPreparation(
+              _vm.mortgageRefinanceLabel.documentPreparation
+            ),
             min: "0",
             id: "document_preparation",
             name: "document_preparation"
@@ -2555,7 +2699,7 @@ var render = function() {
             min: "0",
             name: "other",
             id: "other",
-            placeholder: _vm.mortgageRefinanceLabel.other
+            placeholder: _vm.getOther(_vm.mortgageRefinanceLabel.other)
           },
           domProps: { value: _vm.other },
           on: {
@@ -2785,6 +2929,38 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 return 0;
             }
         }
+    },
+    methods: {
+        getMortgageAmnt: function getMortgageAmnt(str) {
+            if (str == '') {
+                return 'Mortgage Amount';
+            }
+            return str;
+        },
+        getTermInYears: function getTermInYears(str) {
+            if (str == '') {
+                return 'Term in Years';
+            }
+            return str;
+        },
+        getInterestRate: function getInterestRate(str) {
+            if (str == '') {
+                return 'Interest Rate';
+            }
+            return str;
+        },
+        getPropTaxes: function getPropTaxes(str) {
+            if (str == '') {
+                return 'Annual Property Taxes';
+            }
+            return str;
+        },
+        getInsurance: function getInsurance(str) {
+            if (str == '') {
+                return 'Annual Home Insurance';
+            }
+            return str;
+        }
     }
 });
 
@@ -2802,7 +2978,15 @@ var render = function() {
       _c("h3", [_vm._v(_vm._s(_vm.tableTitle))]),
       _vm._v(" "),
       _c("div", { staticClass: "mortgage_amount" }, [
-        _c("label", [_vm._v(_vm._s(_vm.mortgagePaymentLabel.mortgageAmount))]),
+        _c("label", [
+          _vm._v(
+            _vm._s(
+              !_vm.mortgagePaymentLabel.mortgageAmount
+                ? "Mortgage Amount"
+                : _vm.mortgagePaymentLabel.mortgageAmount
+            )
+          )
+        ]),
         _vm._v(" "),
         _c("input", {
           directives: [
@@ -2818,7 +3002,10 @@ var render = function() {
             type: "number",
             min: "0",
             name: "mortgage_amount",
-            id: "mortgage_amount"
+            id: "mortgage_amount",
+            placeholder: _vm.getMortgageAmnt(
+              _vm.mortgagePaymentLabel.mortgageAmount
+            )
           },
           domProps: { value: _vm.mortgage_amount_def_val },
           on: {
@@ -2833,7 +3020,15 @@ var render = function() {
       ]),
       _vm._v(" "),
       _c("div", { staticClass: "term_in_years" }, [
-        _c("label", [_vm._v(_vm._s(_vm.mortgagePaymentLabel.termInYears))]),
+        _c("label", [
+          _vm._v(
+            _vm._s(
+              !_vm.mortgagePaymentLabel.termInYears
+                ? "Term in Years"
+                : _vm.mortgagePaymentLabel.termInYears
+            )
+          )
+        ]),
         _vm._v(" "),
         _c("input", {
           directives: [
@@ -2849,7 +3044,10 @@ var render = function() {
             type: "number",
             min: "0",
             name: "term_in_years",
-            id: "term_in_years"
+            id: "term_in_years",
+            placeholder: _vm.getTermInYears(
+              _vm.mortgagePaymentLabel.termInYears
+            )
           },
           domProps: { value: _vm.term_in_years_def_val },
           on: {
@@ -2864,7 +3062,15 @@ var render = function() {
       ]),
       _vm._v(" "),
       _c("div", { staticClass: "interest_rate" }, [
-        _c("label", [_vm._v(_vm._s(_vm.mortgagePaymentLabel.interestRate))]),
+        _c("label", [
+          _vm._v(
+            _vm._s(
+              !_vm.mortgagePaymentLabel.interestRate
+                ? "Interest Rate"
+                : _vm.mortgagePaymentLabel.interestRate
+            )
+          )
+        ]),
         _vm._v(" "),
         _c("input", {
           directives: [
@@ -2880,7 +3086,10 @@ var render = function() {
             type: "number",
             min: "0",
             name: "interest_rate",
-            id: "interest_rate"
+            id: "interest_rate",
+            placeholder: _vm.getInterestRate(
+              _vm.mortgagePaymentLabel.interestRate
+            )
           },
           domProps: { value: _vm.interest_rate_def_val },
           on: {
@@ -2896,7 +3105,13 @@ var render = function() {
       _vm._v(" "),
       _c("div", { staticClass: "annual_property_taxes" }, [
         _c("label", [
-          _vm._v(_vm._s(_vm.mortgagePaymentLabel.annualPropertyTaxes))
+          _vm._v(
+            _vm._s(
+              !_vm.mortgagePaymentLabel.annualPropertyTaxes
+                ? "Annual Property Taxes"
+                : _vm.mortgagePaymentLabel.annualPropertyTaxes
+            )
+          )
         ]),
         _vm._v(" "),
         _c("input", {
@@ -2914,7 +3129,9 @@ var render = function() {
             min: "0",
             name: "annual_property_taxes",
             id: "annual_property_taxes",
-            placeholder: "Annual Property Taxes"
+            placeholder: _vm.getPropTaxes(
+              _vm.mortgagePaymentLabel.annualPropertyTaxes
+            )
           },
           domProps: { value: _vm.annual_property_taxes_def_val },
           on: {
@@ -2930,7 +3147,13 @@ var render = function() {
       _vm._v(" "),
       _c("div", { staticClass: "annual_property_insurance" }, [
         _c("label", [
-          _vm._v(_vm._s(_vm.mortgagePaymentLabel.annualHomeInsurance))
+          _vm._v(
+            _vm._s(
+              !_vm.mortgagePaymentLabel.annualHomeInsurance
+                ? "Annual Home Insurance"
+                : _vm.mortgagePaymentLabel.annualHomeInsurance
+            )
+          )
         ]),
         _vm._v(" "),
         _c("input", {
@@ -2948,7 +3171,9 @@ var render = function() {
             min: "0",
             name: "annual_property_insurance",
             id: "annual_property_insurance",
-            placeholder: "Annual Property Taxes"
+            placeholder: _vm.getInsurance(
+              _vm.mortgagePaymentLabel.annualHomeInsurance
+            )
           },
           domProps: { value: _vm.annual_property_insurance_def_val },
           on: {

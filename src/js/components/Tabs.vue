@@ -148,31 +148,31 @@
                     <div v-if="calcType=='mortgage_payment'">
                         <el-row>
                             <el-col :span="24">
-                                <label>{{ allPaymentCalcTable.mortgageAmount }}</label>
+                                <label>Mortgage Amount</label>
                                 <el-input type="text" v-model="allPaymentCalcTable.mortgageAmount"></el-input>
                             </el-col>
                         </el-row>
                         <el-row>
                             <el-col :span="24">
-                                <label>{{ allPaymentCalcTable.termInYears }}</label>
+                                <label>Term in Years</label>
                                 <el-input type="text" v-model="allPaymentCalcTable.termInYears"></el-input>
                             </el-col>
                         </el-row>
                         <el-row>
                             <el-col :span="24">
-                                <label>{{ allPaymentCalcTable.interestRate }}</label>
+                                <label>Interest Rate</label>
                                 <el-input type="text" v-model="allPaymentCalcTable.interestRate"></el-input>
                             </el-col>
                         </el-row>
                         <el-row>
                             <el-col :span="24">
-                                <label>{{ allPaymentCalcTable.annualPropertyTaxes }}</label>
+                                <label>Annual Property Taxes</label>
                                 <el-input type="text" v-model="allPaymentCalcTable.annualPropertyTaxes"></el-input>
                             </el-col>
                         </el-row>
                         <el-row>
                             <el-col :span="24">
-                                <label>{{ allPaymentCalcTable.annualHomeInsurance }}</label>
+                                <label>Annual Home Insurance</label>
                                 <el-input type="text" v-model="allPaymentCalcTable.annualHomeInsurance"></el-input>
                             </el-col>
                         </el-row>

@@ -9,7 +9,7 @@
                 <input type="number" min=0 id="current_monthly_payment" 
                                    class="typeNumbers"
                                    name="current_monthly_payment" 
-                                   :placeholder="mortgageRefinanceLabel.currentlyMonthlyPayment"
+                                   :placeholder="getCurrentlyPayment(mortgageRefinanceLabel.currentlyMonthlyPayment)"
                                    v-model="current_monthly_payment"
                                    v-validate="'required'"
                                 :class="{'error': errors.has('current_monthly_payment') }">
@@ -22,7 +22,7 @@
                 <input type="number" min=0 id="current_loan_interest_rate"
                                    class="typeNumbers" 
                                    name="current_loan_interest_rate" 
-                                   :placeholder="mortgageRefinanceLabel.loanIntRate"
+                                   :placeholder="getCurrentLoanRate(mortgageRefinanceLabel.loanIntRate)"
                                    v-model="current_loan_interest_rate"
                                    v-validate="'required'"
                                    :class="{'error': errors.has('current_loan_interest_rate') }">
@@ -38,7 +38,7 @@
                 <input type="number" min=0 id="balance" 
                                      name="balance" 
                                      class="typeNumbers" 
-                                     :placeholder="mortgageRefinanceLabel.balanceMortgage"
+                                     :placeholder="getBalanceMortgage(mortgageRefinanceLabel.balanceMortgage)"
                                      v-model="balance"
                                      v-validate="'required'"
                                      :class="{'error': errors.has('balance') }">
@@ -51,7 +51,7 @@
                 <input type="number" min=0 id="new_interest_rate"
                                     class="typeNumbers" 
                                     name="new_interest_rate" 
-                                    :placeholder="mortgageRefinanceLabel.newIntRate"
+                                    :placeholder="getNewIntRate(mortgageRefinanceLabel.newIntRate)"
                                     v-model="new_interest_rate"
                                     v-validate="'required'"
                                     :class="{'error': errors.has('new_interest_rate') }">
@@ -68,7 +68,7 @@
                 <input type="number" min=0 id="remaining_loan_term" 
                                      name="remaining_loan_term" 
                                      class="typeNumbers" 
-                                     :placeholder="mortgageRefinanceLabel.remainingLoanTerm"
+                                     :placeholder="getRemainingLoan(mortgageRefinanceLabel.remainingLoanTerm)"
                                      v-model="remaining_loan_term"
                                      v-validate="'required'"
                                      :class="{'error': errors.has('remaining_loan_term') }">
@@ -81,7 +81,7 @@
                 <input type="number" min=0 id="new_loan_term"
                                     class="typeNumbers" 
                                     name="new_loan_term" 
-                                    :placeholder="mortgageRefinanceLabel.newLoanTerm"
+                                    :placeholder="getNewLoanTerm(mortgageRefinanceLabel.newLoanTerm)"
                                     v-model="new_loan_term"
                                     v-validate="'required'"
                                     :class="{'error': errors.has('new_loan_term') }">
@@ -99,7 +99,7 @@
             <div class="points">
                 <label>{{ !mortgageRefinanceLabel.points ? "Points" : mortgageRefinanceLabel.points }}</label>
                 <input type="number" min=0 name="points"
-                       id="points" v-model="points" :placeholder="mortgageRefinanceLabel.points"
+                       id="points" v-model="points" :placeholder="getPoints(mortgageRefinanceLabel.points)"
                        v-validate="'required'" class="typeNumbers">
             </div>
             <div class="costPoint">
@@ -111,11 +111,11 @@
             <div class="common">
                 <label>{{ !mortgageRefinanceLabel.applicationFee ? "Application Fee" : mortgageRefinanceLabel.applicationFee }}</label>
                 <input type="number" min=0 name="application_fee"
-                       id="application_fee" v-model="application_fee" :placeholder="mortgageRefinanceLabel.applicationFee" class="typeNumbers">
+                       id="application_fee" v-model="application_fee" :placeholder="getApplicationFee(mortgageRefinanceLabel.applicationFee)" class="typeNumbers">
             </div>
             <div class="common">
                 <label>{{ mortgageRefinanceLabel.creditCheck }}</label>
-                <input type="number" :placeholder="mortgageRefinanceLabel.creditCheck" v-model="credit_check" 
+                <input type="number" :placeholder="getCreditCheck(mortgageRefinanceLabel.creditCheck)" v-model="credit_check" 
                        min=0 id="credit_check" name="credit_check" class="typeNumbers"></el-input>
             </div>
         </div>
@@ -124,11 +124,11 @@
             <div class="common">
                 <label>{{ !mortgageRefinanceLabel.attorneyFeeYours ? "Attorney's Fee(yours)" : mortgageRefinanceLabel.attorneyFeeYours }}</label>
                 <input type="number" min=0 name="attorney_fee_yours"
-                       id="attorney_fee_yours" v-model="attorney_fee_yours" :placeholder="mortgageRefinanceLabel.attorneyFeeYours" class="typeNumbers">
+                       id="attorney_fee_yours" v-model="attorney_fee_yours" :placeholder="getAnthonyYours(mortgageRefinanceLabel.attorneyFeeYours)" class="typeNumbers">
             </div>
             <div class="common">
                 <label>{{ !mortgageRefinanceLabel.attorneyFeeLenders ? "Attorney's Fee(lenders)" : mortgageRefinanceLabel.attorneyFeeLenders }}</label>
-                <input type="number" :placeholder="mortgageRefinanceLabel.attorneyFeeLenders" v-model="attorney_fee_lenders" 
+                <input type="number" :placeholder="getAnthonyLenders(mortgageRefinanceLabel.attorneyFeeLenders)" v-model="attorney_fee_lenders" 
                        min=0 id="attorney_fee_lenders" name="attorney_fee_lenders" class="typeNumbers"></el-input>
             </div>
         </div>
@@ -137,11 +137,11 @@
             <div class="common">
                 <label>{{ !mortgageRefinanceLabel.titleSearch ? "Title Search" : mortgageRefinanceLabel.titleSearch }}</label>
                 <input type="number" min=0 name="title_search"
-                       id="title_search" v-model="title_search" :placeholder="mortgageRefinanceLabel.titleSearch" class="typeNumbers">
+                       id="title_search" v-model="title_search" :placeholder="getTitleSearch(mortgageRefinanceLabel.titleSearch)" class="typeNumbers">
             </div>
             <div class="common">
                 <label>{{ !mortgageRefinanceLabel.titleInsurance ? "Title Insurance" : mortgageRefinanceLabel.titleInsurance }}</label>
-                <input type="number" :placeholder="mortgageRefinanceLabel.titleInsurance" v-model="title_insurance" 
+                <input type="number" :placeholder="getTitleInsurance(mortgageRefinanceLabel.titleInsurance)" v-model="title_insurance" 
                        min=0 id="title_insurance" name="title_insurance" class="typeNumbers"></el-input>
             </div>
         </div>
@@ -150,11 +150,11 @@
             <div class="common">
                 <label>{{ !mortgageRefinanceLabel.appraisalFee ? "Appraisal Fee" : mortgageRefinanceLabel.appraisalFee }}</label>
                 <input type="number" min=0 name="appraisal_fee"
-                       id="appraisal_fee" v-model="appraisal_fee" :placeholder="mortgageRefinanceLabel.appraisalFee" class="typeNumbers">
+                       id="appraisal_fee" v-model="appraisal_fee" :placeholder="getAppraisalFee(mortgageRefinanceLabel.appraisalFee)" class="typeNumbers">
             </div>
             <div class="common">
                 <label>{{ !mortgageRefinanceLabel.inspections ? "Inspections" : mortgageRefinanceLabel.inspections }}</label>
-                <input type="number" :placeholder="mortgageRefinanceLabel.inspections" v-model="inspections" 
+                <input type="number" :placeholder="getInspections(mortgageRefinanceLabel.inspections)" v-model="inspections" 
                        min=0 id="inspections" name="inspections" class="typeNumbers"></el-input>
             </div>
         </div>
@@ -163,11 +163,11 @@
             <div class="common">
                 <label>{{ !mortgageRefinanceLabel.localFees ? "Local Fees" : mortgageRefinanceLabel.localFees }}</label>
                 <input type="number" min=0 name="local_fees"
-                       id="local_fees" v-model="local_fees" :placeholder="mortgageRefinanceLabel.localFees" class="typeNumbers">
+                       id="local_fees" v-model="local_fees" :placeholder="getLocalFees(mortgageRefinanceLabel.localFees)" class="typeNumbers">
             </div>
             <div class="common">
                 <label>{{ !mortgageRefinanceLabel.documentPreparation ? "Document Preparation" : mortgageRefinanceLabel.documentPreparation }}</label>
-                <input type="number" :placeholder="mortgageRefinanceLabel.documentPreparation" v-model="document_preparation" 
+                <input type="number" :placeholder="getDocumentPreparation(mortgageRefinanceLabel.documentPreparation)" v-model="document_preparation" 
                        min=0 id="document_preparation" name="document_preparation" class="typeNumbers"></el-input>
             </div>
         </div>
@@ -176,7 +176,7 @@
             <div class="common">
                 <label>{{ !mortgageRefinanceLabel.other ? "Other" : mortgageRefinanceLabel.other }}</label>
                 <input type="number" min=0 name="other"
-                       id="other" v-model="other" :placeholder="mortgageRefinanceLabel.other" class="typeNumbers">
+                       id="other" v-model="other" :placeholder="getOther(mortgageRefinanceLabel.other)" class="typeNumbers">
             </div>
         </div>
 
@@ -351,6 +351,127 @@ export default {
                 this.pointsResult = 0;
                 this.total_cost = 0;
             }
+        }
+    },
+    methods: {
+        getCurrentlyPayment(str) {
+            if(str == '') {
+                return 'Currently Monthly Payment';
+            }
+            return str;
+        },
+        getCurrentLoanRate(str) {
+            if(str == '') {
+                return 'Current Loan Interest Rate'
+            }
+            return str;
+        },
+        getBalanceMortgage(str) {
+            if( str == '' ) {
+                return 'Balance Left on Mortgage'
+            }
+            return str;
+        },
+        getNewIntRate(str) {
+            if( str == '' ) {
+                return 'New Interest Rate'
+            }
+            return str;
+        },
+        getRemainingLoan(str) {
+            if(str=='') {
+                return 'Remaining Loan Term'
+            }
+            return str;
+        },
+        getNewLoanTerm(str) {
+            if(str=='') {
+                return 'New Loan Term'
+            }
+            return str;
+        },
+        getPoints(str) {
+            if(str=='') {
+                return 'Points'
+            }
+            return str;
+        },
+        getApplicationFee(str) {
+            if(str=='') {
+                return 'Application Fee'
+            }
+            return str;
+        },
+        getCreditCheck(str) {
+            if(str=='') {
+                return 'Credit Check'
+            }
+            return str;
+        },
+
+
+
+        getAnthonyYours(str) {
+            if(str=='') {
+                return "Attorney's Fee(yours)"
+            }
+            return str;
+        },
+
+        getAnthonyLenders(str) {
+            if(str=='') {
+                return "Attorney's Fee(lenders)"
+            }
+            return str;
+        },
+
+        getTitleSearch(str) {
+            if(str=='') {
+                return 'Title Search'
+            }
+            return str;
+        },
+
+        getTitleInsurance(str) {
+            if(str=='') {
+                return 'Title Insurance'
+            }
+            return str;
+        },
+
+        getAppraisalFee(str) {
+            if(str=='') {
+                return 'Appraisal Fee'
+            }
+            return str;
+        },
+
+        getInspections(str) {
+            if(str=='') {
+                return 'Inspections'
+            }
+            return str;
+        },
+
+        getLocalFees(str) {
+            if(str=='') {
+                return 'Local Fees (Taxes, Transfers)'
+            }
+            return str;
+        },
+
+        getDocumentPreparation(str) {
+            if(str=='') {
+                return 'Document Preparation'
+            }
+            return str;
+        },
+
+        getOther(str) {
+            if(str=='') {
+                return 'Other'
+            }
+            return str
         }
     },
     computed: {

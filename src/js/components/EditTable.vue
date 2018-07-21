@@ -253,32 +253,47 @@
 			<div v-if="calc_type==='mortgage_payment'">
 				<el-row :gutter="15" style="margin-top: 20px">
 					<el-col :span="24">
-						<label>{{ all_payment_calc_table.mortgageAmount }}</label>
-						<el-input type="text" v-model="all_payment_calc_table.mortgageAmount" disabled></el-input>
+						<label>{{ !all_payment_calc_table.mortgageAmount ? "Mortgage Amount" : all_payment_calc_table.mortgageAmount }}</label>
+						<el-input type="text" 
+								  placeholder="Mortgage Amount"
+								  v-model="all_payment_calc_table.mortgageAmount" 
+								  disabled></el-input>
 					</el-col>
 				</el-row>
 				<el-row :gutter="15">
 					<el-col :span="24">
-						<label>{{ all_payment_calc_table.termInYears }}</label>
-						<el-input type="text" v-model="all_payment_calc_table.termInYears" disabled></el-input>
+						<label>{{ !all_payment_calc_table.termInYears ? "Term in Years" : all_payment_calc_table.termInYears }}</label>
+						<el-input type="text"
+								  placeholder="Term in Years"
+								  v-model="all_payment_calc_table.termInYears" 
+								  disabled></el-input>
 					</el-col>
 				</el-row>
 				<el-row :gutter="15">
 					<el-col :span="24">
-						<label>{{ all_payment_calc_table.interestRate }}</label>
-						<el-input type="text" v-model="all_payment_calc_table.interestRate" disabled></el-input>
+						<label>{{ !all_payment_calc_table.interestRate ? "Interest Rate" : all_payment_calc_table.interestRate }}</label>
+						<el-input type="text" 
+								  placeholder="Interest Rate"
+								  v-model="all_payment_calc_table.interestRate" 
+								  disabled></el-input>
 					</el-col>
 				</el-row>
 				<el-row :gutter="15">
 					<el-col :span="24">
-						<label>{{ all_payment_calc_table.annualPropertyTaxes }}</label>
-						<el-input type="text" v-model="all_payment_calc_table.annualPropertyTaxes" disabled></el-input>
+						<label>{{ !all_payment_calc_table.annualPropertyTaxes ? "Annual Property Taxes" : all_payment_calc_table.annualPropertyTaxes }}</label>
+						<el-input type="text" 
+								  placeholder="Annual Property Taxes"
+								  v-model="all_payment_calc_table.annualPropertyTaxes" 
+								  disabled></el-input>
 					</el-col>
 				</el-row>
 				<el-row :gutter="15">
 					<el-col :span="24">
-						<label>{{ all_payment_calc_table.annualHomeInsurance }}</label>
-						<el-input type="text" v-model="all_payment_calc_table.annualHomeInsurance" disabled></el-input>
+						<label>{{ !all_payment_calc_table.annualHomeInsurance ? "Annual Home Insurance" : all_payment_calc_table.annualHomeInsurance }}</label>
+						<el-input type="text" 
+								  placeholder="Annual Home Insurance"
+								  v-model="all_payment_calc_table.annualHomeInsurance" 
+								  disabled></el-input>
 					</el-col>
 				</el-row>
 			</div>

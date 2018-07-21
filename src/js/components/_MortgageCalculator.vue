@@ -334,8 +334,9 @@
             if( this.mortgageTerm == 0 || this.mortgageTerm == '' ) {
                 this.monthlyPayment = 0;
                 this.principalPaid = 0;
-                this.mortgageTermMonth = 0;
                 this.showAmortBtn = true;
+
+                this.mortgageTermMonth = 0;
             }
             
             else {
@@ -346,6 +347,9 @@
         mortgageTermMonth() {
             this.showTable = false;
             this.showAmortBtn = true;
+            if( this.mortgageTermMonth == '' ) {
+                this.mortgageTerm = 0;
+            }
             if( this.mortgageTermMonth != 0 ) {
                 this.mortgageTerm = this.mortgageTermMonth / 12;
             }

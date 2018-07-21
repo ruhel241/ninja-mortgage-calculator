@@ -72023,6 +72023,21 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -73537,11 +73552,7 @@ var render = function() {
                           "el-col",
                           { attrs: { span: 24 } },
                           [
-                            _c("label", [
-                              _vm._v(
-                                _vm._s(_vm.allPaymentCalcTable.mortgageAmount)
-                              )
-                            ]),
+                            _c("label", [_vm._v("Mortgage Amount")]),
                             _vm._v(" "),
                             _c("el-input", {
                               attrs: { type: "text" },
@@ -73571,11 +73582,7 @@ var render = function() {
                           "el-col",
                           { attrs: { span: 24 } },
                           [
-                            _c("label", [
-                              _vm._v(
-                                _vm._s(_vm.allPaymentCalcTable.termInYears)
-                              )
-                            ]),
+                            _c("label", [_vm._v("Term in Years")]),
                             _vm._v(" "),
                             _c("el-input", {
                               attrs: { type: "text" },
@@ -73605,11 +73612,7 @@ var render = function() {
                           "el-col",
                           { attrs: { span: 24 } },
                           [
-                            _c("label", [
-                              _vm._v(
-                                _vm._s(_vm.allPaymentCalcTable.interestRate)
-                              )
-                            ]),
+                            _c("label", [_vm._v("Interest Rate")]),
                             _vm._v(" "),
                             _c("el-input", {
                               attrs: { type: "text" },
@@ -73639,13 +73642,7 @@ var render = function() {
                           "el-col",
                           { attrs: { span: 24 } },
                           [
-                            _c("label", [
-                              _vm._v(
-                                _vm._s(
-                                  _vm.allPaymentCalcTable.annualPropertyTaxes
-                                )
-                              )
-                            ]),
+                            _c("label", [_vm._v("Annual Property Taxes")]),
                             _vm._v(" "),
                             _c("el-input", {
                               attrs: { type: "text" },
@@ -73677,13 +73674,7 @@ var render = function() {
                           "el-col",
                           { attrs: { span: 24 } },
                           [
-                            _c("label", [
-                              _vm._v(
-                                _vm._s(
-                                  _vm.allPaymentCalcTable.annualHomeInsurance
-                                )
-                              )
-                            ]),
+                            _c("label", [_vm._v("Annual Home Insurance")]),
                             _vm._v(" "),
                             _c("el-input", {
                               attrs: { type: "text" },
@@ -76194,13 +76185,19 @@ var render = function() {
                             _c("label", [
                               _vm._v(
                                 _vm._s(
-                                  _vm.all_payment_calc_table.mortgageAmount
+                                  !_vm.all_payment_calc_table.mortgageAmount
+                                    ? "Mortgage Amount"
+                                    : _vm.all_payment_calc_table.mortgageAmount
                                 )
                               )
                             ]),
                             _vm._v(" "),
                             _c("el-input", {
-                              attrs: { type: "text", disabled: "" },
+                              attrs: {
+                                type: "text",
+                                placeholder: "Mortgage Amount",
+                                disabled: ""
+                              },
                               model: {
                                 value:
                                   _vm.all_payment_calc_table.mortgageAmount,
@@ -76232,12 +76229,20 @@ var render = function() {
                           [
                             _c("label", [
                               _vm._v(
-                                _vm._s(_vm.all_payment_calc_table.termInYears)
+                                _vm._s(
+                                  !_vm.all_payment_calc_table.termInYears
+                                    ? "Term in Years"
+                                    : _vm.all_payment_calc_table.termInYears
+                                )
                               )
                             ]),
                             _vm._v(" "),
                             _c("el-input", {
-                              attrs: { type: "text", disabled: "" },
+                              attrs: {
+                                type: "text",
+                                placeholder: "Term in Years",
+                                disabled: ""
+                              },
                               model: {
                                 value: _vm.all_payment_calc_table.termInYears,
                                 callback: function($$v) {
@@ -76267,12 +76272,20 @@ var render = function() {
                           [
                             _c("label", [
                               _vm._v(
-                                _vm._s(_vm.all_payment_calc_table.interestRate)
+                                _vm._s(
+                                  !_vm.all_payment_calc_table.interestRate
+                                    ? "Interest Rate"
+                                    : _vm.all_payment_calc_table.interestRate
+                                )
                               )
                             ]),
                             _vm._v(" "),
                             _c("el-input", {
-                              attrs: { type: "text", disabled: "" },
+                              attrs: {
+                                type: "text",
+                                placeholder: "Interest Rate",
+                                disabled: ""
+                              },
                               model: {
                                 value: _vm.all_payment_calc_table.interestRate,
                                 callback: function($$v) {
@@ -76304,13 +76317,21 @@ var render = function() {
                             _c("label", [
                               _vm._v(
                                 _vm._s(
-                                  _vm.all_payment_calc_table.annualPropertyTaxes
+                                  !_vm.all_payment_calc_table
+                                    .annualPropertyTaxes
+                                    ? "Annual Property Taxes"
+                                    : _vm.all_payment_calc_table
+                                        .annualPropertyTaxes
                                 )
                               )
                             ]),
                             _vm._v(" "),
                             _c("el-input", {
-                              attrs: { type: "text", disabled: "" },
+                              attrs: {
+                                type: "text",
+                                placeholder: "Annual Property Taxes",
+                                disabled: ""
+                              },
                               model: {
                                 value:
                                   _vm.all_payment_calc_table
@@ -76344,13 +76365,21 @@ var render = function() {
                             _c("label", [
                               _vm._v(
                                 _vm._s(
-                                  _vm.all_payment_calc_table.annualHomeInsurance
+                                  !_vm.all_payment_calc_table
+                                    .annualHomeInsurance
+                                    ? "Annual Home Insurance"
+                                    : _vm.all_payment_calc_table
+                                        .annualHomeInsurance
                                 )
                               )
                             ]),
                             _vm._v(" "),
                             _c("el-input", {
-                              attrs: { type: "text", disabled: "" },
+                              attrs: {
+                                type: "text",
+                                placeholder: "Annual Home Insurance",
+                                disabled: ""
+                              },
                               model: {
                                 value:
                                   _vm.all_payment_calc_table
