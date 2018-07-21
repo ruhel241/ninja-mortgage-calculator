@@ -5,79 +5,80 @@
 		<div class="mortgage_calc_fields">
             <h3>{{ tableTitle }}</h3>
 			<div class="loanAmountSection">
-				<label>{{ mortgageCalcLabel.loanAmount }}</label><br />
+				<label>{{ !mortgageCalcLabel.loanAmount ? "Loan Amount" : mortgageCalcLabel.loanAmount }}</label><br />
 				<input type="number" min=0 id="loanAmount" 
 									class="typeNumber"
 						   	 	   name="loanAmount" 
 						           v-model="loanAmount"
 						           pattern="/^-?\d+\.?\d*$/" onKeyPress="if(this.value.length==8) return false;"
 						           v-validate="rules"
-                                   :class="{'error': errors.has('loanAmount') }">
+                                   :class="{'error': errors.has('loanAmount') }"
+                                   :placeholder="getLoanAmount(mortgageCalcLabel.loanAmount)">
                 <span v-if="errors.has('loanAmount')" style="color: red;">
-                    {{ errors.first('loanAmount') }}
+                    Please enter a value between 1 and 10000000
                 </span>
 			</div>
 			<div class="downPamentSection">
 				<div class="downPament">
-					<label>{{ mortgageCalcLabel.downPament }}</label><br />
+					<label>{{ !mortgageCalcLabel.downPament ? "Down Payment" : mortgageCalcLabel.downPament }}</label><br />
 					<input type="number" min=0 id="downPament"
 										class="typeNumbers" 
 							   	   	   name="downPament" 
-							           placeholder="Down Pament"
+							           :placeholder="getDownPayment(mortgageCalcLabel.downPament)"
 							           v-model="downPament"
 							           >
 				</div>
 				<div class="downPamentPerc">
-					<label>{{ mortgageCalcLabel.downPament }} Percentage</label>
+					<label>{{ !mortgageCalcLabel.downPament ? "Down Payment" : mortgageCalcLabel.downPament }} Percentage</label>
 					<input type="number" min=0 id="downPamentPerc" 
 								   class="typeNumbers"
 						   	   	   name="downPamentPerc" 
-						           placeholder="Down Pament Percentage"
+						           :placeholder="getPercentage(mortgageCalcLabel.downPament)"
 						           v-model="downPamentPerc">
 				</div>
 			</div>
 			<div class="mortgageTermSection">
 				<div class="mortgageTerm">
-					<label>{{ mortgageCalcLabel.mortgageTerm }}</label>
+					<label>{{ !mortgageCalcLabel.mortgageTerm ? "Mortgage Term" : mortgageCalcLabel.mortgageTerm }} Years</label>
 					<input type="number" min=0 id="mortgageTerm" 
 									   class="typeNumbers"
 							   	   	   name="mortgageTerm" 
-							           placeholder="Mortgage Term"
+							           :placeholder="getMortgageTerm(mortgageCalcLabel.mortgageTerm)"
 							           v-model="mortgageTerm"
 							           pattern="/^-?\d+\.?\d*$/" onKeyPress="if(this.value.length==2) return false;"
 							           v-validate="term_rule"
                                 	   :class="{'error': errors.has('mortgageTerm') }">
                     <span v-if="errors.has('mortgageTerm')" style="color: red;">
-	                    {{ errors.first('mortgageTerm') }}
+	                    Please enter a value between 1 and 40
 	                </span>
 				</div>
 				<div class="mortgageTermMonth">
-					<label>{{ mortgageCalcLabel.mortgageTerm }} Month</label>
+					<label>{{ !mortgageCalcLabel.mortgageTerm ? "Mortgage Term" : mortgageCalcLabel.mortgageTerm }} Month</label>
 					<input type="number" min=0 id="mortgageTermMonth"
 									   class="typeNumbers" 
 							   	  	   name="mortgageTermMonth" 
-							           placeholder="Mortgage Term Month"
+							           :placeholder="getMortgageTermMonth(mortgageCalcLabel.mortgageTerm)"
 							           v-model="mortgageTermMonth"
 							           pattern="/^-?\d+\.?\d*$/" onKeyPress="if(this.value.length==3) return false;"
 							           v-validate="term_rule_month"
                                        :class="{'error': errors.has('mortgageTermMonth') }">
                     <span v-if="errors.has('mortgageTermMonth')" style="color: red;">
-	                    {{ errors.first('mortgageTermMonth') }}
+	                    Please enter a value between 1 and 480
 	                </span>
 				</div>
 			</div>
 			<div class="annualIntRateSection">
-				<label>{{ mortgageCalcLabel.annualInterestRate }}</label><br />
+				<label>{{ !mortgageCalcLabel.annualInterestRate ? "Annual Interest Rate" : mortgageCalcLabel.annualInterestRate }}</label><br />
 				<input type="number" min=0 id="annualInterestRate" 
 								   class="typeNumber"
 						   	 	   name="annualInterestRate" 
-						           placeholder="Annual Interest Rate"
+						           :placeholder="getAnnualIntRate(mortgageCalcLabel.annualInterestRate)"
 						           v-model="annualInterestRate"
 						           pattern="/^-?\d+\.?\d*$/" onKeyPress="if(this.value.length==2) return false;"
 						           v-validate="annual_int_rate_term"
                                    :class="{'error': errors.has('annualInterestRate') }">
                 <span v-if="errors.has('annualInterestRate')" style="color: red;">
-                    {{ errors.first('annualInterestRate') }}
+                    Please enter a value between 1 and 90
                 </span>  
 			</div>
 
@@ -248,7 +249,7 @@
     watch: {
         loanAmount: function() {
             this.showTable = false;
-            
+            this.showAmortBtn = true;
             if( this.principalPaid <= 0 ) {
                 this.principalPaid = this.loanAmount;
             
@@ -281,6 +282,7 @@
         },
         downPament() {
             this.showTable = false;
+            this.showAmortBtn = true;
             if( this.principalPaid == 0 || this.loanAmount == '' ) {
                 
                 this.principalPaid = this.loanAmount;
@@ -308,6 +310,7 @@
         },
         mortgageTerm() {
             this.showTable = false;
+            this.showAmortBtn = true;
             if( this.mortgageTerm != 0 ) {
                 this.mortgageTermMonth = parseFloat( this.mortgageTerm ) * 12;
             
@@ -331,7 +334,7 @@
             if( this.mortgageTerm == 0 || this.mortgageTerm == '' ) {
                 this.monthlyPayment = 0;
                 this.principalPaid = 0;
-
+                this.mortgageTermMonth = 0;
                 this.showAmortBtn = true;
             }
             
@@ -342,6 +345,7 @@
         },
         mortgageTermMonth() {
             this.showTable = false;
+            this.showAmortBtn = true;
             if( this.mortgageTermMonth != 0 ) {
                 this.mortgageTerm = this.mortgageTermMonth / 12;
             }
@@ -353,6 +357,7 @@
         },
         annualInterestRate() {
             this.showTable = false;
+            this.showAmortBtn = true;
             
             this.annualInterestRateUpd = parseFloat(( this.annualInterestRate / 12 ) / 100); 
             if( this.principalPaid == 0 ) {
@@ -423,6 +428,7 @@
                     
                     element.payment = (this.monthlyPayment).toFixed(3);
                     var interest = parseFloat( ( p * (  ann_int / 100 ) ) / 12 );
+
                     element.interest = interest.toFixed(2);
                     total_interest = (parseFloat(interest) + parseFloat(total_interest));
                     element.totalInterest = total_interest.toFixed(2);
@@ -432,12 +438,10 @@
                     if(  p - principal_upd < 1  ) {
                         var balance_final = 0;
                         element.balance = balance_final.toFixed(2);
-                        this.estPayOffDate = element.PaymentDate;
-                    
+                        this.estPayOffDate = element.PaymentDate;    
                     } 
                     else {
                         element.balance = ( p - principal_upd ).toFixed(2); 
-                    
                     }
                     
                     var balance_upd = ( p - principal_upd );
@@ -450,7 +454,7 @@
                 });
 
                 if( p < 1 ) {
-                    break;
+                    return;
                 }
 
                 i = this.monthlyPayment - p;
@@ -470,6 +474,42 @@
             this.month = parseInt(month);
             this.gridData = [];
             this.paymentSchedule();
+        },
+        getLoanAmount(str) {
+            if(str == '') {
+                str = 'Loan Amount';
+            }
+            return str;
+        },
+        getDownPayment(str) {
+            if(str == '' ) {
+                str = 'Down Payment';
+            }
+            return str;
+        },
+        getPercentage(x) {
+            if(x == '') {
+                x = 'Down Payment';
+            }
+            return x + ' Percentage';
+        },
+        getMortgageTerm(str) {
+            if(str == '') {
+                str = 'Mortgage Term';
+            }
+            return str + ' Years';
+        },
+        getMortgageTermMonth(str) {
+            if(str == '') {
+                str = 'Mortgage Term Months';
+            }
+            return str + ' Months';
+        },
+        getAnnualIntRate(str) {
+            if(str == '') {
+                return 'Annual Interest Rate'
+            }
+            return str;
         }
     }
 }

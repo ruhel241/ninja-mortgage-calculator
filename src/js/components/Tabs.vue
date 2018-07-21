@@ -17,7 +17,7 @@
                         </el-row>
                         <el-row>
                             <el-col :span="24">
-                                <label>Mortgage Term</label>
+                                <label>Mortgage Term Years</label>
                                 <el-input v-model="allMortCalcTable.mortgageTerm" type="text"></el-input>
                             </el-col>
                         </el-row>
@@ -184,10 +184,11 @@
                     <div v-if="calcType=='mortgage_calculator'">
                         <el-row>
                             <el-col :span="24">
-                                <label>{{ allMortCalcTable.loanAmount }}</label>
+                                <label>{{ !allMortCalcTable.loanAmount ? "Loan Amount" : allMortCalcTable.loanAmount }}</label>
                                 <el-input type="number" min=0 
                                           name="loanAmountDefVal"
                                           class="typeNumber"
+                                          placeholder="Loan Amount"
                                           v-model="allMortCalcDefVal.loanAmountDefVal"
                                           pattern="/^-?\d+\.?\d*$/" onKeyPress="if(this.value.length==8) return false"
                                           v-validate="rules"
@@ -199,22 +200,24 @@
                         </el-row>
                         <el-row>
                             <el-col :span="24">
-                                <label>{{ allMortCalcTable.downPament }}</label>
+                                <label>{{ !allMortCalcTable.downPament ? "Down Payment" : allMortCalcTable.downPament }}</label>
                                 <el-input type="number" min=0 
                                           name="downPamentDefVal"
                                           class="typeNumber"
+                                          placeholder="Down Payment"
                                           v-model="allMortCalcDefVal.downPamentDefVal"></el-input>
                             </el-col>
                         </el-row>
                         <el-row>
                             <el-col :span="24">
-                                <label>{{ allMortCalcTable.mortgageTerm }}</label>
+                                <label>{{ !allMortCalcTable.mortgageTerm ? "Mortgage Term" : allMortCalcTable.mortgageTerm }}</label>
                                 <el-input type="number" min=0 
                                           class="typeNumber"
                                           v-model="allMortCalcDefVal.mortgageTermDefVal"
                                           pattern="/^-?\d+\.?\d*$/" onKeyPress="if(this.value.length==2) return false"
                                           name="mortgageTermDefVal"
                                           v-validate="mortgageTermRules"
+                                          placeholder="Mortgage Term"
                                           :class="{'error': errors.has('mortgageTermDefVal') }"></el-input>
                                 <span v-if="errors.has('mortgageTermDefVal')" style="color: red;">
                                     The {{ allMortCalcTable.mortgageTerm }} field must be lesser than 40
@@ -223,13 +226,14 @@
                         </el-row>
                         <el-row>
                             <el-col :span="24">
-                                <label>{{ allMortCalcTable.annualInterestRate }}</label>
+                                <label>{{ !allMortCalcTable.annualInterestRate ? "Annual Interest Rate" : allMortCalcTable.annualInterestRate }}</label>
                                 <el-input type="number" min=0 
                                           class="typeNumber"
                                           v-model="allMortCalcDefVal.annualInterestRateDefVal"
                                           pattern="/^-?\d+\.?\d*$/" onKeyPress="if(this.value.length==2) return false"
                                           name="annualInterestRateDefVal"
                                           v-validate="annIntRules"
+                                          placeholder="Annual Interest Rate"
                                           :class="{'error': errors.has('annualInterestRateDefVal') }"></el-input>
                                 <span v-if="errors.has('annualInterestRateDefVal')" style="color: red;">
                                     The {{ allMortCalcTable.annualInterestRate }} field must be lesser than 99
@@ -242,37 +246,37 @@
                     <div v-if="calcType=='mortgage_refinance'">
                         <el-row>
                             <el-col :span="24">
-                                <label>{{ allRefinanceCalcTable.currentlyMonthlyPayment }}</label>
+                                <label>{{ !allRefinanceCalcTable.currentlyMonthlyPayment ? "Currently Monthly Payment" : allRefinanceCalcTable.currentlyMonthlyPayment }}</label>
                                 <el-input type="text" v-model="allRefinanceDefVal.currentlyMonthlyPaymentDefVal"></el-input>
                             </el-col>
                         </el-row>
                         <el-row>
                             <el-col :span="24">
-                                <label>{{ allRefinanceCalcTable.loanIntRate }}</label>
+                                <label>{{ !allRefinanceCalcTable.loanIntRate ? "Loan Interest Rate" : allRefinanceCalcTable.loanIntRate }}</label>
                                 <el-input type="text" v-model="allRefinanceDefVal.loanIntRateDefVal"></el-input>
                             </el-col>
                         </el-row>
                         <el-row>
                             <el-col :span="24">
-                                <label>{{ allRefinanceCalcTable.balanceMortgage }}</label>
+                                <label>{{ !allRefinanceCalcTable.balanceMortgage ? "Balance left on mortgage" : allRefinanceCalcTable.balanceMortgage }}</label>
                                 <el-input type="text" v-model="allRefinanceDefVal.balanceMortgageDefVal"></el-input>
                             </el-col>
                         </el-row>
                         <el-row>
                             <el-col :span="24">
-                                <label>{{ allRefinanceCalcTable.newIntRate }}</label>
+                                <label>{{ !allRefinanceCalcTable.newIntRate ? "New Interest Rate" : allRefinanceCalcTable.newIntRate }}</label>
                                 <el-input type="text" v-model="allRefinanceDefVal.newIntRateDefVal"></el-input>
                             </el-col>
                         </el-row>
                         <el-row>
                             <el-col :span="24">
-                                <label>{{ allRefinanceCalcTable.remainingLoanTerm }}</label>
+                                <label>{{ !allRefinanceCalcTable.remainingLoanTerm ? "Remaining Loan Term" : allRefinanceCalcTable.remainingLoanTerm }}</label>
                                 <el-input type="text" v-model="allRefinanceDefVal.remainingLoanTermDefVal"></el-input>
                             </el-col>
                         </el-row>
                         <el-row>
                             <el-col :span="24">
-                                <label>{{ allRefinanceCalcTable.newLoanTerm }}</label>
+                                <label>{{ !allRefinanceCalcTable.newLoanTerm ? "New Loan Term" : allRefinanceCalcTable.newLoanTerm }}</label>
                                 <el-input type="text" v-model="allRefinanceDefVal.newLoanTermDefVal"></el-input>
                             </el-col>
                         </el-row>
@@ -283,73 +287,73 @@
                         </el-row>
                         <el-row>
                             <el-col :span="24">
-                                <label>{{ allRefinanceCalcTable.points }}</label>
+                                <label>{{ !allRefinanceCalcTable.points ? "Points" : allRefinanceCalcTable.points }}</label>
                                 <el-input type="text" v-model="allRefinanceDefVal.pointsDefVal"></el-input>
                             </el-col>
                         </el-row>
                         <el-row>
                             <el-col :span="24">
-                                <label>{{ allRefinanceCalcTable.applicationFee }}</label>
+                                <label>{{ !allRefinanceCalcTable.applicationFee ? "Application Fee" : allRefinanceCalcTable.applicationFee }}</label>
                                 <el-input type="text" v-model="allRefinanceDefVal.applicationFeeDefVal"></el-input>
                             </el-col>
                         </el-row>
                         <el-row>
                             <el-col :span="24">
-                                <label>{{ allRefinanceCalcTable.creditCheck }}</label>
+                                <label>{{ !allRefinanceCalcTable.creditCheck ? "Credit Check" : allRefinanceCalcTable.creditCheck }}</label>
                                 <el-input type="text" v-model="allRefinanceDefVal.creditCheckDefVal"></el-input>
                             </el-col>
                         </el-row>
                         <el-row>
                             <el-col :span="24">
-                                <label>{{ allRefinanceCalcTable.attorneyFeeYours }}</label>
+                                <label>{{ !allRefinanceCalcTable.attorneyFeeYours ? "Attorney's fee (yours)" : allRefinanceCalcTable.attorneyFeeYours }}</label>
                                 <el-input type="text" v-model="allRefinanceDefVal.attorneyFeeYoursDefVal"></el-input>
                             </el-col>
                         </el-row>
                         <el-row>
                             <el-col :span="24">
-                                <label>{{ allRefinanceCalcTable.attorneyFeeLenders }}</label>
+                                <label>{{ !allRefinanceCalcTable.attorneyFeeLenders ? "Attorney's Fee(lenders)" : allRefinanceCalcTable.attorneyFeeLenders }}</label>
                                 <el-input type="text" v-model="allRefinanceDefVal.attorneyFeeLendersDefVal"></el-input>
                             </el-col>
                         </el-row>
                         <el-row>
                             <el-col :span="24">
-                                <label>{{ allRefinanceCalcTable.titleSearch }}</label>
+                                <label>{{ !allRefinanceCalcTable.titleSearch ? "Title Search" : allRefinanceCalcTable.titleSearch }}</label>
                                 <el-input type="text" v-model="allRefinanceDefVal.titleSearchDefVal"></el-input>
                             </el-col>
                         </el-row>
                         <el-row>
                             <el-col :span="24">
-                                <label>{{ allRefinanceCalcTable.titleInsurance }}</label>
+                                <label>{{ !allRefinanceCalcTable.titleInsurance ? "Title Insurance" : allRefinanceCalcTable.titleInsurance }}</label>
                                 <el-input type="text" v-model="allRefinanceDefVal.titleInsuranceDefVal"></el-input>
                             </el-col>
                         </el-row>
                         <el-row>
                             <el-col :span="24">
-                                <label>{{ allRefinanceCalcTable.appraisalFee }}</label>
+                                <label>{{ !allRefinanceCalcTable.appraisalFee ? "Appraisal Fee" : allRefinanceCalcTable.appraisalFee }}</label>
                                 <el-input type="text" v-model="allRefinanceDefVal.appraisalFeeDefVal"></el-input>
                             </el-col>
                         </el-row>
                         <el-row>
                             <el-col :span="24">
-                                <label>{{ allRefinanceCalcTable.inspections }}</label>
+                                <label>{{ !allRefinanceCalcTable.inspections ? "Inspections" : allRefinanceCalcTable.inspections }}</label>
                                 <el-input type="text" v-model="allRefinanceDefVal.inspectionsDefVal"></el-input>
                             </el-col>
                         </el-row>
                         <el-row>
                             <el-col :span="24">
-                                <label>{{ allRefinanceCalcTable.localFees }}</label>
+                                <label>{{ !allRefinanceCalcTable.localFees ? "Local Fees" : allRefinanceCalcTable.localFees }}</label>
                                 <el-input type="text" v-model="allRefinanceDefVal.localFeesDefVal"></el-input>
                             </el-col>
                         </el-row>
                         <el-row>
                             <el-col :span="24">
-                                <label>{{ allRefinanceCalcTable.documentPreparation }}</label>
+                                <label>{{ !allRefinanceCalcTable.documentPreparation ? "Document Preparation" : allRefinanceCalcTable.documentPreparation }}</label>
                                 <el-input type="text" v-model="allRefinanceDefVal.documentPreparationDefVal"></el-input>
                             </el-col>
                         </el-row>
                         <el-row>
                             <el-col :span="24">
-                                <label>{{ allRefinanceCalcTable.other }}</label>
+                                <label>{{ !allRefinanceCalcTable.other ? "Other" : allRefinanceCalcTable.other }}</label>
                                 <el-input type="text" v-model="allRefinanceDefVal.otherDefVal"></el-input>
                             </el-col>
                         </el-row>
@@ -359,31 +363,31 @@
                     <div v-if="calcType=='mortgage_payment'">
                         <el-row>
                             <el-col :span="24">
-                                <label>{{ allPaymentCalcTable.mortgageAmount }}</label>
+                                <label>{{ !allPaymentCalcTable.mortgageAmount ? "Mortgage Amount" : allPaymentCalcTable.mortgageAmount }}</label>
                                 <el-input type="text" v-model="allPaymentCalcTableDefVal.mortgageAmountDefVal"></el-input>
                             </el-col>
                         </el-row>
                         <el-row>
                             <el-col :span="24">
-                                <label>{{ allPaymentCalcTable.termInYears }}</label>
+                                <label>{{ !allPaymentCalcTable.termInYears ? "Term in Years" : allPaymentCalcTable.termInYears }}</label>
                                 <el-input type="text" v-model="allPaymentCalcTableDefVal.termInYearsDefVal"></el-input>
                             </el-col>
                         </el-row>
                         <el-row>
                             <el-col :span="24">
-                                <label>{{ allPaymentCalcTable.interestRate }}</label>
+                                <label>{{ !allPaymentCalcTable.interestRate ? "Interest Rate" : allPaymentCalcTable.interestRate }}</label>
                                 <el-input type="text" v-model="allPaymentCalcTableDefVal.interestRateDefVal"></el-input>
                             </el-col>
                         </el-row>
                         <el-row>
                             <el-col :span="24">
-                                <label>{{ allPaymentCalcTable.annualPropertyTaxes }}</label>
+                                <label>{{ !allPaymentCalcTable.annualPropertyTaxes ? "Annual Property Taxes" : allPaymentCalcTable.annualPropertyTaxes }}</label>
                                 <el-input type="text" v-model="allPaymentCalcTableDefVal.annualPropertyTaxesDefVal"></el-input>
                             </el-col>
                         </el-row>
                         <el-row>
                             <el-col :span="24">
-                                <label>{{ allPaymentCalcTable.annualHomeInsurance }}</label>
+                                <label>{{ !allPaymentCalcTable.annualHomeInsurance ? "Annual Home Insurance" : allPaymentCalcTable.annualHomeInsurance }}</label>
                                 <el-input type="text" v-model="allPaymentCalcTableDefVal.annualHomeInsuranceDefVal"></el-input>
                             </el-col>
                         </el-row>

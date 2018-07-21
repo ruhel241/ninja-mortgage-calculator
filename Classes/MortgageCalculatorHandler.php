@@ -225,7 +225,7 @@ class MortgageCalculatorHandler
 			
 				'selectedLabel' => array(
 	                'loanAmount' 	     => 'Loan Amount',
-	                'downPament'	     => 'Down Pament',
+	                'downPament'	     => 'Down Payment',
 	                'mortgageTerm'	     => 'Mortgage Term',
 	                'annualInterestRate' => 'Annual Interest Rate',
 	            ),

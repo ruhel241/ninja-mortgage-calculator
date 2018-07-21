@@ -5,7 +5,7 @@
 
         <div class="currentlyMonthlyPaymentSection"> 
             <div class="common">
-                <label>{{ mortgageRefinanceLabel.currentlyMonthlyPayment }}</label><br />
+                <label>{{ !mortgageRefinanceLabel.currentlyMonthlyPayment ? "Currently Monthly Payment" : mortgageRefinanceLabel.currentlyMonthlyPayment }}</label><br />
                 <input type="number" min=0 id="current_monthly_payment" 
                                    class="typeNumbers"
                                    name="current_monthly_payment" 
@@ -18,7 +18,7 @@
                 </span>
             </div>
             <div class="common">
-                <label>{{ mortgageRefinanceLabel.loanIntRate }}</label><br />
+                <label>{{ !mortgageRefinanceLabel.loanIntRate ? "Current Loan Interest Rate" : mortgageRefinanceLabel.loanIntRate }}</label><br />
                 <input type="number" min=0 id="current_loan_interest_rate"
                                    class="typeNumbers" 
                                    name="current_loan_interest_rate" 
@@ -34,7 +34,7 @@
 
         <div class="balanceleftonMortgageSection">
             <div class="common">
-                <label>{{ mortgageRefinanceLabel.balanceMortgage }}</label><br />
+                <label>{{ !mortgageRefinanceLabel.balanceMortgage ? "Balance Left on Mortgage" : mortgageRefinanceLabel.balanceMortgage }}</label><br />
                 <input type="number" min=0 id="balance" 
                                      name="balance" 
                                      class="typeNumbers" 
@@ -47,7 +47,7 @@
                 </span>
             </div>
             <div class="common">
-                <label>{{ mortgageRefinanceLabel.newIntRate }}</label><br />
+                <label>{{ !mortgageRefinanceLabel.newIntRate ? "New Interest Rate" : mortgageRefinanceLabel.newIntRate }}</label><br />
                 <input type="number" min=0 id="new_interest_rate"
                                     class="typeNumbers" 
                                     name="new_interest_rate" 
@@ -64,7 +64,7 @@
 
         <div class="remainingLoanTermSection">
             <div class="common">
-                <label>{{ mortgageRefinanceLabel.remainingLoanTerm }}</label><br />
+                <label>{{ !mortgageRefinanceLabel.remainingLoanTerm ? "Remaining Loan Term" : mortgageRefinanceLabel.remainingLoanTerm }}</label><br />
                 <input type="number" min=0 id="remaining_loan_term" 
                                      name="remaining_loan_term" 
                                      class="typeNumbers" 
@@ -77,7 +77,7 @@
                 </span>
             </div>
             <div class="common">
-                <label>{{ mortgageRefinanceLabel.newLoanTerm }}</label><br />
+                <label>{{ !mortgageRefinanceLabel.newLoanTerm ? "New Loan Term" : mortgageRefinanceLabel.newLoanTerm }}</label><br />
                 <input type="number" min=0 id="new_loan_term"
                                     class="typeNumbers" 
                                     name="new_loan_term" 
@@ -97,7 +97,7 @@
 
         <div class="fees_section_points">
             <div class="points">
-                <label>{{ mortgageRefinanceLabel.points }}</label>
+                <label>{{ !mortgageRefinanceLabel.points ? "Points" : mortgageRefinanceLabel.points }}</label>
                 <input type="number" min=0 name="points"
                        id="points" v-model="points" :placeholder="mortgageRefinanceLabel.points"
                        v-validate="'required'" class="typeNumbers">
@@ -109,7 +109,7 @@
 
         <div class="feeSection">
             <div class="common">
-                <label>{{ mortgageRefinanceLabel.applicationFee }}</label>
+                <label>{{ !mortgageRefinanceLabel.applicationFee ? "Application Fee" : mortgageRefinanceLabel.applicationFee }}</label>
                 <input type="number" min=0 name="application_fee"
                        id="application_fee" v-model="application_fee" :placeholder="mortgageRefinanceLabel.applicationFee" class="typeNumbers">
             </div>
@@ -122,12 +122,12 @@
 
         <div class="feeSection">
             <div class="common">
-                <label>{{ mortgageRefinanceLabel.attorneyFeeYours }}</label>
+                <label>{{ !mortgageRefinanceLabel.attorneyFeeYours ? "Attorney's Fee(yours)" : mortgageRefinanceLabel.attorneyFeeYours }}</label>
                 <input type="number" min=0 name="attorney_fee_yours"
                        id="attorney_fee_yours" v-model="attorney_fee_yours" :placeholder="mortgageRefinanceLabel.attorneyFeeYours" class="typeNumbers">
             </div>
             <div class="common">
-                <label>{{ mortgageRefinanceLabel.attorneyFeeLenders }}</label>
+                <label>{{ !mortgageRefinanceLabel.attorneyFeeLenders ? "Attorney's Fee(lenders)" : mortgageRefinanceLabel.attorneyFeeLenders }}</label>
                 <input type="number" :placeholder="mortgageRefinanceLabel.attorneyFeeLenders" v-model="attorney_fee_lenders" 
                        min=0 id="attorney_fee_lenders" name="attorney_fee_lenders" class="typeNumbers"></el-input>
             </div>
@@ -135,12 +135,12 @@
 
         <div class="feeSection">
             <div class="common">
-                <label>{{ mortgageRefinanceLabel.titleSearch }}</label>
+                <label>{{ !mortgageRefinanceLabel.titleSearch ? "Title Search" : mortgageRefinanceLabel.titleSearch }}</label>
                 <input type="number" min=0 name="title_search"
                        id="title_search" v-model="title_search" :placeholder="mortgageRefinanceLabel.titleSearch" class="typeNumbers">
             </div>
             <div class="common">
-                <label>{{ mortgageRefinanceLabel.titleInsurance }}</label>
+                <label>{{ !mortgageRefinanceLabel.titleInsurance ? "Title Insurance" : mortgageRefinanceLabel.titleInsurance }}</label>
                 <input type="number" :placeholder="mortgageRefinanceLabel.titleInsurance" v-model="title_insurance" 
                        min=0 id="title_insurance" name="title_insurance" class="typeNumbers"></el-input>
             </div>
@@ -148,12 +148,12 @@
 
         <div class="feeSection">
             <div class="common">
-                <label>{{ mortgageRefinanceLabel.appraisalFee }}</label>
+                <label>{{ !mortgageRefinanceLabel.appraisalFee ? "Appraisal Fee" : mortgageRefinanceLabel.appraisalFee }}</label>
                 <input type="number" min=0 name="appraisal_fee"
                        id="appraisal_fee" v-model="appraisal_fee" :placeholder="mortgageRefinanceLabel.appraisalFee" class="typeNumbers">
             </div>
             <div class="common">
-                <label>{{ mortgageRefinanceLabel.inspections }}</label>
+                <label>{{ !mortgageRefinanceLabel.inspections ? "Inspections" : mortgageRefinanceLabel.inspections }}</label>
                 <input type="number" :placeholder="mortgageRefinanceLabel.inspections" v-model="inspections" 
                        min=0 id="inspections" name="inspections" class="typeNumbers"></el-input>
             </div>
@@ -161,12 +161,12 @@
 
         <div class="feeSection">
             <div class="common">
-                <label>{{ mortgageRefinanceLabel.localFees }}</label>
+                <label>{{ !mortgageRefinanceLabel.localFees ? "Local Fees" : mortgageRefinanceLabel.localFees }}</label>
                 <input type="number" min=0 name="local_fees"
                        id="local_fees" v-model="local_fees" :placeholder="mortgageRefinanceLabel.localFees" class="typeNumbers">
             </div>
             <div class="common">
-                <label>{{ mortgageRefinanceLabel.documentPreparation }}</label>
+                <label>{{ !mortgageRefinanceLabel.documentPreparation ? "Document Preparation" : mortgageRefinanceLabel.documentPreparation }}</label>
                 <input type="number" :placeholder="mortgageRefinanceLabel.documentPreparation" v-model="document_preparation" 
                        min=0 id="document_preparation" name="document_preparation" class="typeNumbers"></el-input>
             </div>
@@ -174,7 +174,7 @@
 
         <div class="feeSection">
             <div class="common">
-                <label>{{ mortgageRefinanceLabel.other }}</label>
+                <label>{{ !mortgageRefinanceLabel.other ? "Other" : mortgageRefinanceLabel.other }}</label>
                 <input type="number" min=0 name="other"
                        id="other" v-model="other" :placeholder="mortgageRefinanceLabel.other" class="typeNumbers">
             </div>

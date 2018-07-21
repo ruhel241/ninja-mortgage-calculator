@@ -423,6 +423,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     props: ['tableTitle', 'mortgageCalcLabel', 'mortgageCalcDef', 'amortizationTable'],
@@ -526,7 +527,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     watch: {
         loanAmount: function loanAmount() {
             this.showTable = false;
-
+            this.showAmortBtn = true;
             if (this.principalPaid <= 0) {
                 this.principalPaid = this.loanAmount;
             }
@@ -554,6 +555,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         },
         downPament: function downPament() {
             this.showTable = false;
+            this.showAmortBtn = true;
             if (this.principalPaid == 0 || this.loanAmount == '') {
 
                 this.principalPaid = this.loanAmount;
@@ -576,6 +578,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         },
         mortgageTerm: function mortgageTerm() {
             this.showTable = false;
+            this.showAmortBtn = true;
             if (this.mortgageTerm != 0) {
                 this.mortgageTermMonth = parseFloat(this.mortgageTerm) * 12;
             }
@@ -595,7 +598,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             if (this.mortgageTerm == 0 || this.mortgageTerm == '') {
                 this.monthlyPayment = 0;
                 this.principalPaid = 0;
-
+                this.mortgageTermMonth = 0;
                 this.showAmortBtn = true;
             } else {
                 this.monthlyPayment = parseFloat(this.principalPaid * this.annualInterestRateUpd / (1 - 1 / Math.pow(1 + this.annualInterestRateUpd, this.mortgageTermMonth)));
@@ -603,6 +606,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         },
         mortgageTermMonth: function mortgageTermMonth() {
             this.showTable = false;
+            this.showAmortBtn = true;
             if (this.mortgageTermMonth != 0) {
                 this.mortgageTerm = this.mortgageTermMonth / 12;
             }
@@ -614,6 +618,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         },
         annualInterestRate: function annualInterestRate() {
             this.showTable = false;
+            this.showAmortBtn = true;
 
             this.annualInterestRateUpd = parseFloat(this.annualInterestRate / 12 / 100);
             if (this.principalPaid == 0) {
@@ -685,6 +690,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
                     element.payment = _this.monthlyPayment.toFixed(3);
                     var interest = parseFloat(p * (ann_int / 100) / 12);
+
                     element.interest = interest.toFixed(2);
                     total_interest = parseFloat(interest) + parseFloat(total_interest);
                     element.totalInterest = total_interest.toFixed(2);
@@ -709,7 +715,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 });
 
                 if (p < 1) {
-                    break;
+                    return;
                 }
 
                 i = this.monthlyPayment - p;
@@ -728,6 +734,42 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             this.month = parseInt(month);
             this.gridData = [];
             this.paymentSchedule();
+        },
+        getLoanAmount: function getLoanAmount(str) {
+            if (str == '') {
+                str = 'Loan Amount';
+            }
+            return str;
+        },
+        getDownPayment: function getDownPayment(str) {
+            if (str == '') {
+                str = 'Down Payment';
+            }
+            return str;
+        },
+        getPercentage: function getPercentage(x) {
+            if (x == '') {
+                x = 'Down Payment';
+            }
+            return x + ' Percentage';
+        },
+        getMortgageTerm: function getMortgageTerm(str) {
+            if (str == '') {
+                str = 'Mortgage Term';
+            }
+            return str + ' Years';
+        },
+        getMortgageTermMonth: function getMortgageTermMonth(str) {
+            if (str == '') {
+                str = 'Mortgage Term Months';
+            }
+            return str + ' Months';
+        },
+        getAnnualIntRate: function getAnnualIntRate(str) {
+            if (str == '') {
+                return 'Annual Interest Rate';
+            }
+            return str;
         }
     }
 });
@@ -746,7 +788,15 @@ var render = function() {
       _c("h3", [_vm._v(_vm._s(_vm.tableTitle))]),
       _vm._v(" "),
       _c("div", { staticClass: "loanAmountSection" }, [
-        _c("label", [_vm._v(_vm._s(_vm.mortgageCalcLabel.loanAmount))]),
+        _c("label", [
+          _vm._v(
+            _vm._s(
+              !_vm.mortgageCalcLabel.loanAmount
+                ? "Loan Amount"
+                : _vm.mortgageCalcLabel.loanAmount
+            )
+          )
+        ]),
         _c("br"),
         _vm._v(" "),
         _c("input", {
@@ -772,7 +822,8 @@ var render = function() {
             id: "loanAmount",
             name: "loanAmount",
             pattern: "/^-?\\d+\\.?\\d*$/",
-            onKeyPress: "if(this.value.length==8) return false;"
+            onKeyPress: "if(this.value.length==8) return false;",
+            placeholder: _vm.getLoanAmount(_vm.mortgageCalcLabel.loanAmount)
           },
           domProps: { value: _vm.loanAmount },
           on: {
@@ -788,9 +839,7 @@ var render = function() {
         _vm.errors.has("loanAmount")
           ? _c("span", { staticStyle: { color: "red" } }, [
               _vm._v(
-                "\n                    " +
-                  _vm._s(_vm.errors.first("loanAmount")) +
-                  "\n                "
+                "\n                    Please enter a value between 1 and 10000000\n                "
               )
             ])
           : _vm._e()
@@ -798,7 +847,15 @@ var render = function() {
       _vm._v(" "),
       _c("div", { staticClass: "downPamentSection" }, [
         _c("div", { staticClass: "downPament" }, [
-          _c("label", [_vm._v(_vm._s(_vm.mortgageCalcLabel.downPament))]),
+          _c("label", [
+            _vm._v(
+              _vm._s(
+                !_vm.mortgageCalcLabel.downPament
+                  ? "Down Payment"
+                  : _vm.mortgageCalcLabel.downPament
+              )
+            )
+          ]),
           _c("br"),
           _vm._v(" "),
           _c("input", {
@@ -816,7 +873,7 @@ var render = function() {
               min: "0",
               id: "downPament",
               name: "downPament",
-              placeholder: "Down Pament"
+              placeholder: _vm.getDownPayment(_vm.mortgageCalcLabel.downPament)
             },
             domProps: { value: _vm.downPament },
             on: {
@@ -832,7 +889,13 @@ var render = function() {
         _vm._v(" "),
         _c("div", { staticClass: "downPamentPerc" }, [
           _c("label", [
-            _vm._v(_vm._s(_vm.mortgageCalcLabel.downPament) + " Percentage")
+            _vm._v(
+              _vm._s(
+                !_vm.mortgageCalcLabel.downPament
+                  ? "Down Payment"
+                  : _vm.mortgageCalcLabel.downPament
+              ) + " Percentage"
+            )
           ]),
           _vm._v(" "),
           _c("input", {
@@ -850,7 +913,7 @@ var render = function() {
               min: "0",
               id: "downPamentPerc",
               name: "downPamentPerc",
-              placeholder: "Down Pament Percentage"
+              placeholder: _vm.getPercentage(_vm.mortgageCalcLabel.downPament)
             },
             domProps: { value: _vm.downPamentPerc },
             on: {
@@ -867,7 +930,15 @@ var render = function() {
       _vm._v(" "),
       _c("div", { staticClass: "mortgageTermSection" }, [
         _c("div", { staticClass: "mortgageTerm" }, [
-          _c("label", [_vm._v(_vm._s(_vm.mortgageCalcLabel.mortgageTerm))]),
+          _c("label", [
+            _vm._v(
+              _vm._s(
+                !_vm.mortgageCalcLabel.mortgageTerm
+                  ? "Mortgage Term"
+                  : _vm.mortgageCalcLabel.mortgageTerm
+              ) + " Years"
+            )
+          ]),
           _vm._v(" "),
           _c("input", {
             directives: [
@@ -891,7 +962,9 @@ var render = function() {
               min: "0",
               id: "mortgageTerm",
               name: "mortgageTerm",
-              placeholder: "Mortgage Term",
+              placeholder: _vm.getMortgageTerm(
+                _vm.mortgageCalcLabel.mortgageTerm
+              ),
               pattern: "/^-?\\d+\\.?\\d*$/",
               onKeyPress: "if(this.value.length==2) return false;"
             },
@@ -909,9 +982,7 @@ var render = function() {
           _vm.errors.has("mortgageTerm")
             ? _c("span", { staticStyle: { color: "red" } }, [
                 _vm._v(
-                  "\n\t                    " +
-                    _vm._s(_vm.errors.first("mortgageTerm")) +
-                    "\n\t                "
+                  "\n\t                    Please enter a value between 1 and 40\n\t                "
                 )
               ])
             : _vm._e()
@@ -919,7 +990,13 @@ var render = function() {
         _vm._v(" "),
         _c("div", { staticClass: "mortgageTermMonth" }, [
           _c("label", [
-            _vm._v(_vm._s(_vm.mortgageCalcLabel.mortgageTerm) + " Month")
+            _vm._v(
+              _vm._s(
+                !_vm.mortgageCalcLabel.mortgageTerm
+                  ? "Mortgage Term"
+                  : _vm.mortgageCalcLabel.mortgageTerm
+              ) + " Month"
+            )
           ]),
           _vm._v(" "),
           _c("input", {
@@ -944,7 +1021,9 @@ var render = function() {
               min: "0",
               id: "mortgageTermMonth",
               name: "mortgageTermMonth",
-              placeholder: "Mortgage Term Month",
+              placeholder: _vm.getMortgageTermMonth(
+                _vm.mortgageCalcLabel.mortgageTerm
+              ),
               pattern: "/^-?\\d+\\.?\\d*$/",
               onKeyPress: "if(this.value.length==3) return false;"
             },
@@ -962,9 +1041,7 @@ var render = function() {
           _vm.errors.has("mortgageTermMonth")
             ? _c("span", { staticStyle: { color: "red" } }, [
                 _vm._v(
-                  "\n\t                    " +
-                    _vm._s(_vm.errors.first("mortgageTermMonth")) +
-                    "\n\t                "
+                  "\n\t                    Please enter a value between 1 and 480\n\t                "
                 )
               ])
             : _vm._e()
@@ -972,7 +1049,15 @@ var render = function() {
       ]),
       _vm._v(" "),
       _c("div", { staticClass: "annualIntRateSection" }, [
-        _c("label", [_vm._v(_vm._s(_vm.mortgageCalcLabel.annualInterestRate))]),
+        _c("label", [
+          _vm._v(
+            _vm._s(
+              !_vm.mortgageCalcLabel.annualInterestRate
+                ? "Annual Interest Rate"
+                : _vm.mortgageCalcLabel.annualInterestRate
+            )
+          )
+        ]),
         _c("br"),
         _vm._v(" "),
         _c("input", {
@@ -997,7 +1082,9 @@ var render = function() {
             min: "0",
             id: "annualInterestRate",
             name: "annualInterestRate",
-            placeholder: "Annual Interest Rate",
+            placeholder: _vm.getAnnualIntRate(
+              _vm.mortgageCalcLabel.annualInterestRate
+            ),
             pattern: "/^-?\\d+\\.?\\d*$/",
             onKeyPress: "if(this.value.length==2) return false;"
           },
@@ -1015,9 +1102,7 @@ var render = function() {
         _vm.errors.has("annualInterestRate")
           ? _c("span", { staticStyle: { color: "red" } }, [
               _vm._v(
-                "\n                    " +
-                  _vm._s(_vm.errors.first("annualInterestRate")) +
-                  "\n                "
+                "\n                    Please enter a value between 1 and 90\n                "
               )
             ])
           : _vm._e()
@@ -1646,7 +1731,13 @@ var render = function() {
     _c("div", { staticClass: "currentlyMonthlyPaymentSection" }, [
       _c("div", { staticClass: "common" }, [
         _c("label", [
-          _vm._v(_vm._s(_vm.mortgageRefinanceLabel.currentlyMonthlyPayment))
+          _vm._v(
+            _vm._s(
+              !_vm.mortgageRefinanceLabel.currentlyMonthlyPayment
+                ? "Currently Monthly Payment"
+                : _vm.mortgageRefinanceLabel.currentlyMonthlyPayment
+            )
+          )
         ]),
         _c("br"),
         _vm._v(" "),
@@ -1695,7 +1786,15 @@ var render = function() {
       ]),
       _vm._v(" "),
       _c("div", { staticClass: "common" }, [
-        _c("label", [_vm._v(_vm._s(_vm.mortgageRefinanceLabel.loanIntRate))]),
+        _c("label", [
+          _vm._v(
+            _vm._s(
+              !_vm.mortgageRefinanceLabel.loanIntRate
+                ? "Current Loan Interest Rate"
+                : _vm.mortgageRefinanceLabel.loanIntRate
+            )
+          )
+        ]),
         _c("br"),
         _vm._v(" "),
         _c("input", {
@@ -1746,7 +1845,13 @@ var render = function() {
     _c("div", { staticClass: "balanceleftonMortgageSection" }, [
       _c("div", { staticClass: "common" }, [
         _c("label", [
-          _vm._v(_vm._s(_vm.mortgageRefinanceLabel.balanceMortgage))
+          _vm._v(
+            _vm._s(
+              !_vm.mortgageRefinanceLabel.balanceMortgage
+                ? "Balance Left on Mortgage"
+                : _vm.mortgageRefinanceLabel.balanceMortgage
+            )
+          )
         ]),
         _c("br"),
         _vm._v(" "),
@@ -1795,7 +1900,15 @@ var render = function() {
       ]),
       _vm._v(" "),
       _c("div", { staticClass: "common" }, [
-        _c("label", [_vm._v(_vm._s(_vm.mortgageRefinanceLabel.newIntRate))]),
+        _c("label", [
+          _vm._v(
+            _vm._s(
+              !_vm.mortgageRefinanceLabel.newIntRate
+                ? "New Interest Rate"
+                : _vm.mortgageRefinanceLabel.newIntRate
+            )
+          )
+        ]),
         _c("br"),
         _vm._v(" "),
         _c("input", {
@@ -1846,7 +1959,13 @@ var render = function() {
     _c("div", { staticClass: "remainingLoanTermSection" }, [
       _c("div", { staticClass: "common" }, [
         _c("label", [
-          _vm._v(_vm._s(_vm.mortgageRefinanceLabel.remainingLoanTerm))
+          _vm._v(
+            _vm._s(
+              !_vm.mortgageRefinanceLabel.remainingLoanTerm
+                ? "Remaining Loan Term"
+                : _vm.mortgageRefinanceLabel.remainingLoanTerm
+            )
+          )
         ]),
         _c("br"),
         _vm._v(" "),
@@ -1895,7 +2014,15 @@ var render = function() {
       ]),
       _vm._v(" "),
       _c("div", { staticClass: "common" }, [
-        _c("label", [_vm._v(_vm._s(_vm.mortgageRefinanceLabel.newLoanTerm))]),
+        _c("label", [
+          _vm._v(
+            _vm._s(
+              !_vm.mortgageRefinanceLabel.newLoanTerm
+                ? "New Loan Term"
+                : _vm.mortgageRefinanceLabel.newLoanTerm
+            )
+          )
+        ]),
         _c("br"),
         _vm._v(" "),
         _c("input", {
@@ -1947,7 +2074,15 @@ var render = function() {
     _vm._v(" "),
     _c("div", { staticClass: "fees_section_points" }, [
       _c("div", { staticClass: "points" }, [
-        _c("label", [_vm._v(_vm._s(_vm.mortgageRefinanceLabel.points))]),
+        _c("label", [
+          _vm._v(
+            _vm._s(
+              !_vm.mortgageRefinanceLabel.points
+                ? "Points"
+                : _vm.mortgageRefinanceLabel.points
+            )
+          )
+        ]),
         _vm._v(" "),
         _c("input", {
           directives: [
@@ -1994,7 +2129,13 @@ var render = function() {
     _c("div", { staticClass: "feeSection" }, [
       _c("div", { staticClass: "common" }, [
         _c("label", [
-          _vm._v(_vm._s(_vm.mortgageRefinanceLabel.applicationFee))
+          _vm._v(
+            _vm._s(
+              !_vm.mortgageRefinanceLabel.applicationFee
+                ? "Application Fee"
+                : _vm.mortgageRefinanceLabel.applicationFee
+            )
+          )
         ]),
         _vm._v(" "),
         _c("input", {
@@ -2062,7 +2203,13 @@ var render = function() {
     _c("div", { staticClass: "feeSection" }, [
       _c("div", { staticClass: "common" }, [
         _c("label", [
-          _vm._v(_vm._s(_vm.mortgageRefinanceLabel.attorneyFeeYours))
+          _vm._v(
+            _vm._s(
+              !_vm.mortgageRefinanceLabel.attorneyFeeYours
+                ? "Attorney's Fee(yours)"
+                : _vm.mortgageRefinanceLabel.attorneyFeeYours
+            )
+          )
         ]),
         _vm._v(" "),
         _c("input", {
@@ -2096,7 +2243,13 @@ var render = function() {
       _vm._v(" "),
       _c("div", { staticClass: "common" }, [
         _c("label", [
-          _vm._v(_vm._s(_vm.mortgageRefinanceLabel.attorneyFeeLenders))
+          _vm._v(
+            _vm._s(
+              !_vm.mortgageRefinanceLabel.attorneyFeeLenders
+                ? "Attorney's Fee(lenders)"
+                : _vm.mortgageRefinanceLabel.attorneyFeeLenders
+            )
+          )
         ]),
         _vm._v(" "),
         _c("input", {
@@ -2131,7 +2284,15 @@ var render = function() {
     _vm._v(" "),
     _c("div", { staticClass: "feeSection" }, [
       _c("div", { staticClass: "common" }, [
-        _c("label", [_vm._v(_vm._s(_vm.mortgageRefinanceLabel.titleSearch))]),
+        _c("label", [
+          _vm._v(
+            _vm._s(
+              !_vm.mortgageRefinanceLabel.titleSearch
+                ? "Title Search"
+                : _vm.mortgageRefinanceLabel.titleSearch
+            )
+          )
+        ]),
         _vm._v(" "),
         _c("input", {
           directives: [
@@ -2164,7 +2325,13 @@ var render = function() {
       _vm._v(" "),
       _c("div", { staticClass: "common" }, [
         _c("label", [
-          _vm._v(_vm._s(_vm.mortgageRefinanceLabel.titleInsurance))
+          _vm._v(
+            _vm._s(
+              !_vm.mortgageRefinanceLabel.titleInsurance
+                ? "Title Insurance"
+                : _vm.mortgageRefinanceLabel.titleInsurance
+            )
+          )
         ]),
         _vm._v(" "),
         _c("input", {
@@ -2199,7 +2366,15 @@ var render = function() {
     _vm._v(" "),
     _c("div", { staticClass: "feeSection" }, [
       _c("div", { staticClass: "common" }, [
-        _c("label", [_vm._v(_vm._s(_vm.mortgageRefinanceLabel.appraisalFee))]),
+        _c("label", [
+          _vm._v(
+            _vm._s(
+              !_vm.mortgageRefinanceLabel.appraisalFee
+                ? "Appraisal Fee"
+                : _vm.mortgageRefinanceLabel.appraisalFee
+            )
+          )
+        ]),
         _vm._v(" "),
         _c("input", {
           directives: [
@@ -2231,7 +2406,15 @@ var render = function() {
       ]),
       _vm._v(" "),
       _c("div", { staticClass: "common" }, [
-        _c("label", [_vm._v(_vm._s(_vm.mortgageRefinanceLabel.inspections))]),
+        _c("label", [
+          _vm._v(
+            _vm._s(
+              !_vm.mortgageRefinanceLabel.inspections
+                ? "Inspections"
+                : _vm.mortgageRefinanceLabel.inspections
+            )
+          )
+        ]),
         _vm._v(" "),
         _c("input", {
           directives: [
@@ -2265,7 +2448,15 @@ var render = function() {
     _vm._v(" "),
     _c("div", { staticClass: "feeSection" }, [
       _c("div", { staticClass: "common" }, [
-        _c("label", [_vm._v(_vm._s(_vm.mortgageRefinanceLabel.localFees))]),
+        _c("label", [
+          _vm._v(
+            _vm._s(
+              !_vm.mortgageRefinanceLabel.localFees
+                ? "Local Fees"
+                : _vm.mortgageRefinanceLabel.localFees
+            )
+          )
+        ]),
         _vm._v(" "),
         _c("input", {
           directives: [
@@ -2298,7 +2489,13 @@ var render = function() {
       _vm._v(" "),
       _c("div", { staticClass: "common" }, [
         _c("label", [
-          _vm._v(_vm._s(_vm.mortgageRefinanceLabel.documentPreparation))
+          _vm._v(
+            _vm._s(
+              !_vm.mortgageRefinanceLabel.documentPreparation
+                ? "Document Preparation"
+                : _vm.mortgageRefinanceLabel.documentPreparation
+            )
+          )
         ]),
         _vm._v(" "),
         _c("input", {
@@ -2333,7 +2530,15 @@ var render = function() {
     _vm._v(" "),
     _c("div", { staticClass: "feeSection" }, [
       _c("div", { staticClass: "common" }, [
-        _c("label", [_vm._v(_vm._s(_vm.mortgageRefinanceLabel.other))]),
+        _c("label", [
+          _vm._v(
+            _vm._s(
+              !_vm.mortgageRefinanceLabel.other
+                ? "Other"
+                : _vm.mortgageRefinanceLabel.other
+            )
+          )
+        ]),
         _vm._v(" "),
         _c("input", {
           directives: [

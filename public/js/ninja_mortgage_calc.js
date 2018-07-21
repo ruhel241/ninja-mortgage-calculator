@@ -71956,6 +71956,73 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -72183,6 +72250,21 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 					type: 'success'
 				});
 			});
+		},
+		getDownPamentPerc: function getDownPamentPerc(x) {
+			return x + ' Percentage';
+		},
+		getMortgageTerm: function getMortgageTerm(str) {
+			if (str === '') {
+				return 'Mortgage Term Years';
+			}
+			return str + ' Years';
+		},
+		getMortgageTermMonth: function getMortgageTermMonth(str) {
+			if (str === '') {
+				return 'Mortgage Term Months';
+			}
+			return str + ' Months';
 		}
 	},
 	created: function created() {
@@ -72250,6 +72332,10 @@ module.exports = Component.exports
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
 //
 //
 //
@@ -72807,7 +72893,7 @@ var render = function() {
                           "el-col",
                           { attrs: { span: 24 } },
                           [
-                            _c("label", [_vm._v("Mortgage Term")]),
+                            _c("label", [_vm._v("Mortgage Term Years")]),
                             _vm._v(" "),
                             _c("el-input", {
                               attrs: { type: "text" },
@@ -73643,7 +73729,13 @@ var render = function() {
                             { attrs: { span: 24 } },
                             [
                               _c("label", [
-                                _vm._v(_vm._s(_vm.allMortCalcTable.loanAmount))
+                                _vm._v(
+                                  _vm._s(
+                                    !_vm.allMortCalcTable.loanAmount
+                                      ? "Loan Amount"
+                                      : _vm.allMortCalcTable.loanAmount
+                                  )
+                                )
                               ]),
                               _vm._v(" "),
                               _c("el-input", {
@@ -73663,6 +73755,7 @@ var render = function() {
                                   type: "number",
                                   min: "0",
                                   name: "loanAmountDefVal",
+                                  placeholder: "Loan Amount",
                                   pattern: "/^-?\\d+\\.?\\d*$/",
                                   onKeyPress:
                                     "if(this.value.length==8) return false"
@@ -73711,7 +73804,13 @@ var render = function() {
                             { attrs: { span: 24 } },
                             [
                               _c("label", [
-                                _vm._v(_vm._s(_vm.allMortCalcTable.downPament))
+                                _vm._v(
+                                  _vm._s(
+                                    !_vm.allMortCalcTable.downPament
+                                      ? "Down Payment"
+                                      : _vm.allMortCalcTable.downPament
+                                  )
+                                )
                               ]),
                               _vm._v(" "),
                               _c("el-input", {
@@ -73719,7 +73818,8 @@ var render = function() {
                                 attrs: {
                                   type: "number",
                                   min: "0",
-                                  name: "downPamentDefVal"
+                                  name: "downPamentDefVal",
+                                  placeholder: "Down Payment"
                                 },
                                 model: {
                                   value: _vm.allMortCalcDefVal.downPamentDefVal,
@@ -73750,7 +73850,11 @@ var render = function() {
                             [
                               _c("label", [
                                 _vm._v(
-                                  _vm._s(_vm.allMortCalcTable.mortgageTerm)
+                                  _vm._s(
+                                    !_vm.allMortCalcTable.mortgageTerm
+                                      ? "Mortgage Term"
+                                      : _vm.allMortCalcTable.mortgageTerm
+                                  )
                                 )
                               ]),
                               _vm._v(" "),
@@ -73773,7 +73877,8 @@ var render = function() {
                                   pattern: "/^-?\\d+\\.?\\d*$/",
                                   onKeyPress:
                                     "if(this.value.length==2) return false",
-                                  name: "mortgageTermDefVal"
+                                  name: "mortgageTermDefVal",
+                                  placeholder: "Mortgage Term"
                                 },
                                 model: {
                                   value:
@@ -73822,7 +73927,9 @@ var render = function() {
                               _c("label", [
                                 _vm._v(
                                   _vm._s(
-                                    _vm.allMortCalcTable.annualInterestRate
+                                    !_vm.allMortCalcTable.annualInterestRate
+                                      ? "Annual Interest Rate"
+                                      : _vm.allMortCalcTable.annualInterestRate
                                   )
                                 )
                               ]),
@@ -73848,7 +73955,8 @@ var render = function() {
                                   pattern: "/^-?\\d+\\.?\\d*$/",
                                   onKeyPress:
                                     "if(this.value.length==2) return false",
-                                  name: "annualInterestRateDefVal"
+                                  name: "annualInterestRateDefVal",
+                                  placeholder: "Annual Interest Rate"
                                 },
                                 model: {
                                   value:
@@ -73907,8 +74015,11 @@ var render = function() {
                               _c("label", [
                                 _vm._v(
                                   _vm._s(
-                                    _vm.allRefinanceCalcTable
+                                    !_vm.allRefinanceCalcTable
                                       .currentlyMonthlyPayment
+                                      ? "Currently Monthly Payment"
+                                      : _vm.allRefinanceCalcTable
+                                          .currentlyMonthlyPayment
                                   )
                                 )
                               ]),
@@ -73946,7 +74057,11 @@ var render = function() {
                             [
                               _c("label", [
                                 _vm._v(
-                                  _vm._s(_vm.allRefinanceCalcTable.loanIntRate)
+                                  _vm._s(
+                                    !_vm.allRefinanceCalcTable.loanIntRate
+                                      ? "Loan Interest Rate"
+                                      : _vm.allRefinanceCalcTable.loanIntRate
+                                  )
                                 )
                               ]),
                               _vm._v(" "),
@@ -73983,7 +74098,10 @@ var render = function() {
                               _c("label", [
                                 _vm._v(
                                   _vm._s(
-                                    _vm.allRefinanceCalcTable.balanceMortgage
+                                    !_vm.allRefinanceCalcTable.balanceMortgage
+                                      ? "Balance left on mortgage"
+                                      : _vm.allRefinanceCalcTable
+                                          .balanceMortgage
                                   )
                                 )
                               ]),
@@ -74021,7 +74139,11 @@ var render = function() {
                             [
                               _c("label", [
                                 _vm._v(
-                                  _vm._s(_vm.allRefinanceCalcTable.newIntRate)
+                                  _vm._s(
+                                    !_vm.allRefinanceCalcTable.newIntRate
+                                      ? "New Interest Rate"
+                                      : _vm.allRefinanceCalcTable.newIntRate
+                                  )
                                 )
                               ]),
                               _vm._v(" "),
@@ -74058,7 +74180,10 @@ var render = function() {
                               _c("label", [
                                 _vm._v(
                                   _vm._s(
-                                    _vm.allRefinanceCalcTable.remainingLoanTerm
+                                    !_vm.allRefinanceCalcTable.remainingLoanTerm
+                                      ? "Remaining Loan Term"
+                                      : _vm.allRefinanceCalcTable
+                                          .remainingLoanTerm
                                   )
                                 )
                               ]),
@@ -74096,7 +74221,11 @@ var render = function() {
                             [
                               _c("label", [
                                 _vm._v(
-                                  _vm._s(_vm.allRefinanceCalcTable.newLoanTerm)
+                                  _vm._s(
+                                    !_vm.allRefinanceCalcTable.newLoanTerm
+                                      ? "New Loan Term"
+                                      : _vm.allRefinanceCalcTable.newLoanTerm
+                                  )
                                 )
                               ]),
                               _vm._v(" "),
@@ -74141,7 +74270,13 @@ var render = function() {
                             { attrs: { span: 24 } },
                             [
                               _c("label", [
-                                _vm._v(_vm._s(_vm.allRefinanceCalcTable.points))
+                                _vm._v(
+                                  _vm._s(
+                                    !_vm.allRefinanceCalcTable.points
+                                      ? "Points"
+                                      : _vm.allRefinanceCalcTable.points
+                                  )
+                                )
                               ]),
                               _vm._v(" "),
                               _c("el-input", {
@@ -74175,7 +74310,9 @@ var render = function() {
                               _c("label", [
                                 _vm._v(
                                   _vm._s(
-                                    _vm.allRefinanceCalcTable.applicationFee
+                                    !_vm.allRefinanceCalcTable.applicationFee
+                                      ? "Application Fee"
+                                      : _vm.allRefinanceCalcTable.applicationFee
                                   )
                                 )
                               ]),
@@ -74212,7 +74349,11 @@ var render = function() {
                             [
                               _c("label", [
                                 _vm._v(
-                                  _vm._s(_vm.allRefinanceCalcTable.creditCheck)
+                                  _vm._s(
+                                    !_vm.allRefinanceCalcTable.creditCheck
+                                      ? "Credit Check"
+                                      : _vm.allRefinanceCalcTable.creditCheck
+                                  )
                                 )
                               ]),
                               _vm._v(" "),
@@ -74249,7 +74390,10 @@ var render = function() {
                               _c("label", [
                                 _vm._v(
                                   _vm._s(
-                                    _vm.allRefinanceCalcTable.attorneyFeeYours
+                                    !_vm.allRefinanceCalcTable.attorneyFeeYours
+                                      ? "Attorney's fee (yours)"
+                                      : _vm.allRefinanceCalcTable
+                                          .attorneyFeeYours
                                   )
                                 )
                               ]),
@@ -74288,7 +74432,11 @@ var render = function() {
                               _c("label", [
                                 _vm._v(
                                   _vm._s(
-                                    _vm.allRefinanceCalcTable.attorneyFeeLenders
+                                    !_vm.allRefinanceCalcTable
+                                      .attorneyFeeLenders
+                                      ? "Attorney's Fee(lenders)"
+                                      : _vm.allRefinanceCalcTable
+                                          .attorneyFeeLenders
                                   )
                                 )
                               ]),
@@ -74326,7 +74474,11 @@ var render = function() {
                             [
                               _c("label", [
                                 _vm._v(
-                                  _vm._s(_vm.allRefinanceCalcTable.titleSearch)
+                                  _vm._s(
+                                    !_vm.allRefinanceCalcTable.titleSearch
+                                      ? "Title Search"
+                                      : _vm.allRefinanceCalcTable.titleSearch
+                                  )
                                 )
                               ]),
                               _vm._v(" "),
@@ -74363,7 +74515,9 @@ var render = function() {
                               _c("label", [
                                 _vm._v(
                                   _vm._s(
-                                    _vm.allRefinanceCalcTable.titleInsurance
+                                    !_vm.allRefinanceCalcTable.titleInsurance
+                                      ? "Title Insurance"
+                                      : _vm.allRefinanceCalcTable.titleInsurance
                                   )
                                 )
                               ]),
@@ -74400,7 +74554,11 @@ var render = function() {
                             [
                               _c("label", [
                                 _vm._v(
-                                  _vm._s(_vm.allRefinanceCalcTable.appraisalFee)
+                                  _vm._s(
+                                    !_vm.allRefinanceCalcTable.appraisalFee
+                                      ? "Appraisal Fee"
+                                      : _vm.allRefinanceCalcTable.appraisalFee
+                                  )
                                 )
                               ]),
                               _vm._v(" "),
@@ -74436,7 +74594,11 @@ var render = function() {
                             [
                               _c("label", [
                                 _vm._v(
-                                  _vm._s(_vm.allRefinanceCalcTable.inspections)
+                                  _vm._s(
+                                    !_vm.allRefinanceCalcTable.inspections
+                                      ? "Inspections"
+                                      : _vm.allRefinanceCalcTable.inspections
+                                  )
                                 )
                               ]),
                               _vm._v(" "),
@@ -74472,7 +74634,11 @@ var render = function() {
                             [
                               _c("label", [
                                 _vm._v(
-                                  _vm._s(_vm.allRefinanceCalcTable.localFees)
+                                  _vm._s(
+                                    !_vm.allRefinanceCalcTable.localFees
+                                      ? "Local Fees"
+                                      : _vm.allRefinanceCalcTable.localFees
+                                  )
                                 )
                               ]),
                               _vm._v(" "),
@@ -74508,8 +74674,11 @@ var render = function() {
                               _c("label", [
                                 _vm._v(
                                   _vm._s(
-                                    _vm.allRefinanceCalcTable
+                                    !_vm.allRefinanceCalcTable
                                       .documentPreparation
+                                      ? "Document Preparation"
+                                      : _vm.allRefinanceCalcTable
+                                          .documentPreparation
                                   )
                                 )
                               ]),
@@ -74546,7 +74715,13 @@ var render = function() {
                             { attrs: { span: 24 } },
                             [
                               _c("label", [
-                                _vm._v(_vm._s(_vm.allRefinanceCalcTable.other))
+                                _vm._v(
+                                  _vm._s(
+                                    !_vm.allRefinanceCalcTable.other
+                                      ? "Other"
+                                      : _vm.allRefinanceCalcTable.other
+                                  )
+                                )
                               ]),
                               _vm._v(" "),
                               _c("el-input", {
@@ -74587,7 +74762,11 @@ var render = function() {
                             [
                               _c("label", [
                                 _vm._v(
-                                  _vm._s(_vm.allPaymentCalcTable.mortgageAmount)
+                                  _vm._s(
+                                    !_vm.allPaymentCalcTable.mortgageAmount
+                                      ? "Mortgage Amount"
+                                      : _vm.allPaymentCalcTable.mortgageAmount
+                                  )
                                 )
                               ]),
                               _vm._v(" "),
@@ -74624,7 +74803,11 @@ var render = function() {
                             [
                               _c("label", [
                                 _vm._v(
-                                  _vm._s(_vm.allPaymentCalcTable.termInYears)
+                                  _vm._s(
+                                    !_vm.allPaymentCalcTable.termInYears
+                                      ? "Term in Years"
+                                      : _vm.allPaymentCalcTable.termInYears
+                                  )
                                 )
                               ]),
                               _vm._v(" "),
@@ -74661,7 +74844,11 @@ var render = function() {
                             [
                               _c("label", [
                                 _vm._v(
-                                  _vm._s(_vm.allPaymentCalcTable.interestRate)
+                                  _vm._s(
+                                    !_vm.allPaymentCalcTable.interestRate
+                                      ? "Interest Rate"
+                                      : _vm.allPaymentCalcTable.interestRate
+                                  )
                                 )
                               ]),
                               _vm._v(" "),
@@ -74699,7 +74886,10 @@ var render = function() {
                               _c("label", [
                                 _vm._v(
                                   _vm._s(
-                                    _vm.allPaymentCalcTable.annualPropertyTaxes
+                                    !_vm.allPaymentCalcTable.annualPropertyTaxes
+                                      ? "Annual Property Taxes"
+                                      : _vm.allPaymentCalcTable
+                                          .annualPropertyTaxes
                                   )
                                 )
                               ]),
@@ -74738,7 +74928,10 @@ var render = function() {
                               _c("label", [
                                 _vm._v(
                                   _vm._s(
-                                    _vm.allPaymentCalcTable.annualHomeInsurance
+                                    !_vm.allPaymentCalcTable.annualHomeInsurance
+                                      ? "Annual Home Insurance"
+                                      : _vm.allPaymentCalcTable
+                                          .annualHomeInsurance
                                   )
                                 )
                               ]),
@@ -74977,12 +75170,20 @@ var render = function() {
                           [
                             _c("label", [
                               _vm._v(
-                                _vm._s(_vm.all_mort_calc_table.loanAmount) + " "
+                                _vm._s(
+                                  !_vm.all_mort_calc_table.loanAmount
+                                    ? "Loan Amount"
+                                    : _vm.all_mort_calc_table.loanAmount
+                                ) + " "
                               )
                             ]),
                             _vm._v(" "),
                             _c("el-input", {
-                              attrs: { type: "text", disabled: "" },
+                              attrs: {
+                                type: "text",
+                                placeholder: "Loan Amount",
+                                disabled: ""
+                              },
                               model: {
                                 value: _vm.all_mort_calc_table.loanAmount,
                                 callback: function($$v) {
@@ -75011,11 +75212,21 @@ var render = function() {
                           { attrs: { span: 12 } },
                           [
                             _c("label", [
-                              _vm._v(_vm._s(_vm.all_mort_calc_table.downPament))
+                              _vm._v(
+                                _vm._s(
+                                  !_vm.all_mort_calc_table.downPament
+                                    ? "Down Pament"
+                                    : _vm.all_mort_calc_table.downPament
+                                )
+                              )
                             ]),
                             _vm._v(" "),
                             _c("el-input", {
-                              attrs: { type: "text", disabled: "" },
+                              attrs: {
+                                type: "text",
+                                placeholder: "Down Pament",
+                                disabled: ""
+                              },
                               model: {
                                 value: _vm.all_mort_calc_table.downPament,
                                 callback: function($$v) {
@@ -75038,15 +75249,20 @@ var render = function() {
                           [
                             _c("label", [
                               _vm._v(
-                                _vm._s(_vm.all_mort_calc_table.downPament) +
-                                  " Percentage"
+                                _vm._s(
+                                  !_vm.all_mort_calc_table.downPament
+                                    ? "Down Pament"
+                                    : _vm.all_mort_calc_table.downPament
+                                ) + " Percentage"
                               )
                             ]),
                             _vm._v(" "),
                             _c("el-input", {
                               attrs: {
                                 type: "text",
-                                placeholder: "Down Pament Percentage",
+                                placeholder: _vm.getDownPamentPerc(
+                                  _vm.all_mort_calc_table.downPament
+                                ),
                                 disabled: ""
                               }
                             })
@@ -75067,26 +75283,21 @@ var render = function() {
                           [
                             _c("label", [
                               _vm._v(
-                                _vm._s(_vm.all_mort_calc_table.mortgageTerm)
+                                _vm._s(
+                                  !_vm.all_mort_calc_table.mortgageTerm
+                                    ? "Mortgage Term"
+                                    : _vm.all_mort_calc_table.mortgageTerm
+                                ) + " Years"
                               )
                             ]),
                             _vm._v(" "),
                             _c("el-input", {
                               attrs: {
                                 type: "text",
-                                placeholder: "Mortgage Term",
+                                placeholder: _vm.getMortgageTerm(
+                                  _vm.all_mort_calc_table.mortgageTerm
+                                ),
                                 disabled: ""
-                              },
-                              model: {
-                                value: _vm.all_mort_calc_table.mortgageTerm,
-                                callback: function($$v) {
-                                  _vm.$set(
-                                    _vm.all_mort_calc_table,
-                                    "mortgageTerm",
-                                    $$v
-                                  )
-                                },
-                                expression: "all_mort_calc_table.mortgageTerm"
                               }
                             })
                           ],
@@ -75099,15 +75310,20 @@ var render = function() {
                           [
                             _c("label", [
                               _vm._v(
-                                _vm._s(_vm.all_mort_calc_table.mortgageTerm) +
-                                  " Month"
+                                _vm._s(
+                                  !_vm.all_mort_calc_table.mortgageTerm
+                                    ? "Mortgage Term"
+                                    : _vm.all_mort_calc_table.mortgageTerm
+                                ) + " Months"
                               )
                             ]),
                             _vm._v(" "),
                             _c("el-input", {
                               attrs: {
                                 type: "text",
-                                placeholder: "Mortgage Term Month",
+                                placeholder: _vm.getMortgageTermMonth(
+                                  _vm.all_mort_calc_table.mortgageTerm
+                                ),
                                 disabled: ""
                               }
                             })
@@ -75129,13 +75345,19 @@ var render = function() {
                             _c("label", [
                               _vm._v(
                                 _vm._s(
-                                  _vm.all_mort_calc_table.annualInterestRate
+                                  !_vm.all_mort_calc_table.annualInterestRate
+                                    ? "Annual Interest Rate"
+                                    : _vm.all_mort_calc_table.annualInterestRate
                                 )
                               )
                             ]),
                             _vm._v(" "),
                             _c("el-input", {
-                              attrs: { type: "text", disabled: "" },
+                              attrs: {
+                                type: "text",
+                                disabled: "",
+                                placeholder: "Annual Interest Rate"
+                              },
                               model: {
                                 value:
                                   _vm.all_mort_calc_table.annualInterestRate,
@@ -75179,8 +75401,11 @@ var render = function() {
                             _c("label", [
                               _vm._v(
                                 _vm._s(
-                                  _vm.all_refinance_calc_table
+                                  !_vm.all_refinance_calc_table
                                     .currentlyMonthlyPayment
+                                    ? "Currently Monthly Payment"
+                                    : _vm.all_refinance_calc_table
+                                        .currentlyMonthlyPayment
                                 )
                               )
                             ]),
@@ -75188,7 +75413,7 @@ var render = function() {
                             _c("el-input", {
                               attrs: {
                                 type: "text",
-                                placeholder: "Current monthly payment",
+                                placeholder: "Current Monthly Payment",
                                 disabled: ""
                               },
                               model: {
@@ -75223,14 +75448,18 @@ var render = function() {
                           [
                             _c("label", [
                               _vm._v(
-                                _vm._s(_vm.all_refinance_calc_table.loanIntRate)
+                                _vm._s(
+                                  !_vm.all_refinance_calc_table.loanIntRate
+                                    ? "Current Loan Interest Rate"
+                                    : _vm.all_refinance_calc_table.loanIntRate
+                                )
                               )
                             ]),
                             _vm._v(" "),
                             _c("el-input", {
                               attrs: {
                                 type: "text",
-                                placeholder: "Current loan interest rate",
+                                placeholder: "Current Loan Interest Rate",
                                 disabled: ""
                               },
                               model: {
@@ -75257,7 +75486,10 @@ var render = function() {
                             _c("label", [
                               _vm._v(
                                 _vm._s(
-                                  _vm.all_refinance_calc_table.balanceMortgage
+                                  !_vm.all_refinance_calc_table.balanceMortgage
+                                    ? "Balance Left on Mortgage"
+                                    : _vm.all_refinance_calc_table
+                                        .balanceMortgage
                                 )
                               )
                             ]),
@@ -75265,7 +75497,7 @@ var render = function() {
                             _c("el-input", {
                               attrs: {
                                 type: "text",
-                                placeholder: "Balance left on mortgage",
+                                placeholder: "Balance Left on Mortgage",
                                 disabled: ""
                               },
                               model: {
@@ -75299,7 +75531,11 @@ var render = function() {
                           [
                             _c("label", [
                               _vm._v(
-                                _vm._s(_vm.all_refinance_calc_table.newIntRate)
+                                _vm._s(
+                                  !_vm.all_refinance_calc_table.newIntRate
+                                    ? "New Interest Rate"
+                                    : _vm.all_refinance_calc_table.newIntRate
+                                )
                               )
                             ]),
                             _vm._v(" "),
@@ -75333,7 +75569,11 @@ var render = function() {
                             _c("label", [
                               _vm._v(
                                 _vm._s(
-                                  _vm.all_refinance_calc_table.remainingLoanTerm
+                                  !_vm.all_refinance_calc_table
+                                    .remainingLoanTerm
+                                    ? "Remaining Loan Term"
+                                    : _vm.all_refinance_calc_table
+                                        .remainingLoanTerm
                                 )
                               )
                             ]),
@@ -75341,7 +75581,7 @@ var render = function() {
                             _c("el-input", {
                               attrs: {
                                 type: "text",
-                                placeholder: "Remaining loan term",
+                                placeholder: "Remaining Loan Term",
                                 disabled: ""
                               },
                               model: {
@@ -75376,7 +75616,11 @@ var render = function() {
                           [
                             _c("label", [
                               _vm._v(
-                                _vm._s(_vm.all_refinance_calc_table.newLoanTerm)
+                                _vm._s(
+                                  !_vm.all_refinance_calc_table.newLoanTerm
+                                    ? "New Loan Term"
+                                    : _vm.all_refinance_calc_table.newLoanTerm
+                                )
                               )
                             ]),
                             _vm._v(" "),
@@ -75429,12 +75673,20 @@ var render = function() {
                           [
                             _c("label", [
                               _vm._v(
-                                _vm._s(_vm.all_refinance_calc_table.points)
+                                _vm._s(
+                                  !_vm.all_refinance_calc_table.points
+                                    ? "Points"
+                                    : _vm.all_refinance_calc_table.points
+                                )
                               )
                             ]),
                             _vm._v(" "),
                             _c("el-input", {
-                              attrs: { type: "text", disabled: "" },
+                              attrs: {
+                                type: "text",
+                                placeholder: "Points",
+                                disabled: ""
+                              },
                               model: {
                                 value: _vm.all_refinance_calc_table.points,
                                 callback: function($$v) {
@@ -75469,13 +75721,20 @@ var render = function() {
                             _c("label", [
                               _vm._v(
                                 _vm._s(
-                                  _vm.all_refinance_calc_table.applicationFee
+                                  !_vm.all_refinance_calc_table.applicationFee
+                                    ? "Application Fee"
+                                    : _vm.all_refinance_calc_table
+                                        .applicationFee
                                 )
                               )
                             ]),
                             _vm._v(" "),
                             _c("el-input", {
-                              attrs: { type: "text", disabled: "" },
+                              attrs: {
+                                type: "text",
+                                placeholder: "Application Fee",
+                                disabled: ""
+                              },
                               model: {
                                 value:
                                   _vm.all_refinance_calc_table.applicationFee,
@@ -75500,12 +75759,20 @@ var render = function() {
                           [
                             _c("label", [
                               _vm._v(
-                                _vm._s(_vm.all_refinance_calc_table.creditCheck)
+                                _vm._s(
+                                  !_vm.all_refinance_calc_table.creditCheck
+                                    ? "Credit Check"
+                                    : _vm.all_refinance_calc_table.creditCheck
+                                )
                               )
                             ]),
                             _vm._v(" "),
                             _c("el-input", {
-                              attrs: { type: "text", disabled: "" },
+                              attrs: {
+                                type: "text",
+                                placeholder: "Credit Check",
+                                disabled: ""
+                              },
                               model: {
                                 value: _vm.all_refinance_calc_table.creditCheck,
                                 callback: function($$v) {
@@ -75537,13 +75804,20 @@ var render = function() {
                             _c("label", [
                               _vm._v(
                                 _vm._s(
-                                  _vm.all_refinance_calc_table.attorneyFeeYours
+                                  !_vm.all_refinance_calc_table.attorneyFeeYours
+                                    ? "Attorney's fee (yours)"
+                                    : _vm.all_refinance_calc_table
+                                        .attorneyFeeYours
                                 )
                               )
                             ]),
                             _vm._v(" "),
                             _c("el-input", {
-                              attrs: { type: "text", disabled: "" },
+                              attrs: {
+                                type: "text",
+                                placeholder: "Attorney's fee (yours)",
+                                disabled: ""
+                              },
                               model: {
                                 value:
                                   _vm.all_refinance_calc_table.attorneyFeeYours,
@@ -75569,14 +75843,21 @@ var render = function() {
                             _c("label", [
                               _vm._v(
                                 _vm._s(
-                                  _vm.all_refinance_calc_table
+                                  !_vm.all_refinance_calc_table
                                     .attorneyFeeLenders
+                                    ? "Attorney's Fee(lenders)"
+                                    : _vm.all_refinance_calc_table
+                                        .attorneyFeeLenders
                                 )
                               )
                             ]),
                             _vm._v(" "),
                             _c("el-input", {
-                              attrs: { type: "text", disabled: "" },
+                              attrs: {
+                                type: "text",
+                                placeholder: "Attorney's Fee(lenders)",
+                                disabled: ""
+                              },
                               model: {
                                 value:
                                   _vm.all_refinance_calc_table
@@ -75609,12 +75890,20 @@ var render = function() {
                           [
                             _c("label", [
                               _vm._v(
-                                _vm._s(_vm.all_refinance_calc_table.titleSearch)
+                                _vm._s(
+                                  !_vm.all_refinance_calc_table.titleSearch
+                                    ? "Title Search"
+                                    : _vm.all_refinance_calc_table.titleSearch
+                                )
                               )
                             ]),
                             _vm._v(" "),
                             _c("el-input", {
-                              attrs: { type: "text", disabled: "" },
+                              attrs: {
+                                type: "text",
+                                placeholder: "Title Search",
+                                disabled: ""
+                              },
                               model: {
                                 value: _vm.all_refinance_calc_table.titleSearch,
                                 callback: function($$v) {
@@ -75639,13 +75928,20 @@ var render = function() {
                             _c("label", [
                               _vm._v(
                                 _vm._s(
-                                  _vm.all_refinance_calc_table.titleInsurance
+                                  !_vm.all_refinance_calc_table.titleInsurance
+                                    ? "Title Insurance"
+                                    : _vm.all_refinance_calc_table
+                                        .titleInsurance
                                 )
                               )
                             ]),
                             _vm._v(" "),
                             _c("el-input", {
-                              attrs: { type: "text", disabled: "" },
+                              attrs: {
+                                type: "text",
+                                placeholder: "Title Insurance",
+                                disabled: ""
+                              },
                               model: {
                                 value:
                                   _vm.all_refinance_calc_table.titleInsurance,
@@ -75678,13 +75974,19 @@ var render = function() {
                             _c("label", [
                               _vm._v(
                                 _vm._s(
-                                  _vm.all_refinance_calc_table.appraisalFee
+                                  !_vm.all_refinance_calc_table.appraisalFee
+                                    ? "Appraisal Fee"
+                                    : _vm.all_refinance_calc_table.appraisalFee
                                 )
                               )
                             ]),
                             _vm._v(" "),
                             _c("el-input", {
-                              attrs: { type: "text", disabled: "" },
+                              attrs: {
+                                type: "text",
+                                placeholder: "Appraisal Fee",
+                                disabled: ""
+                              },
                               model: {
                                 value:
                                   _vm.all_refinance_calc_table.appraisalFee,
@@ -75709,12 +76011,20 @@ var render = function() {
                           [
                             _c("label", [
                               _vm._v(
-                                _vm._s(_vm.all_refinance_calc_table.inspections)
+                                _vm._s(
+                                  !_vm.all_refinance_calc_table.inspections
+                                    ? "Inspections"
+                                    : _vm.all_refinance_calc_table.inspections
+                                )
                               )
                             ]),
                             _vm._v(" "),
                             _c("el-input", {
-                              attrs: { type: "text", disabled: "" },
+                              attrs: {
+                                type: "text",
+                                placeholder: "Inspections",
+                                disabled: ""
+                              },
                               model: {
                                 value: _vm.all_refinance_calc_table.inspections,
                                 callback: function($$v) {
@@ -75745,12 +76055,20 @@ var render = function() {
                           [
                             _c("label", [
                               _vm._v(
-                                _vm._s(_vm.all_refinance_calc_table.localFees)
+                                _vm._s(
+                                  !_vm.all_refinance_calc_table.localFees
+                                    ? "Local Fees"
+                                    : _vm.all_refinance_calc_table.localFees
+                                )
                               )
                             ]),
                             _vm._v(" "),
                             _c("el-input", {
-                              attrs: { type: "text", disabled: "" },
+                              attrs: {
+                                type: "text",
+                                placeholder: "Local Fees",
+                                disabled: ""
+                              },
                               model: {
                                 value: _vm.all_refinance_calc_table.localFees,
                                 callback: function($$v) {
@@ -75774,14 +76092,21 @@ var render = function() {
                             _c("label", [
                               _vm._v(
                                 _vm._s(
-                                  _vm.all_refinance_calc_table
+                                  !_vm.all_refinance_calc_table
                                     .documentPreparation
+                                    ? "Document Preparation"
+                                    : _vm.all_refinance_calc_table
+                                        .documentPreparation
                                 )
                               )
                             ]),
                             _vm._v(" "),
                             _c("el-input", {
-                              attrs: { type: "text", disabled: "" },
+                              attrs: {
+                                type: "text",
+                                placeholder: "Document Preparation",
+                                disabled: ""
+                              },
                               model: {
                                 value:
                                   _vm.all_refinance_calc_table
@@ -75813,11 +76138,21 @@ var render = function() {
                           { attrs: { span: 24 } },
                           [
                             _c("label", [
-                              _vm._v(_vm._s(_vm.all_refinance_calc_table.other))
+                              _vm._v(
+                                _vm._s(
+                                  !_vm.all_refinance_calc_table.other
+                                    ? "Other"
+                                    : _vm.all_refinance_calc_table.other
+                                )
+                              )
                             ]),
                             _vm._v(" "),
                             _c("el-input", {
-                              attrs: { type: "text", disabled: "" },
+                              attrs: {
+                                type: "text",
+                                placeholder: "Other",
+                                disabled: ""
+                              },
                               model: {
                                 value: _vm.all_refinance_calc_table.other,
                                 callback: function($$v) {
